@@ -98,5 +98,5 @@ theme: pure
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repo: github.com:xdai555/xdai555.github.io.git
+  type: 
+  repo: 
