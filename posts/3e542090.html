@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fefefe">
+  <meta name="msvalidate.01" content="8DAA4873BEFC66EB6071E0A8562B64FF">
+  <meta name="baidu-site-verification" content="code-epf7zfvuoz">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/pace-js@1.2.4/themes/silver/pace-theme-minimal.css">
+  <script src="https://unpkg.com/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":260,"display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#ccc","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="之前简单介绍了 Python 针对 XML 文件的操作方式，XML 的诸多特性使得它非常适合程序之间的数据传输，NETCONF 就是采用 XML 来进行工作。 NETCONF 简单介绍NETCONF（Network Configuration Protocol，网络配置协议）是一种基于 XML 的网络管理协议，它提供了一种可编程的、对网络设备进行配置和管理的方法。 NETCONF 报文使用 XML">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 使用 NETCONF 管理配置 H3C 网络设备">
+<meta property="og:url" content="https://555.xdai.vip/posts/3e542090.html">
+<meta property="og:site_name" content="xdai">
+<meta property="og:description" content="之前简单介绍了 Python 针对 XML 文件的操作方式，XML 的诸多特性使得它非常适合程序之间的数据传输，NETCONF 就是采用 XML 来进行工作。 NETCONF 简单介绍NETCONF（Network Configuration Protocol，网络配置协议）是一种基于 XML 的网络管理协议，它提供了一种可编程的、对网络设备进行配置和管理的方法。 NETCONF 报文使用 XML">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210422215225791.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021042221511225.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210422215617862.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021042322422449.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210423231825685.png">
+<meta property="article:published_time" content="2021-04-22T15:23:49.000Z">
+<meta property="article:modified_time" content="2021-12-16T16:12:48.882Z">
+<meta property="article:author" content="某呆">
+<meta property="article:tag" content="netconf">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210422215225791.png">
+
+
+<link rel="canonical" href="https://555.xdai.vip/posts/3e542090.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/3e542090.html","path":"posts/3e542090.html","title":"Python 使用 NETCONF 管理配置 H3C 网络设备"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python 使用 NETCONF 管理配置 H3C 网络设备 | xdai</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9de2876f250b395fc8c1bffb43afd6b4"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="xdai" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xdai</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">^_^</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">21</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NETCONF-%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">NETCONF 简单介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NETCONF-%E5%8D%8F%E8%AE%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">NETCONF 协议结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NETCONF-%E6%8A%A5%E6%96%87%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">NETCONF 报文结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">请求报文格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%A5%E6%96%87%E5%9B%9E%E5%A4%8D%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">报文回复格式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NETCONF-%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.</span> <span class="nav-text">NETCONF 配置数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NETCONF-%E6%94%AF%E6%8C%81%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">1.4.</span> <span class="nav-text">NETCONF 支持的操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">实验操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">基础环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.1.</span> <span class="nav-text">网络环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.2.</span> <span class="nav-text">设备配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.3.</span> <span class="nav-text">代码环境</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-NETCONF-%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87%E6%8E%A5%E5%8F%A3%E4%BF%A1%E6%81%AF"><span class="nav-number">2.2.</span> <span class="nav-text">使用 NETCONF 获取设备接口信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97"><span class="nav-number">2.2.1.</span> <span class="nav-text">导入模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA-XML"><span class="nav-number">2.2.2.</span> <span class="nav-text">构建 XML</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E8%AE%BE%E5%A4%87%EF%BC%8C%E6%89%A7%E8%A1%8C-XML"><span class="nav-number">2.2.3.</span> <span class="nav-text">连接设备，执行 XML</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-NETCONF-%E4%B8%8B%E5%8F%91%E6%8E%A5%E5%8F%A3%E9%85%8D%E7%BD%AE"><span class="nav-number">2.3.</span> <span class="nav-text">使用 NETCONF 下发接口配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA-XML-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">构建 XML</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E8%AE%BE%E5%A4%87%EF%BC%8C%E6%89%A7%E8%A1%8C-XML-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">连接设备，执行 XML</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-NETCONF-%E4%B8%8B%E5%8F%91-BGP-%E9%85%8D%E7%BD%AE"><span class="nav-number">2.4.</span> <span class="nav-text">使用 NETCONF 下发 BGP 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA-XML-2"><span class="nav-number">2.4.1.</span> <span class="nav-text">构建 XML</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E8%AE%BE%E5%A4%87%EF%BC%8C%E6%89%A7%E8%A1%8C-XML-2"><span class="nav-number">2.4.2.</span> <span class="nav-text">连接设备，执行 XML</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%84"><span class="nav-number">3.1.</span> <span class="nav-text">附</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="某呆"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">某呆</p>
+  <div class="site-description" itemprop="description">记录，分享</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xdai555" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xdai555" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vip@xdai.vip" title="E-Mail → mailto:vip@xdai.vip" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/q965844841qq?type=blog" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;q965844841qq?type&#x3D;blog" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-copyright fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://gitee.com/xdai555/nornir_docs_cn" title="https:&#x2F;&#x2F;gitee.com&#x2F;xdai555&#x2F;nornir_docs_cn" rel="noopener external nofollow noreferrer" target="_blank">Nornir 中文手册</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://textfsm.xdai.vip/" title="http:&#x2F;&#x2F;textfsm.xdai.vip&#x2F;" rel="noopener external nofollow noreferrer" target="_blank">TextFSM 在线解析</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com/" title="https:&#x2F;&#x2F;kalacloud.com" rel="noopener external nofollow noreferrer" target="_blank">卡拉云低代码工具</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+        <!-- <h3 class="widget-title">Tag Cloud</h3>  #为标签云命名，建议不命名，直接删除此行 -->
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ipv6/" rel="tag">ipv6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jinja/" rel="tag">jinja</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netbox/" rel="tag">netbox</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netconf/" rel="tag">netconf</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netmiko/" rel="tag">netmiko</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nornir/" rel="tag">nornir</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openstack/" rel="tag">openstack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ospf/" rel="tag">ospf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/" rel="tag">pip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/3e542090.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="某呆">
+      <meta itemprop="description" content="记录，分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 使用 NETCONF 管理配置 H3C 网络设备
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-04-22 23:23:49" itemprop="dateCreated datePublished" datetime="2021-04-22T23:23:49+08:00">2021-04-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NetDevOps/" itemprop="url" rel="index"><span itemprop="name">NetDevOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/3e542090.html" class="post-meta-item leancloud_visitors" data-flag-title="Python 使用 NETCONF 管理配置 H3C 网络设备" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>12k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>11 分钟</span>
+    </span>
+
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>之前简单介绍了 Python 针对 XML 文件的操作方式，XML 的诸多特性使得它非常适合程序之间的数据传输，NETCONF 就是采用 XML 来进行工作。</p>
+<h2 id="NETCONF-简单介绍"><a href="#NETCONF-简单介绍" class="headerlink" title="NETCONF 简单介绍"></a>NETCONF 简单介绍</h2><p>NETCONF（Network Configuration Protocol，网络配置协议）是一种基于 XML 的网络管理协议，它提供了一种可编程的、对网络设备进行配置和管理的方法。</p>
+<p>NETCONF 报文使用 XML 格式，具有强大的过滤能力，而且每一个数据项都有一个固定的元素名称和位置，所以具有很强的兼容性，不同厂家不同设备可以通过 XML 得到相同的结果，便于混合不同厂商不同设备的为冷热软件开发。</p>
+<h3 id="NETCONF-协议结构"><a href="#NETCONF-协议结构" class="headerlink" title="NETCONF 协议结构"></a>NETCONF 协议结构</h3><p>NETCONF 采用分层结构，分别为：</p>
+<ul>
+<li>Content 内容层</li>
+<li>Operations 操作层</li>
+<li>RPC（Remote Procedure Call）远程调用层</li>
+<li>Transport Protocol 通信协议层</li>
+</ul>
+<span id="more"></span>
+
+<p>XML 分层与 NETCONF 协议分层模型对应关系</p>
+<table>
+<thead>
+<tr>
+<th>NETCONF 分层</th>
+<th>XML 分层</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Content<br />内容层</td>
+<td>具体的配置数据、状态数据等信息</td>
+<td>被管理对象的信息，包括配置、状态等，如：<br /><code>&lt;Ifmgr&gt;&lt;Interfaces&gt;&lt;Interface&gt;&lt;Name&gt;G0/0&lt;/Name&gt;&lt;/Interface&gt;&lt;/Interfaces&gt;&lt;/Ifmgr&gt;</code><br />这个 XML 就是一个简单的内容层，它表示了一个接口的名称信息：G0&#x2F;0。</td>
+</tr>
+<tr>
+<td>Operations<br />操作层</td>
+<td><code>&lt;get&gt;</code>，<code>&lt;get-config&gt;</code>，<code>&lt;edit-config&gt;</code></td>
+<td>RPC 中的基本的原语操作集，NETCONF 对其进行扩展，全面定义了对被管理设备的各种基础操作，如<code>get</code>，<code>get-config</code>，<code>get-bulk</code>，<code>edit-config</code>等。</td>
+</tr>
+<tr>
+<td>RPC <br />远程调用层</td>
+<td><code>&lt;rpc&gt;</code>，<code>rpc-reply</code></td>
+<td>为 RPC 模块的编码提供了简单的、传输协议无关的机制，在 XML 中使用<code>&lt;rpc&gt;</code>，<code>rpc-reply</code>对上层的请求和响应数据进行封装。</td>
+</tr>
+<tr>
+<td>Transport Protocol<br />通信协议层</td>
+<td>设备登录方式，支持 Console、SSH、HTTP、TLS、Telnet 等</td>
+<td>为 NETCONF 提供面向连接的、可靠的、顺序的数据链路。</td>
+</tr>
+</tbody></table>
+<p>可参考下图：<br><img data-src="https://img-blog.csdnimg.cn/20210422215225791.png"></p>
+<h3 id="NETCONF-报文结构"><a href="#NETCONF-报文结构" class="headerlink" title="NETCONF 报文结构"></a>NETCONF 报文结构</h3><p>NETCONF 命令必须符合 XML 语言的基本格式。NETCONF 报文格式遵循 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://tools.ietf.org/html/rfc4741">RFC 4741</a>&#x2F;<a target="_blank" rel="noopener external nofollow noreferrer" href="https://tools.ietf.org/html/rfc6241">RFC 6241</a>。</p>
+<h4 id="请求报文格式"><a href="#请求报文格式" class="headerlink" title="请求报文格式"></a>请求报文格式</h4><p>对于 H3C 网络设备，请求报文分为两部分：协议定义部分、H3C 自有部分，格式如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">rpc</span> <span class="attr">message-id</span> =<span class="string">&quot;101&quot;</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;<span class="name">operation</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">rpc</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>协议定义部分：</p>
+<ul>
+<li>encoding 表示使用的 XML 编码格式，默认使用 UTF-8。</li>
+<li>message-id 表示消息 ID。客户端使用单调递增的整数来表示消息 ID。服务器端在应答中会使用相同的消息 ID 以表示应答对应的请求。</li>
+<li>协议定义部分的命名空间必须为 <code>urn:ietf:params:xml:ns:netconf:base:1.0</code>。</li>
+</ul>
+<p>H3C 自有部分：<br>对于 get 系列操作，filter 元素下的内容为 H3C 自有部分；对于 edit-config 系<br>列操作，config 元素下的内容为 H3C 自有部分。<br>H3C 自有部分需要使用H3C命名空间，H3C 命名空间又分为 base、config、data、action<br>命名空间。</p>
+<ul>
+<li>Base 命名空间：<code>http://www.h3c.com/netconf/base:1.0</code></li>
+<li>Config 命名空间：<code>http://www.h3c.com/netconf/config:1.0</code></li>
+<li>Data 命名空间：<code>http://www.h3c.com/netconf/data:1.0</code></li>
+<li>Action 命名空间：<code>http://www.h3c.com/netconf/action:1.0</code></li>
+</ul>
+<p>具体使用哪个命名空间与操作类型和内容有关。</p>
+<p>以为接口配置一个 IP 地址的消息为例，请求报文结构可以用下图来说明：</p>
+<p><img data-src="https://img-blog.csdnimg.cn/2021042221511225.png" alt="xml-layer"></p>
+<h4 id="报文回复格式"><a href="#报文回复格式" class="headerlink" title="报文回复格式"></a>报文回复格式</h4><p>报文回复格式统一使用协议定义的  <code>&lt;rpc-reply&gt;</code>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">rpc-reply</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;</span> <span class="attr">message-id</span>=<span class="string">&quot;101&quot;</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;<span class="name">ok</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">rpc-reply</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+
+
+<h3 id="NETCONF-配置数据库"><a href="#NETCONF-配置数据库" class="headerlink" title="NETCONF 配置数据库"></a>NETCONF 配置数据库</h3><p>NETCONF 有三个配置数据库，用来对设备的配置进行管理。</p>
+<ul>
+<li><code>&lt;running/&gt;</code>：存储正在运行的配置，等价于 <code>show run / display cur</code>，所有设备都具有该数据库。</li>
+<li><code>&lt;startup/&gt;</code>：存储下次启动时生效的配置，等价于<code>show startup / display saved</code>。</li>
+<li><code>&lt;candidate/&gt;</code>：存储没有生效的候选配置，等价于一些设备需要<code>commit</code>来使配置生效，并不是所有设备都支持。</li>
+</ul>
+<h3 id="NETCONF-支持的操作"><a href="#NETCONF-支持的操作" class="headerlink" title="NETCONF 支持的操作"></a>NETCONF 支持的操作</h3><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;get-config&gt;</code></td>
+<td>用来从<code>&lt;running/&gt;</code>、<code>&lt;candidate/&gt;</code>和<code>&lt;startup/&gt;</code>数据库中获取全部或部分配置数据。</td>
+</tr>
+<tr>
+<td><code>&lt;get&gt;</code></td>
+<td>用来从<code>&lt;running/&gt;</code>数据库中获取全部或部分运行配置数据或设备的状态数据。</td>
+</tr>
+<tr>
+<td><code>&lt;edit-config&gt;</code></td>
+<td>用来对<code>&lt;running/&gt;</code>或<code>&lt;candidate/&gt;</code>数据库新增、修改、删除配置数据。</td>
+</tr>
+<tr>
+<td><code>&lt;copy-config&gt;</code></td>
+<td>用源数据库替换目标数据库。如果目标数据库没有创建，则直接创建数据库，然后进行拷贝。</td>
+</tr>
+<tr>
+<td><code>&lt;delete-config&gt;</code></td>
+<td>用来删除一个数据库，但不能删除<code>&lt;running/&gt;</code>数据库。</td>
+</tr>
+<tr>
+<td><code>&lt;lock&gt;</code></td>
+<td>用来锁定一个数据库，独占数据库的修改权限，防止多用户并行操作设备产生冲突。</td>
+</tr>
+<tr>
+<td><code>&lt;unlock&gt;</code></td>
+<td>用来取消用户自己之前执行的<code>&lt;lock&gt;</code>操作，但不能取消其他用户的<code>&lt;lock&gt;</code>操作。</td>
+</tr>
+<tr>
+<td><code>&lt;close-session&gt;</code></td>
+<td>用来正常关闭NETCONF会话。</td>
+</tr>
+<tr>
+<td><code>&lt;kill-session&gt;</code></td>
+<td>用来强制关闭NETCONF会话，只有管理员用户才有权限执行<code>&lt;kill-session&gt;</code>操作。</td>
+</tr>
+</tbody></table>
+<h2 id="实验操作"><a href="#实验操作" class="headerlink" title="实验操作"></a>实验操作</h2><h3 id="基础环境配置"><a href="#基础环境配置" class="headerlink" title="基础环境配置"></a>基础环境配置</h3><h4 id="网络环境"><a href="#网络环境" class="headerlink" title="网络环境"></a>网络环境</h4><p>使用 HCL 模拟器，打开一台设备，连接到本地网络<br><img data-src="https://img-blog.csdnimg.cn/20210422215617862.png"></p>
+<h4 id="设备配置"><a href="#设备配置" class="headerlink" title="设备配置"></a>设备配置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">interface GigabitEthernet0/0</span><br><span class="line"> port link-mode route</span><br><span class="line"> ip address 192.168.56.20 255.255.255.0</span><br><span class="line">#</span><br><span class="line">local-user netdevops</span><br><span class="line"> password simple netdevops</span><br><span class="line"> authorization-attribute user-role network-admin</span><br><span class="line"> service-type ssh</span><br><span class="line"> #</span><br><span class="line"> ssh server enable</span><br><span class="line"> netconf ssh server enable</span><br><span class="line"> #</span><br><span class="line"> user-interface vty 0 63</span><br><span class="line"> authentication-mode scheme</span><br><span class="line"> #</span><br></pre></td></tr></table></figure>
+<h4 id="代码环境"><a href="#代码环境" class="headerlink" title="代码环境"></a>代码环境</h4><ul>
+<li>Python 3.8</li>
+<li>ncclient 0.6.7</li>
+</ul>
+<p>本次实验使用 ncclient 模块来操作网络设备，可以使用 <code>pip install ncclient</code> 来进行安装，可以先把 pip 下载源修改为国内的，否则下载速度会很慢，参考 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/q965844841qq/article/details/105547362">pip 设置国内源</a>。</p>
+<h3 id="使用-NETCONF-获取设备接口信息"><a href="#使用-NETCONF-获取设备接口信息" class="headerlink" title="使用 NETCONF 获取设备接口信息"></a>使用 NETCONF 获取设备接口信息</h3><h4 id="导入模块"><a href="#导入模块" class="headerlink" title="导入模块"></a>导入模块</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导入 lxml 相关模块，用于构建 xml</span></span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">from</span> lxml.builder <span class="keyword">import</span> ElementMaker</span><br><span class="line"><span class="comment"># 导入 ncclient 相关模块，用于使用 NETCONF 协议连接设备</span></span><br><span class="line"><span class="keyword">from</span> ncclient <span class="keyword">import</span> manager</span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据网络环境，构建包含设备信息的字典</span></span><br><span class="line">host = &#123;</span><br><span class="line">    <span class="string">&#x27;host&#x27;</span>: <span class="string">&#x27;192.168.56.20&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;username&#x27;</span>: <span class="string">&#x27;netdevops&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;password&#x27;</span>: <span class="string">&#x27;netdevops&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;port&#x27;</span>: <span class="number">830</span>,</span><br><span class="line">    <span class="string">&#x27;device_params&#x27;</span>: &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;h3c&#x27;</span>&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="构建-XML"><a href="#构建-XML" class="headerlink" title="构建 XML"></a>构建 XML</h4><p>XML 信息可以使用纯文本格式手写，也可以使用 lxml 工具来构建，构建方式可以参考<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/q965844841qq/article/details/114714690">上一篇文章</a> 。</p>
+<p>上文请求报文格式中说明了，对于 get 操作，需要加入 H3C 自有部分的命名空间。<br>获取设备信息需要使用 data 命名空间。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 构建 xml 请求文件，以下 xml 用于获取设备上所有的接口名称</span></span><br><span class="line">get_all_iface = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;top xmlns=&quot;http://www.h3c.com/netconf/data:1.0&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;Ifmgr&gt;</span></span><br><span class="line"><span class="string">&lt;Interfaces&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;</span></span><br><span class="line"><span class="string">&lt;Name&gt;&lt;/Name&gt;</span></span><br><span class="line"><span class="string">&lt;InetAddressIPV4&gt;&lt;/InetAddressIPV4&gt;</span></span><br><span class="line"><span class="string">&lt;AdminStatus&gt;&lt;/AdminStatus&gt;</span></span><br><span class="line"><span class="string">&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;/Interfaces&gt;</span></span><br><span class="line"><span class="string">&lt;/Ifmgr&gt;</span></span><br><span class="line"><span class="string">&lt;/top&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 可以使用 lxml 相关模块构建获取接口信息需要的 xml</span></span><br><span class="line"><span class="comment"># 以下 xml 用于获取设备上所有的接口名称</span></span><br><span class="line">H3C_DATA_1_0 = <span class="string">&quot;http://www.h3c.com/netconf/data:1.0&quot;</span></span><br><span class="line">H3C_DATA_1_0_C = <span class="string">&#x27;&#123;&#x27;</span> + H3C_DATA_1_0 + <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">E = ElementMaker(namespace=H3C_DATA_1_0, nsmap=&#123;<span class="literal">None</span>: H3C_DATA_1_0&#125;)</span><br><span class="line">top = E.top(</span><br><span class="line">    E.Ifmgr(</span><br><span class="line">        E.Interfaces(</span><br><span class="line">            E.Interface(</span><br><span class="line">                E.Name(),</span><br><span class="line">                E.InetAddressIPV4(),</span><br><span class="line">                E.AdminStatus()</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">))</span><br></pre></td></tr></table></figure>
+
+<p>不论哪种方式构建，最终的内容都是一样的</p>
+<h4 id="连接设备，执行-XML"><a href="#连接设备，执行-XML" class="headerlink" title="连接设备，执行 XML"></a>连接设备，执行 XML</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对于 ssh 协议，连接设备时会先保存对端的 key，并从本机查找并验证，使用以下两个 False 的参数来跳过检查</span></span><br><span class="line">conn = manager.connect(**host, hostkey_verify=<span class="literal">False</span>, look_for_keys=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 获取设备所有接口的名称、IP地址、状态</span></span><br><span class="line">ret = conn.get((<span class="string">&#x27;subtree&#x27;</span>, top))</span><br><span class="line"><span class="built_in">print</span>(ret)</span><br></pre></td></tr></table></figure>
+<p>上面代码中使用了 ncclient 封装的 get 操作，我们只需要传入 Content 层的 XML 信息即可，实际上传递给网络设备完整的一个请求报文包含了协议定义的部分，这部分属于 Operation 层，具体的原始 XML 是：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rpc</span> <span class="attr">message-id</span>=<span class="string">&quot;ncclient 自动生成的 id&quot;</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">get</span>&gt;</span>                         <span class="comment">&lt;!--- Operation 层，使用 get 操作 ---&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">type</span>=<span class="string">&quot;subtree&quot;</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">top</span>&gt;</span>&quot;构建的 xml 内容&quot;<span class="tag">&lt;/<span class="name">top</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">get</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rpc</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上述几段代码结合起来，执行结果如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><span class="tag">&lt;<span class="name">rpc-reply</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;</span> <span class="attr">message-id</span>=<span class="string">&quot;urn:uuid:c2124ac3-2c72-4046-a575-de8ea8d151a7&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">data</span>&gt;</span><span class="tag">&lt;<span class="name">top</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.h3c.com/netconf/data:1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Ifmgr</span>&gt;</span><span class="tag">&lt;<span class="name">Interfaces</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>1<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet0/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;<span class="name">InetAddressIPV4</span>&gt;</span>192.168.56.20<span class="tag">&lt;/<span class="name">InetAddressIPV4</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>2<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet0/1<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>3<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet0/2<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>4<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Serial1/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>5<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Serial2/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>6<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Serial3/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>7<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Serial4/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>8<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet5/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>9<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet5/1<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>10<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet6/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>11<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet6/1<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>129<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>NULL0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>130<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>InLoopBack0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;<span class="name">InetAddressIPV4</span>&gt;</span>127.0.0.1<span class="tag">&lt;/<span class="name">InetAddressIPV4</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>131<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Register-Tunnel0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;/<span class="name">Interfaces</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Ifmgr</span>&gt;</span><span class="tag">&lt;/<span class="name">top</span>&gt;</span><span class="tag">&lt;/<span class="name">data</span>&gt;</span><span class="tag">&lt;/<span class="name">rpc-reply</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，已经成功从设备中获取到了想要的接口信息，对于设备不存在的信息，返回值没有该标签；<br>之后对返回数据根据需要进行格式化即可，之后会介绍如何格式化该数据。</p>
+<h3 id="使用-NETCONF-下发接口配置"><a href="#使用-NETCONF-下发接口配置" class="headerlink" title="使用 NETCONF 下发接口配置"></a>使用 NETCONF 下发接口配置</h3><h4 id="构建-XML-1"><a href="#构建-XML-1" class="headerlink" title="构建 XML"></a>构建 XML</h4><p>以给 G0&#x2F;1 接口配置 IP 地址为例，由于 NETCONF 只支持通过 IfIndex 来进行配置，如果实际使用中想要根据接口名称来进行配置，则需要对功能进行封装；<br>从上面的结果中可以看到 G0&#x2F;1 的接口索引值为 2，所以构建以下 XML：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下发配置需要有 config 元素，且命名空间固定，之后再加入 top 元素及具体的配置信息元素</span></span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> ElementMaker, etree</span><br><span class="line"></span><br><span class="line">BASE_NS_1_0 = <span class="string">&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;</span></span><br><span class="line">H3C_CONFIG_1_0 = <span class="string">&quot;http://www.h3c.com/netconf/config:1.0&quot;</span></span><br><span class="line">C = ElementMaker(namespace=BASE_NS_1_0, nsmap=&#123;<span class="literal">None</span>: BASE_NS_1_0&#125;)</span><br><span class="line">E = ElementMaker(namespace=H3C_CONFIG_1_0, nsmap=&#123;<span class="literal">None</span>: H3C_CONFIG_1_0&#125;)</span><br><span class="line"></span><br><span class="line">xml_ifcfg = C.config(</span><br><span class="line">    E.top(</span><br><span class="line">        E.Ifmgr(</span><br><span class="line">            E.Interfaces(</span><br><span class="line">                E.Interface(</span><br><span class="line">                    E.IfIndex(<span class="string">&quot;2&quot;</span>),</span><br><span class="line">                    E.Description(<span class="string">&quot;Configured by netconf&quot;</span>),</span><br><span class="line">                    E.InetAddressIPV4(<span class="string">&quot;1.1.1.1&quot;</span>),</span><br><span class="line">                    E.InetAddressIPV4Mask(<span class="string">&quot;24&quot;</span>)</span><br><span class="line">                )</span><br><span class="line">            )</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(etree.tostring(xml_ifcfg))</span><br></pre></td></tr></table></figure>
+
+<p>实际生成的 XML 内容打印如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">config</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">top</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.h3c.com/netconf/config:1.0&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">IPV4ADDRESS</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">Ipv4Addresses</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">Ipv4Address</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>2<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">Ipv4Address</span>&gt;</span>1.1.1.1<span class="tag">&lt;/<span class="name">Ipv4Address</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">Ipv4Mask</span>&gt;</span>255.255.255.0<span class="tag">&lt;/<span class="name">Ipv4Mask</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;/<span class="name">Ipv4Address</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;/<span class="name">Ipv4Addresses</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">IPV4ADDRESS</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">top</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">config</span>&gt;</span>&#x27;</span><br></pre></td></tr></table></figure>
+
+<h4 id="连接设备，执行-XML-1"><a href="#连接设备，执行-XML-1" class="headerlink" title="连接设备，执行 XML"></a>连接设备，执行 XML</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将接口配置下发到 running 配置库中</span></span><br><span class="line">conn = manager.connect(**host, hostkey_verify=<span class="literal">False</span>, look_for_keys=<span class="literal">False</span>)</span><br><span class="line">ret = conn.edit_config(target=<span class="string">&quot;running&quot;</span>, config=xml_ifcfg)</span><br><span class="line"><span class="built_in">print</span>(ret)</span><br></pre></td></tr></table></figure>
+
+<p>返回值为 ok，说明配置下发成功，打印执行结果如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">rpc-reply</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;</span> <span class="attr">message-id</span>=<span class="string">&quot;urn:uuid:67ad766a-83de-45ba-a575-95059a6cfce6&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ok</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rpc-reply</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>到设备上检查配置下发成功：<br><img data-src="https://img-blog.csdnimg.cn/2021042322422449.png" alt="ip配置"></p>
+<h3 id="使用-NETCONF-下发-BGP-配置"><a href="#使用-NETCONF-下发-BGP-配置" class="headerlink" title="使用 NETCONF 下发 BGP 配置"></a>使用 NETCONF 下发 BGP 配置</h3><h4 id="构建-XML-2"><a href="#构建-XML-2" class="headerlink" title="构建 XML"></a>构建 XML</h4><p>为设备配置 ASNumber 为 62333，并宣告 G1&#x2F;0 的接口地址。<br>根据一般的 BGP 配置逻辑，应该：</p>
+<ol>
+<li>配置 ASN，即启动 BGP 进程</li>
+<li>配置地址族，表明配置生效的范围，如单播 IPv4，带有 VPN Instance 的单播 IPv4 等，并配置相关属性，如本地优先级、等价路由数目等</li>
+<li>配置宣告路由等</li>
+</ol>
+<p>对应的在 NETCONF 中下发配置时，操作逻辑也是一样的。<br>根据需要进行的配置构建以下 XML：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置 asn</span></span><br><span class="line">xml_bgp_asn_cfg = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;config xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;top xmlns=&quot;http://www.h3c.com/netconf/config:1.0&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;BGP&gt;</span></span><br><span class="line"><span class="string"> &lt;Instances&gt;</span></span><br><span class="line"><span class="string"> &lt;Instance&gt;</span></span><br><span class="line"><span class="string"> &lt;Name&gt;&lt;/Name&gt;</span></span><br><span class="line"><span class="string"> &lt;ASNumber&gt;62333&lt;/ASNumber&gt;</span></span><br><span class="line"><span class="string"> &lt;/Instance&gt;</span></span><br><span class="line"><span class="string"> &lt;/Instances&gt;</span></span><br><span class="line"><span class="string">&lt;/BGP&gt;</span></span><br><span class="line"><span class="string">&lt;/top&gt;</span></span><br><span class="line"><span class="string">&lt;/config&gt;&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 配置单播 ipv4 地址族</span></span><br><span class="line">xml_bgp_familys_cfg=<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;config xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;top xmlns=&quot;http://www.h3c.com/netconf/config:1.0&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;BGP&gt;</span></span><br><span class="line"><span class="string">&lt;Familys&gt;</span></span><br><span class="line"><span class="string">&lt;Family&gt;</span></span><br><span class="line"><span class="string">&lt;Name&gt;&lt;/Name&gt;</span></span><br><span class="line"><span class="string">&lt;VRF&gt;&lt;/VRF&gt;</span></span><br><span class="line"><span class="string">&lt;Type&gt;1&lt;/Type&gt;</span></span><br><span class="line"><span class="string">&lt;/Family&gt;</span></span><br><span class="line"><span class="string">&lt;/Familys&gt;</span></span><br><span class="line"><span class="string">&lt;/BGP&gt;</span></span><br><span class="line"><span class="string">&lt;/top&gt;</span></span><br><span class="line"><span class="string">&lt;/config&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 在单播 ipv4 地址族中宣告网段</span></span><br><span class="line">xml_bgp_net_cfg = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;config xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;top xmlns=&quot;http://www.h3c.com/netconf/config:1.0&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;BGP&gt;</span></span><br><span class="line"><span class="string"> &lt;Networks&gt;</span></span><br><span class="line"><span class="string"> &lt;Network&gt;</span></span><br><span class="line"><span class="string"> &lt;Name&gt;&lt;/Name&gt;</span></span><br><span class="line"><span class="string"> &lt;VRF&gt;&lt;/VRF&gt;</span></span><br><span class="line"><span class="string"> &lt;Family&gt;1&lt;/Family&gt;</span></span><br><span class="line"><span class="string"> &lt;IpAddress&gt;1.1.1.1&lt;/IpAddress&gt;</span></span><br><span class="line"><span class="string"> &lt;Mask&gt;24&lt;/Mask&gt;</span></span><br><span class="line"><span class="string"> &lt;/Network&gt;</span></span><br><span class="line"><span class="string"> &lt;/Networks&gt;</span></span><br><span class="line"><span class="string">&lt;/BGP&gt;</span></span><br><span class="line"><span class="string">&lt;/top&gt;</span></span><br><span class="line"><span class="string">&lt;/config&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="连接设备，执行-XML-2"><a href="#连接设备，执行-XML-2" class="headerlink" title="连接设备，执行 XML"></a>连接设备，执行 XML</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conn = manager.connect(**host, hostkey_verify=<span class="literal">False</span>, look_for_keys=<span class="literal">False</span>)</span><br><span class="line">conn.edit_config(target=<span class="string">&quot;running&quot;</span>, config=xml_bgp_net_cfg)</span><br><span class="line">conn.edit_config(target=<span class="string">&quot;running&quot;</span>, config=xml_bgp_net_cfg)</span><br><span class="line">conn.edit_config(target=<span class="string">&quot;running&quot;</span>, config=xml_bgp_net_cfg)</span><br></pre></td></tr></table></figure>
+
+<p>依次执行三项配置并返回成功后，可以在设备上看到相关的配置：<br><img data-src="https://img-blog.csdnimg.cn/20210423231825685.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章简单介绍了 NETCONF 协议，并结合上篇文章中关于 XML 的知识，进行了三个实际的操作案例。</p>
+<p>乍一看，你可能会想：用 NETCONF 下发配置和我用命令行差不多啊，而且看起来好复杂啊，用命令行三下五除二就配置完成了。</p>
+<p>NETCONF 的好处在于，如果将日常运维的操作封装为接口进行调用，并且以 WEB 的方式显示出来或者进行配置操作，会方便许多，而且可以做成标准化、流程化的操作进行变更，且返回的数据都是 XML 格式，可以很轻松的转换成 JSON，与其他平台进行联动，这些都是命令行操作不可控的（命令行的操作逻辑及返回数据处理不如 NETCONF 方便）。</p>
+<h3 id="附"><a href="#附" class="headerlink" title="附"></a>附</h3><p>问：你怎么知道获取接口信息、配置 BGP 的 XML 怎么写？<br>答：参考官方的 NETCONF API 开发手册。华为的可以在官网直接找到，华三的可以<a target="_blank" rel="noopener external nofollow noreferrer" href="https://download.csdn.net/download/q965844841qq/15849005">点击链接进行下载</a>（官方资料）~</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\f57ab1ee.html" rel="bookmark">格式化输出NETCONF回显内容</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\fe994980.html" rel="bookmark">Python lxml 模块操作 XML 的基本使用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\ad63b5a0.html" rel="bookmark">使用 netmiko 的 is_alive() 方法实现 ssh 保活机制</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\6909405a.html" rel="bookmark">netbox 在 Ubuntu20 系统上的安装记录</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/netconf/" rel="tag"><i class="fa fa-tag"></i> netconf</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/fe994980.html" rel="prev" title="Python lxml 模块操作 XML 的基本使用">
+                  <i class="fa fa-chevron-left"></i> Python lxml 模块操作 XML 的基本使用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/f57ab1ee.html" rel="next" title="格式化输出NETCONF回显内容">
+                  格式化输出NETCONF回显内容 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="far fa-grin-wink"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">某呆</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:09</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.7/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"8MMinwRrMsuJe3aSCaWDvsK6-gzGzoHsz","app_key":"Bkx590nLq6gdEa1laXiWsWQC","server_url":"https://8mminwrr.lc-cn-n1-shared.com","security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

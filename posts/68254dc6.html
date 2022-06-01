@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fefefe">
+  <meta name="msvalidate.01" content="8DAA4873BEFC66EB6071E0A8562B64FF">
+  <meta name="baidu-site-verification" content="code-epf7zfvuoz">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/pace-js@1.2.4/themes/silver/pace-theme-minimal.css">
+  <script src="https://unpkg.com/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":260,"display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#ccc","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="概览官方文档 Jinja 模板只是一个文本文件，可以 基于模板生成任何基于文本的格式（HTML、XML、CSV、LaTeX 等），一般用在前端的项目中，渲染 HTML 文件。 作为网络工程师，可以将其用来批量生成网络设备的配置。 或者其他需要批量生成文本的场景中。 模板包含变量或表达式，这两者在模板求值的时候会被替换为值。模板中还有标签，控制模板的逻辑。模板语法的大量灵感来自于 Django 和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jinja2 入门教程、基本概念、简单使用及使用 Jinja2 生成交换机配置">
+<meta property="og:url" content="https://555.xdai.vip/posts/68254dc6.html">
+<meta property="og:site_name" content="xdai">
+<meta property="og:description" content="概览官方文档 Jinja 模板只是一个文本文件，可以 基于模板生成任何基于文本的格式（HTML、XML、CSV、LaTeX 等），一般用在前端的项目中，渲染 HTML 文件。 作为网络工程师，可以将其用来批量生成网络设备的配置。 或者其他需要批量生成文本的场景中。 模板包含变量或表达式，这两者在模板求值的时候会被替换为值。模板中还有标签，控制模板的逻辑。模板语法的大量灵感来自于 Django 和">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-15T04:44:35.000Z">
+<meta property="article:modified_time" content="2021-12-16T16:12:58.257Z">
+<meta property="article:author" content="某呆">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="jinja">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://555.xdai.vip/posts/68254dc6.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/68254dc6.html","path":"posts/68254dc6.html","title":"Jinja2 入门教程、基本概念、简单使用及使用 Jinja2 生成交换机配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Jinja2 入门教程、基本概念、简单使用及使用 Jinja2 生成交换机配置 | xdai</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9de2876f250b395fc8c1bffb43afd6b4"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="xdai" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xdai</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">^_^</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">21</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E7%94%A8%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">一般用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for-%E8%AF%AD%E5%8F%A5%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">for 语句的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#if-%E8%AF%AD%E5%8F%A5%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">if 语句的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Template-Inheritance-in-Jinja%EF%BC%88%E7%BB%A7%E6%89%BF%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">Template Inheritance in Jinja（继承）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#filter-%E8%AF%AD%E5%8F%A5%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">filter 语句的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jinja2-Custom-Filters"><span class="nav-number">8.</span> <span class="nav-text">Jinja2 Custom Filters</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4%E5%99%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">8.1.</span> <span class="nav-text">自定义过滤器示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Macro%EF%BC%88%E5%AE%8F%EF%BC%9A%E7%9B%B8%E5%BD%93%E4%BA%8E%E5%87%BD%E6%95%B0%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">Macro（宏：相当于函数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E7%99%BD%E8%A1%8C%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">10.</span> <span class="nav-text">空白行的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-number">11.</span> <span class="nav-text">实际应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">12.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="某呆"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">某呆</p>
+  <div class="site-description" itemprop="description">记录，分享</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xdai555" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xdai555" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vip@xdai.vip" title="E-Mail → mailto:vip@xdai.vip" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/q965844841qq?type=blog" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;q965844841qq?type&#x3D;blog" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-copyright fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://gitee.com/xdai555/nornir_docs_cn" title="https:&#x2F;&#x2F;gitee.com&#x2F;xdai555&#x2F;nornir_docs_cn" rel="noopener external nofollow noreferrer" target="_blank">Nornir 中文手册</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://textfsm.xdai.vip/" title="http:&#x2F;&#x2F;textfsm.xdai.vip&#x2F;" rel="noopener external nofollow noreferrer" target="_blank">TextFSM 在线解析</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com/" title="https:&#x2F;&#x2F;kalacloud.com" rel="noopener external nofollow noreferrer" target="_blank">卡拉云低代码工具</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+        <!-- <h3 class="widget-title">Tag Cloud</h3>  #为标签云命名，建议不命名，直接删除此行 -->
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ipv6/" rel="tag">ipv6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jinja/" rel="tag">jinja</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netbox/" rel="tag">netbox</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netconf/" rel="tag">netconf</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netmiko/" rel="tag">netmiko</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nornir/" rel="tag">nornir</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openstack/" rel="tag">openstack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ospf/" rel="tag">ospf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/" rel="tag">pip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/68254dc6.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="某呆">
+      <meta itemprop="description" content="记录，分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jinja2 入门教程、基本概念、简单使用及使用 Jinja2 生成交换机配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-15 12:44:35" itemprop="dateCreated datePublished" datetime="2020-04-15T12:44:35+08:00">2020-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NetDevOps/" itemprop="url" rel="index"><span itemprop="name">NetDevOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/68254dc6.html" class="post-meta-item leancloud_visitors" data-flag-title="Jinja2 入门教程、基本概念、简单使用及使用 Jinja2 生成交换机配置" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://jinja.palletsprojects.com/en/2.11.x/templates/">官方文档</a></p>
+<p>Jinja 模板只是一个文本文件，可以 基于模板生成任何基于文本的格式（HTML、XML、CSV、LaTeX 等），一般用在前端的项目中，渲染 HTML 文件。</p>
+<p>作为网络工程师，可以将其用来批量生成网络设备的配置。</p>
+<p>或者其他需要批量生成文本的场景中。</p>
+<p>模板包含<strong>变量</strong>或<strong>表达式</strong>，这两者在模板求值的时候会被替换为值。模板中还有<strong>标签</strong>，控制模板的逻辑。模板语法的大量灵感来自于 Django 和 Python。</p>
+<span id="more"></span>
+
+<p>基本语法：</p>
+<ul>
+<li>语句 <code>&#123;% ... %&#125;</code></li>
+<li>变量 <code>&#123;&#123; ... &#125;&#125;</code></li>
+<li>注释 <code> </code></li>
+</ul>
+<p>常用的语句包括：for、if、set、include、block、filter 等</p>
+<p>变量通过传递字典来进行使用，当使用 for 语句的时候，变量可以是列表。</p>
+<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>创建和渲染模板的最基本方法是通过 <code>Template</code>，通过创建一个 <code>Template</code> 的实例，<br>会得到一个新的模板对象，模板对象有一个 <code>render()</code> 的方法，该方法在调用 <em>dict</em> 或 <em>keywords</em> 参数时填充模板。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> Template</span><br><span class="line"></span><br><span class="line">tmpl = Template(<span class="string">&#x27;hello &#123;&#123; name&#125;&#125;&#x27;</span>)</span><br><span class="line">result = tmpl.render(name = <span class="string">&#x27;111&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br><span class="line"><span class="comment"># 打印结果</span></span><br><span class="line">hello <span class="number">111</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="一般用法"><a href="#一般用法" class="headerlink" title="一般用法"></a>一般用法</h2><p>一般情况下，我们使用 <code>*.j2</code> 文件作为模板文件，用法如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导入相关模块</span></span><br><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> Template, FileSystemLoader, Environment</span><br><span class="line"></span><br><span class="line"><span class="comment"># 首先告诉Jinja2模块，jinja模板文件路径在哪？(如当前目录)</span></span><br><span class="line">j2_loader = FileSystemLoader(<span class="string">&#x27;./&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后定义一个环境，告诉jinja2，从哪里调用模板</span></span><br><span class="line">env = Environment(loader=j2_loader)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 之后通过 get_template 获取并载入模板</span></span><br><span class="line">j2_tmpl = env.get_template(<span class="string">&#x27;./jinja2.j2&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最后传入参数，渲染模板</span></span><br><span class="line">result = j2_tmpl.render(name=<span class="string">&quot;xdai&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+<p>模板 <code>jinja2.j2</code> 的内容如下</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat jinja2.j2</span></span><br><span class="line">This <span class="keyword">is</span> a Jinja2 template file created by &#123;&#123; name &#125;&#125;.</span><br></pre></td></tr></table></figure>
+<p>最终打印结果如下，传入的 name 被赋值给了模板文件，并输出了最终结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This is a Jinja2 template file created by xdai.</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="for-语句的使用"><a href="#for-语句的使用" class="headerlink" title="for 语句的使用"></a>for 语句的使用</h2><p>现在有如模板文件如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># cat jinja2_for.j2</span><br><span class="line">&#123;% for name in names %&#125;</span><br><span class="line">Hello &#123;&#123; name &#125;&#125;.</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<p>通过传入一个列表来批量生成最终的结果。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> Template, FileSystemLoader, Environment</span><br><span class="line">j2_loader = FileSystemLoader(<span class="string">&#x27;./&#x27;</span>)</span><br><span class="line">env = Environment(loader=j2_loader)</span><br><span class="line">j2_tmpl = env.get_template(<span class="string">&#x27;./jinja2_for.j2&#x27;</span>)</span><br><span class="line"><span class="comment"># 传入一个列表，对列表里面的人打招呼</span></span><br><span class="line">names = [<span class="string">&#x27;Zhang San&#x27;</span>, <span class="string">&#x27;Li Si&#x27;</span>, <span class="string">&#x27;Wang Wu&#x27;</span>]</span><br><span class="line">result = j2_tmpl.render(names=names)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+<p>打印结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Hello Zhang San.</span><br><span class="line"></span><br><span class="line">Hello Li Si.</span><br><span class="line"></span><br><span class="line">Hello Wang Wu.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>通过 for 循环，批量生成了 Hello。</p>
+<p>还可以传入列表，列表的值是一个字典，然后通过 for 和字典的 <code>.</code> 或者 <code>[]</code> 进行取值（和 Python 语法一致），将上面的模板文件改动如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># cat jinja2_for_with_dict.j2</span><br><span class="line">&#123;% for person in people %&#125;</span><br><span class="line">My name is &#123;&#123; person.name &#125;&#125;, and I am &#123;&#123; person[&#x27;age&#x27;] &#125;&#125; years old.</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后，编写代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> Template, FileSystemLoader, Environment</span><br><span class="line">j2_loader = FileSystemLoader(<span class="string">&#x27;./&#x27;</span>)</span><br><span class="line">env = Environment(loader=j2_loader)</span><br><span class="line">j2_tmpl = env.get_template(<span class="string">&#x27;./jinja2_for_with_dict.j2&#x27;</span>)</span><br><span class="line"><span class="comment"># 传入一个列表，列表里面的人进行自我介绍</span></span><br><span class="line">people = [</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>:<span class="string">&#x27;Zhang San&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">18</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>:<span class="string">&#x27;Li Si&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">20</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>:<span class="string">&#x27;Wang Wu&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">22</span>&#125;,</span><br><span class="line">]</span><br><span class="line">result = j2_tmpl.render(names=names)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+<p>打印结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">My name is Zhang San, and I am 18 years old.</span><br><span class="line"></span><br><span class="line">My name is Li Si, and I am 20 years old.</span><br><span class="line"></span><br><span class="line">My name is Wang Wu, and I am 22 years old.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="if-语句的使用"><a href="#if-语句的使用" class="headerlink" title="if 语句的使用"></a>if 语句的使用</h2><p>if 语句用来判断，当条件成立时，对语句块文件的内容进行渲染，条件判定失败后则跳过该语句块。</p>
+<p>将上文中的 for 循环模板进行修改如下，年龄大于 18 的进行自我介绍。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># cat jinja2_if.j2</span><br><span class="line">&#123;% for person in people %&#125;</span><br><span class="line">&#123;% if person.age &gt; 18 %&#125;</span><br><span class="line">My name is &#123;&#123; person.name &#125;&#125;, and I am &#123;&#123; person[&#x27;age&#x27;] &#125;&#125; years old.</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码与上面 for 语句的例子中相同，仅修改了加载模板的名字，打印结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">My name is Li Si, and I am 20 years old.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">My name is Wang Wu, and I am 22 years old.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到，age 小于 18 的，没有输出相应的文字。</p>
+<h2 id="Template-Inheritance-in-Jinja（继承）"><a href="#Template-Inheritance-in-Jinja（继承）" class="headerlink" title="Template Inheritance in Jinja（继承）"></a>Template Inheritance in Jinja（继承）</h2><p>在为网络设备配置创建更大、功能更多的模板文件时，可以使用模板继承，将模板分解开来。<br>比如，创建 VLAN、interface 、OSPF 等各自独立的模板，这样灵活性更高，模板继承可以将这些独立的模板文件连接在一起。</p>
+<p>使用 <code>include</code>语句可以将一个模板完全插入到另一个模板中：</p>
+<figure class="highlight jinja"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="template-tag">&#123;% <span class="name"><span class="name">include</span></span> &#x27;vlans.j2&#x27; %&#125;</span></span><br></pre></td></tr></table></figure>
+<p>另一种继承的方法是使用 <code>bolck</code> 语句，子模板引用父模板后，可以指定其中的某些部分，如果子模板中不存在，则使用父模板中的值。父模板也可以将 <code>bolck</code> 留空，子模板直接填充内容。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 父模板，cat father.j2</span></span><br><span class="line">This <span class="keyword">is</span> father template.</span><br><span class="line">&#123;% block test %&#125;</span><br><span class="line"> This <span class="keyword">is</span> line can be replaced.</span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line">This <span class="keyword">is</span> father template.</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子模板，cat children.j2</span></span><br><span class="line">&#123;% extends <span class="string">&#x27;father.j2&#x27;</span> %&#125;</span><br><span class="line">&#123;% block test %&#125;</span><br><span class="line">This <span class="keyword">is</span> children template.</span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 渲染结果，block 被替代，其他内容不变。</span></span><br><span class="line">This <span class="keyword">is</span> father template.</span><br><span class="line">This <span class="keyword">is</span> children template.</span><br><span class="line">This <span class="keyword">is</span> father template.</span><br></pre></td></tr></table></figure>
+
+<h2 id="filter-语句的使用"><a href="#filter-语句的使用" class="headerlink" title="filter 语句的使用"></a>filter 语句的使用</h2><p>filter 语句的作用就是对模板数据块的内容进行格式化修改。<br>例如：大小写转换、统计长度、计算绝对值等等，内置支持的过滤器可参见<a target="_blank" rel="noopener external nofollow noreferrer" href="https://jinja.palletsprojects.com/en/3.0.x/templates/#builtin-filters">官网</a></p>
+<p>来看个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># cat jinja2_filter.j2</span><br><span class="line">&#123;% for person in people %&#125;</span><br><span class="line">My name is &#123;&#123; person.name | upper() &#125;&#125;, and I am &#123;&#123; person[&#x27;age&#x27;] &#125;&#125; years old.</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<p>执行代码不再赘述，打印结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">My name is ZHANG SAN, and I am 18 years old.</span><br><span class="line"></span><br><span class="line">My name is LI SI, and I am 20 years old.</span><br><span class="line"></span><br><span class="line">My name is WANG WU, and I am 22 years old.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Jinja2-Custom-Filters"><a href="#Jinja2-Custom-Filters" class="headerlink" title="Jinja2 Custom Filters"></a>Jinja2 Custom Filters</h2><p>内置的 filter 可能会不满足自己的需要，这时就需要进行自定义了。<br>自定义筛选器只是常规 Python 函数，将筛选器的左侧作为第一个参数，并将参数作为额外的参数或关键字参数传递给筛选器。</p>
+<p>可以将自己写的函数、导入的模块等更新到环境中，进而在 Jinja2 中使用。</p>
+<p>Jinja2 的默认 filter 是一个字典，查看方式：<code>Environment.filters</code></p>
+<p>使用方法：通过更新 <strong>environment</strong> 中的 <strong>filters</strong> 字典，在模板环境中注册。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">env = Environment(loader=FileSystemLoader(<span class="string">&#x27;./templates/&#x27;</span>))</span><br><span class="line">env.filters[<span class="string">&#x27;datetimeformat&#x27;</span>] = datetimeformat</span><br></pre></td></tr></table></figure>
+<p>在模板中使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; article.pub_date|datetimeformat &#125;&#125;</span><br><span class="line"><span class="comment"># 传参方法</span></span><br><span class="line"><span class="comment"># &#123;&#123; 42| myfilter(23) &#125;&#125; ==  myfilter(42, 23)</span></span><br></pre></td></tr></table></figure>
+<h3 id="自定义过滤器示例"><a href="#自定义过滤器示例" class="headerlink" title="自定义过滤器示例"></a>自定义过滤器示例</h3><p>将 <code>ipaddress.IPv4Interface</code> 作为过滤器，来实现将传入的 IP 地址变量进行分析。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 按照jinja2自定义过滤器传参方法定义一个函数，获取其他模块的属性 **getattr**</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">custom_ipaddr</span>(<span class="params">ipaddress,operation</span>):</span><br><span class="line">    <span class="keyword">from</span> ipaddress <span class="keyword">import</span> IPv4Interface</span><br><span class="line">    ipadd = IPv4Interface(ipaddress)</span><br><span class="line">    attr = <span class="built_in">getattr</span>(ipadd,operation)</span><br><span class="line">    <span class="keyword">return</span> attr</span><br><span class="line"><span class="comment"># 添加到环境中</span></span><br><span class="line">env = Environment(loader=FileSystemLoader(<span class="string">&#x27;./roles/cmw7/templates/&#x27;</span>))</span><br><span class="line">env.filters[<span class="string">&#x27;custom_ipaddr&#x27;</span>] = custom_ipaddr</span><br><span class="line"><span class="comment"># 在模板中使用</span></span><br><span class="line"><span class="comment"># cat filter_test.j2</span></span><br><span class="line">&#123;&#123; <span class="number">192.168</span><span class="number">.1</span><span class="number">.1</span>/<span class="number">24</span> | custom_ipaddr(<span class="string">&#x27;netmask&#x27;</span>) &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Macro（宏：相当于函数）"><a href="#Macro（宏：相当于函数）" class="headerlink" title="Macro（宏：相当于函数）"></a>Macro（宏：相当于函数）</h2><p>可以自己编写一个函数，然后在模板中调用</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat test.j2</span></span><br><span class="line">&#123;% macro testfunc() %&#125;</span><br><span class="line">  test string</span><br><span class="line">&#123;% endmacro %&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="空白行的处理"><a href="#空白行的处理" class="headerlink" title="空白行的处理"></a>空白行的处理</h2><p>通过上面的实践，你可能会发现，生成的结果中，有很多空行，默认情况下，jinja2 会给渲染后的结果加上空行。</p>
+<p>如果需要去除模板中的空白，如 For 语句前后、变量表达式的开头或结尾添加减号 (-)，就会删除这个语句块之前或之后的空格。</p>
+<p>以上文中的 for 循环为例，修改模板如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># cat jinja2.j2</span><br><span class="line">&#123;% for name in names -%&#125;</span><br><span class="line">Hello &#123;&#123; name &#125;&#125;.</span><br><span class="line">&#123;%- endfor %&#125;</span><br></pre></td></tr></table></figure>
+<p>注意上面的 <code>-</code> 符号，放在 for 的结尾，是删除语句块之前的空行，放在 endfor 之前，是删除语句块之后的空行，如果前后的空行都删除了，则内容会在同一行，所以，上面模板渲染之后的输出为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello Zhang San.Hello Li Si.Hello Wang Wu.</span><br></pre></td></tr></table></figure>
+<p>具体请根据自己的需求来进行空白行的控制。</p>
+<h2 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h2><p>实际应用过程中，由于 jinja2 的模板需要传入字典、列表等，为了方便维护，我们可以使用单独的变量文件来存储这些东西，例如 YAML、JSON 等，一般使用 YAML ，因为简洁易读。</p>
+<p>下面通过一个生成交换机配置的文件，来对 jinja2 模板语法进行综合使用。<br>模板文件如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># cat l2_interface.j2</span><br><span class="line">&#123;% for iface in l2_interface -%&#125;</span><br><span class="line">#</span><br><span class="line">interface &#123;&#123; iface.iface_name &#125;&#125;</span><br><span class="line"> &#123;% if iface.desc != None -%&#125;</span><br><span class="line"> description &#123;&#123; iface.desc &#125;&#125;</span><br><span class="line"> &#123;% endif -%&#125;</span><br><span class="line">&#123;% if iface.link_type == &#x27;trunk&#x27; -%&#125;</span><br><span class="line"> port link-type trunk</span><br><span class="line"> undo port trunk permit vlan 1</span><br><span class="line"> port trunk permit vlan &#123;&#123; iface.allow_vlan &#125;&#125;</span><br><span class="line">&#123;% else -%&#125;</span><br><span class="line"> port link-type access</span><br><span class="line"> port access vlan &#123;&#123; iface.allow_vlan &#125;&#125;</span><br><span class="line">&#123;% endif -%&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<p>变量文件如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># l2_interface.yaml</span></span><br><span class="line"><span class="attr">l2_interface:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">iface_name:</span> <span class="string">g1/0/1</span></span><br><span class="line">    <span class="attr">desc:</span> <span class="string">jinja2_render_config</span></span><br><span class="line">    <span class="attr">link_type:</span> <span class="string">access</span></span><br><span class="line">    <span class="attr">allow_vlan:</span> <span class="number">10</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">iface_name:</span> <span class="string">g1/0/2</span></span><br><span class="line">    <span class="attr">desc:</span> </span><br><span class="line">    <span class="attr">link_type:</span> <span class="string">trunk</span></span><br><span class="line">    <span class="attr">allow_vlan:</span> <span class="number">10</span> <span class="number">20</span> <span class="number">30</span></span><br></pre></td></tr></table></figure>
+<p>代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> Template, FileSystemLoader, Environment</span><br><span class="line"></span><br><span class="line">j2_loader = FileSystemLoader(<span class="string">&#x27;./&#x27;</span>)</span><br><span class="line">env = Environment(loader=j2_loader)</span><br><span class="line">j2_tmpl = env.get_template(<span class="string">&#x27;./l2_interfaces.j2&#x27;</span>)</span><br><span class="line"><span class="comment"># 加载变量文件，解析成列表/字典</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;l2_interfaces.yaml&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="built_in">vars</span> = yaml.safe_load(f.read())</span><br><span class="line">result = j2_tmpl.render(<span class="built_in">vars</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+<p>最终生成了以下配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">interface g1/0/1</span><br><span class="line"> description jinja2_render_config</span><br><span class="line"> port link-type access</span><br><span class="line"> port access vlan 10</span><br><span class="line">#</span><br><span class="line">interface g1/0/2</span><br><span class="line"> port link-type trunk</span><br><span class="line"> undo port trunk permit vlan 1</span><br><span class="line"> port trunk permit vlan 10 20 30</span><br></pre></td></tr></table></figure>
+
+<p>下面是一个我自己写的案例，供参考。<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/xdai555/ansible_creat_config"> Ansible Role：根据 Jinja2 生成 H3C Comware V7 配置</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在实际场景中，可以将固化配置做成模板文件，生成配置时，只要传入指定的参数，就可生成对应的配置，降低配置编写复杂度的同时，也降低了出错的概率。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\26e9de3c.html" rel="bookmark">Python 使用 Netmiko 连接 H3C 网络设备</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\1aeac5e3.html" rel="bookmark">使用 pysnmp 查询 H3C 网络设备示例</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\61f26ef2.html" rel="bookmark">解决 Django 导出 csv 乱码问题</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\ad63b5a0.html" rel="bookmark">使用 netmiko 的 is_alive() 方法实现 ssh 保活机制</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\6909405a.html" rel="bookmark">netbox 在 Ubuntu20 系统上的安装记录</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+              <a href="/tags/jinja/" rel="tag"><i class="fa fa-tag"></i> jinja</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/f77b58f5.html" rel="prev" title="wireshark-notes">
+                  <i class="fa fa-chevron-left"></i> wireshark-notes
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/59f6b218.html" rel="next" title="在Netmiko中使用TextFSM">
+                  在Netmiko中使用TextFSM <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="far fa-grin-wink"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">某呆</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:09</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.7/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"8MMinwRrMsuJe3aSCaWDvsK6-gzGzoHsz","app_key":"Bkx590nLq6gdEa1laXiWsWQC","server_url":"https://8mminwrr.lc-cn-n1-shared.com","security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

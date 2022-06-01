@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>xdai</title>
+  <icon>https://555.xdai.vip/icon.png</icon>
+  <subtitle>^_^</subtitle>
+  <link href="https://555.xdai.vip/atom.xml" rel="self"/>
+  
+  <link href="https://555.xdai.vip/"/>
+  <updated>2022-06-01T06:39:26.352Z</updated>
+  <id>https://555.xdai.vip/</id>
+  
+  <author>
+    <name>某呆</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用 netmiko 的 is_alive() 方法实现 ssh 保活机制</title>
+    <link href="https://555.xdai.vip/posts/ad63b5a0.html"/>
+    <id>https://555.xdai.vip/posts/ad63b5a0.html</id>
+    <published>2022-04-18T15:13:04.000Z</published>
+    <updated>2022-06-01T06:39:26.352Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;在使用 Netmiko 的过程中，出于某些原因（SSH 新建连接慢、VTY 数量限制等），需要把 Netmiko 已经连接到设备上的 SSH 会话保持住，防止超时。&lt;/p&gt;
+&lt;p&gt;网络设备的超时时间是按照最后一次接收到命令的时间开始算的（以华三设备为例），所以一般发送一个回车、空字符等等都可以实现保活。&lt;/p&gt;
+&lt;p&gt;Netmiko 本身提供了一个 &lt;code&gt;is_alive()&lt;/code&gt; 方法来对会话进行验证，底层实现是通过发送 &lt;code&gt;null&lt;/code&gt; 来做的。&lt;/p&gt;
+&lt;p&gt;简单记录一下验证过程：&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netmiko" scheme="https://555.xdai.vip/tags/netmiko/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OSPF 最佳实践</title>
+    <link href="https://555.xdai.vip/posts/fd4d8189.html"/>
+    <id>https://555.xdai.vip/posts/fd4d8189.html</id>
+    <published>2022-04-10T15:28:23.000Z</published>
+    <updated>2022-06-01T06:39:26.361Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;Router-ID&quot;&gt;&lt;a href=&quot;#Router-ID&quot; class=&quot;headerlink&quot; title=&quot;Router ID&quot;&gt;&lt;/a&gt;Router ID&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;使用 router-id 命令为指定进程手动指定 router-id。&lt;/li&gt;
+&lt;li&gt;如果 router-id 需要路由可达，配置具有相同 IP 地址的 loopback 接口，并将其宣告在 OSPF 进程下。&lt;/li&gt;
+&lt;li&gt;在本区域的地址空间中选择一个地址作为 router-id 及 loopback 接口，便于路由发布；或者全网使用单独的网段来配置 router-id&lt;/li&gt;
+&lt;li&gt;如果其他协议或者功能等需要使用 loopback 接口，尽量使用新的地址&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;Process-ID&quot;&gt;&lt;a href=&quot;#Process-ID&quot; class=&quot;headerlink&quot; title=&quot;Process ID&quot;&gt;&lt;/a&gt;Process ID&lt;/h2&gt;&lt;p&gt;OSPF process id 是本地有效的，用来区分不同的 OSPF 进程，但是仍然建议在单进程的情况下全网配置保持一致，这样有利于自动化配置。&lt;/p&gt;
+&lt;h2 id=&quot;认证&quot;&gt;&lt;a href=&quot;#认证&quot; class=&quot;headerlink&quot; title=&quot;认证&quot;&gt;&lt;/a&gt;认证&lt;/h2&gt;&lt;p&gt;邻居路由器两端接口的验证模式必须一致，如果设置了密钥，需要保证密钥一致，认证分为接口认证和区域认证两种。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="网络技术" scheme="https://555.xdai.vip/categories/%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF/"/>
+    
+    
+    <category term="ospf" scheme="https://555.xdai.vip/tags/ospf/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SSH 端口转发配置</title>
+    <link href="https://555.xdai.vip/posts/f161c36b.html"/>
+    <id>https://555.xdai.vip/posts/f161c36b.html</id>
+    <published>2022-02-14T13:34:56.000Z</published>
+    <updated>2022-06-01T06:39:26.360Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;strong&gt;SSH开启端口转发需要修改 &amp;#x2F;etc&amp;#x2F;ssh&amp;#x2F;sshd_config配置文件，将 GatewayPorts修改为yes&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;参数解释：&lt;/p&gt;
+&lt;p&gt;-f 后台执行ssh指令&lt;br&gt;-C 允许压缩数据&lt;br&gt;-N 不执行远程指令&lt;br&gt;-R 将远程主机(服务器)的某个端口转发到本地端指定机器的指定端口&lt;br&gt;-L 本地端口转发&lt;br&gt;-D 动态端口转发&lt;/p&gt;
+&lt;p&gt;简版：本地端口转发（相当于正向代理），本地监听16379端口，将16379端口的流量都转发给6379端口&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ssh -fCNL *:16379:localhost:6379 localhost&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://555.xdai.vip/categories/Linux/"/>
+    
+    
+    <category term="linux" scheme="https://555.xdai.vip/tags/linux/"/>
+    
+    <category term="代理" scheme="https://555.xdai.vip/tags/%E4%BB%A3%E7%90%86/"/>
+    
+    <category term="ssh" scheme="https://555.xdai.vip/tags/ssh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netbox 在 Ubuntu20 系统上的安装记录</title>
+    <link href="https://555.xdai.vip/posts/6909405a.html"/>
+    <id>https://555.xdai.vip/posts/6909405a.html</id>
+    <published>2022-02-09T14:58:04.000Z</published>
+    <updated>2022-06-01T06:39:26.358Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;NetBox-安装&quot;&gt;&lt;a href=&quot;#NetBox-安装&quot; class=&quot;headerlink&quot; title=&quot;NetBox 安装&quot;&gt;&lt;/a&gt;NetBox 安装&lt;/h2&gt;&lt;p&gt;系统环境：Ubuntu20.04 LTS&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netbox" scheme="https://555.xdai.vip/tags/netbox/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netbox 使用问题记录</title>
+    <link href="https://555.xdai.vip/posts/101f7898.html"/>
+    <id>https://555.xdai.vip/posts/101f7898.html</id>
+    <published>2022-01-18T12:22:29.000Z</published>
+    <updated>2022-06-01T06:39:26.356Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;Netbox-CSV-导出中文乱码&quot;&gt;&lt;a href=&quot;#Netbox-CSV-导出中文乱码&quot; class=&quot;headerlink&quot; title=&quot;Netbox CSV 导出中文乱码&quot;&gt;&lt;/a&gt;Netbox CSV 导出中文乱码&lt;/h3&gt;&lt;h4 id=&quot;解决办法&quot;&gt;&lt;a href=&quot;#解决办法&quot; class=&quot;headerlink&quot; title=&quot;解决办法&quot;&gt;&lt;/a&gt;解决办法&lt;/h4&gt;&lt;p&gt;修改文件：&lt;code&gt;./netbox/netbox/netbox/views/generic.py&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;修改内容：&lt;/p&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 1. 在 import 语句后面添加一个新的类，重写父类 `TableExport`&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title class_&quot;&gt;TableExport2&lt;/span&gt;(&lt;span class=&quot;title class_ inherited__&quot;&gt;TableExport&lt;/span&gt;):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;title function_&quot;&gt;response&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;self, filename=&lt;span class=&quot;literal&quot;&gt;None&lt;/span&gt;&lt;/span&gt;):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        response = HttpResponse(content_type=&lt;span class=&quot;string&quot;&gt;&amp;quot;text/csv; charset=utf-8-sig&amp;quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; filename &lt;span class=&quot;keyword&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;None&lt;/span&gt;:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            response[&lt;span class=&quot;string&quot;&gt;&amp;quot;Content-Disposition&amp;quot;&lt;/span&gt;] = &lt;span class=&quot;string&quot;&gt;&amp;#x27;attachment; filename=&amp;quot;&amp;#123;&amp;#125;&amp;quot;&amp;#x27;&lt;/span&gt;.&lt;span class=&quot;built_in&quot;&gt;format&lt;/span&gt;(filename)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        response.write(self.export())&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; response&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 2. 修改 export_table 方法（大约在文件 200 行左右）让其使用重写的类来实例化&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title class_&quot;&gt;ObjectListView&lt;/span&gt;(ObjectPermissionRequiredMixin, View):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    ...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;# &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;title function_&quot;&gt;export_table&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;self, table, columns=&lt;span class=&quot;literal&quot;&gt;None&lt;/span&gt;&lt;/span&gt;):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        ...&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        exporter = TableExport2(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            export_format=TableExport.CSV,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            table=table,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            exclude_columns=exclude_columns&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        )&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        ...&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;修改文件后，重启 netbox 服务。如果是容器部署，重启 &lt;code&gt;netbox-docker_netbox_1&lt;/code&gt; 容器（暴露端口的那个容器）。&lt;/p&gt;
+&lt;h4 id=&quot;解决过程记录&quot;&gt;&lt;a href=&quot;#解决过程记录&quot; class=&quot;headerlink&quot; title=&quot;解决过程记录&quot;&gt;&lt;/a&gt;解决过程记录&lt;/h4&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netbox" scheme="https://555.xdai.vip/tags/netbox/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用 docker 安装部署 Zabbix5.0 并进行优化</title>
+    <link href="https://555.xdai.vip/posts/b9dcfcd4.html"/>
+    <id>https://555.xdai.vip/posts/b9dcfcd4.html</id>
+    <published>2021-12-29T17:23:33.000Z</published>
+    <updated>2022-06-01T06:39:26.364Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;架构概览&quot;&gt;&lt;a href=&quot;#架构概览&quot; class=&quot;headerlink&quot; title=&quot;架构概览&quot;&gt;&lt;/a&gt;架构概览&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/zabbix_deploy.svg&quot; alt=&quot;zabbix_deploy&quot;&gt;&lt;/p&gt;
+&lt;p&gt;网络环境不宜说太多：四朵独立的云，中间通过防火墙隔离，需要搭建一套监控系统对全网的网络设备进行监控，通过 Zabbix Server + Proxy 分布式部署方式来实现。&lt;/p&gt;
+&lt;h2 id=&quot;版本选择&quot;&gt;&lt;a href=&quot;#版本选择&quot; class=&quot;headerlink&quot; title=&quot;版本选择&quot;&gt;&lt;/a&gt;版本选择&lt;/h2&gt;&lt;p&gt;截止目前，Zabbix 已经发布了 6.0 pre-release，稳定版也已经来到了 5.4。&lt;/p&gt;
+&lt;p&gt;在生产环境部署时，为稳定起见，建议使用 &lt;strong&gt;Long-term support&lt;/strong&gt; (&lt;strong&gt;LTS&lt;/strong&gt;) 版本。&lt;/p&gt;
+&lt;p&gt;本次部署选用的是 &lt;a href=&quot;https://www.zabbix.com/cn/rn/rn5.0.19&quot;&gt;Zabbix 5.0 LTS&lt;/a&gt; 版本。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/image-20211229090438953.png&quot; alt=&quot;版本及软件依赖&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://555.xdai.vip/categories/Linux/"/>
+    
+    
+    <category term="zabbix" scheme="https://555.xdai.vip/tags/zabbix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HTTP PUT 和 POST 的区别</title>
+    <link href="https://555.xdai.vip/posts/86bb7394.html"/>
+    <id>https://555.xdai.vip/posts/86bb7394.html</id>
+    <published>2021-12-24T09:12:07.000Z</published>
+    <updated>2021-12-29T17:22:46.558Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;PUT 和POST 是 HTTP 的两个方法(Method)，都可以用来向 HTTP 服务器提交数据。似乎用哪个都可以，但其实两者还是有本质的区别的。&lt;/p&gt;
+&lt;p&gt;网上关于两者区别的文章比较多，但有相当一部分绝对是误导人。所以这次特意查看了 RFC7231，来澄清二者的区别。&lt;/p&gt;
+&lt;p&gt;首先直接摘出 RFC7231 中的的部分关键原文：&lt;/p&gt;
+&lt;p&gt;The fundamental difference between the POST and PUT methods is   highlighted by the different intent for the enclosed representation.   The target resource in a POST request is intended to handle the   enclosed representation according to the resource’s own semantics,   whereas the enclosed representation in a PUT request is defined as   replacing the state of the target resource.  Hence, the intent of PUT   is idempotent and visible to intermediaries, even though the exact   effect is only known by the origin server.&lt;/p&gt;
+&lt;p&gt;Proper interpretation of a PUT request presumes that the user agent   knows which target resource is desired.  A service that selects a   proper URI on behalf of the client, after receiving a state-changing   request, SHOULD be implemented using the POST method rather than PUT.&lt;/p&gt;
+&lt;p&gt;上面这两段描述的关键词就是“idempotent”（幂等），理解了这个词就理解了二者的本质区别。下面就围绕这个词从以下几个角度分析 &lt;code&gt;PUT&lt;/code&gt; 和 &lt;code&gt;POST&lt;/code&gt; 的区别。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Develop" scheme="https://555.xdai.vip/categories/Develop/"/>
+    
+    
+    <category term="http" scheme="https://555.xdai.vip/tags/http/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu apt 报错 Certificate verification failed: The certificate is NOT trusted</title>
+    <link href="https://555.xdai.vip/posts/1dfab79.html"/>
+    <id>https://555.xdai.vip/posts/1dfab79.html</id>
+    <published>2021-11-22T15:09:36.000Z</published>
+    <updated>2021-12-17T18:06:37.856Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;p&gt;使用 Windows 系统安装了 Ubuntu 20.04 wsl1.0 子系统之后，照例进行软件更新，修改为清华源之后，执行 &lt;code&gt;apt update&lt;/code&gt; 命令报错:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Certificate verification failed: The certificate is NOT trusted. The certificate chain uses expired certificate. Could not handshake: Error in the certificate verification&lt;/code&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://555.xdai.vip/categories/Linux/"/>
+    
+    <category term="问题记录" scheme="https://555.xdai.vip/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+    
+    
+    <category term="linux" scheme="https://555.xdai.vip/tags/linux/"/>
+    
+    <category term="ssl" scheme="https://555.xdai.vip/tags/ssl/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用多线程操作 paramiko 执行命令</title>
+    <link href="https://555.xdai.vip/posts/9a4bdb5a.html"/>
+    <id>https://555.xdai.vip/posts/9a4bdb5a.html</id>
+    <published>2021-08-22T16:05:55.000Z</published>
+    <updated>2021-12-16T16:12:20.071Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;最近公司内网设备版本有些问题，会出现队列丢包现象，由于设备较多，写个脚本定期收集会方便一点，不过内网只有 paramiko，所以简单造了一个轮子，实现多线程并发登录设备执行命令并对结果进行解析。&lt;/p&gt;
+&lt;p&gt;用这个脚本可以在网络设备上执行任何命令，实现各种功能，而且多线程并发很 Nice！&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;本次用到的命令及输出示例如下：
+# [H3C]dis qos queue-statistics interface outbound | in &amp;quot;^ Drop&amp;quot;
+#  Dropped: 0 packets, 0 bytes
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个命令用来收集当前设备上所有接口的所有队列的转发信息累计值（bytes 和 packages）。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="paramiko" scheme="https://555.xdai.vip/tags/paramiko/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一张图了解 Nornir 基础概念及用法</title>
+    <link href="https://555.xdai.vip/posts/ee91bfce.html"/>
+    <id>https://555.xdai.vip/posts/ee91bfce.html</id>
+    <published>2021-08-02T16:40:42.000Z</published>
+    <updated>2021-12-16T16:10:10.973Z</updated>
+    
+    
+    <summary type="html">分析源码，认识 Nornir</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="nornir" scheme="https://555.xdai.vip/tags/nornir/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>格式化输出NETCONF回显内容</title>
+    <link href="https://555.xdai.vip/posts/f57ab1ee.html"/>
+    <id>https://555.xdai.vip/posts/f57ab1ee.html</id>
+    <published>2021-05-26T14:02:49.000Z</published>
+    <updated>2021-12-16T16:11:11.349Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;在 《Python 使用 NETCONF 管理配置 H3C 网络设备》中，简单介绍了 Python 使用 NETCONF 操作网络设备。&lt;/p&gt;
+&lt;p&gt;对于配置类的操作，即 &lt;code&gt;edit-config&lt;/code&gt;，NETCONF 的回显内容一般情况下为 &lt;code&gt;ok&lt;/code&gt; 或者具体的报错信息；对于查询类的操作，即 &lt;code&gt;get&lt;/code&gt; &lt;code&gt;get-config&lt;/code&gt; 等，回显内容为 XML 格式，可读性较差，此时需要对查询到的内容进行格式化。&lt;/p&gt;
+&lt;h2 id=&quot;思路&quot;&gt;&lt;a href=&quot;#思路&quot; class=&quot;headerlink&quot; title=&quot;思路&quot;&gt;&lt;/a&gt;思路&lt;/h2&gt;&lt;p&gt;对于 XML 格式的数据，可以直接使用 XML 模块来进行解析，由于查询信息时，已经传入了一个 XML，那么进行解析时，可以根据这个 XML 来进行操作，使用 lxml 模块来进行实际操作。&lt;/p&gt;
+&lt;p&gt;针对网络设备的回显信息，先解析为 lxml 支持的格式如 &lt;code&gt;Element&lt;/code&gt; ，再使用 lxml 中 find 相关的方法，并添加上命名空间和具体的查询元素，查找到最终想要的信息。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netconf" scheme="https://555.xdai.vip/tags/netconf/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python 使用 NETCONF 管理配置 H3C 网络设备</title>
+    <link href="https://555.xdai.vip/posts/3e542090.html"/>
+    <id>https://555.xdai.vip/posts/3e542090.html</id>
+    <published>2021-04-22T15:23:49.000Z</published>
+    <updated>2021-12-16T16:12:48.882Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;之前简单介绍了 Python 针对 XML 文件的操作方式，XML 的诸多特性使得它非常适合程序之间的数据传输，NETCONF 就是采用 XML 来进行工作。&lt;/p&gt;
+&lt;h2 id=&quot;NETCONF-简单介绍&quot;&gt;&lt;a href=&quot;#NETCONF-简单介绍&quot; class=&quot;headerlink&quot; title=&quot;NETCONF 简单介绍&quot;&gt;&lt;/a&gt;NETCONF 简单介绍&lt;/h2&gt;&lt;p&gt;NETCONF（Network Configuration Protocol，网络配置协议）是一种基于 XML 的网络管理协议，它提供了一种可编程的、对网络设备进行配置和管理的方法。&lt;/p&gt;
+&lt;p&gt;NETCONF 报文使用 XML 格式，具有强大的过滤能力，而且每一个数据项都有一个固定的元素名称和位置，所以具有很强的兼容性，不同厂家不同设备可以通过 XML 得到相同的结果，便于混合不同厂商不同设备的为冷热软件开发。&lt;/p&gt;
+&lt;h3 id=&quot;NETCONF-协议结构&quot;&gt;&lt;a href=&quot;#NETCONF-协议结构&quot; class=&quot;headerlink&quot; title=&quot;NETCONF 协议结构&quot;&gt;&lt;/a&gt;NETCONF 协议结构&lt;/h3&gt;&lt;p&gt;NETCONF 采用分层结构，分别为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Content 内容层&lt;/li&gt;
+&lt;li&gt;Operations 操作层&lt;/li&gt;
+&lt;li&gt;RPC（Remote Procedure Call）远程调用层&lt;/li&gt;
+&lt;li&gt;Transport Protocol 通信协议层&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netconf" scheme="https://555.xdai.vip/tags/netconf/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python lxml 模块操作 XML 的基本使用</title>
+    <link href="https://555.xdai.vip/posts/fe994980.html"/>
+    <id>https://555.xdai.vip/posts/fe994980.html</id>
+    <published>2021-03-12T16:28:17.000Z</published>
+    <updated>2021-12-16T16:12:49.404Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;XML 相关的知识可以在 &lt;a href=&quot;https://www.w3school.com.cn/xml/index.asp&quot;&gt;w3school&lt;/a&gt; 上进行了解。&lt;br&gt;假设你已经对 XML 的基本概念有一些了解，本文介绍了 Python lxml 模块对 XML 的一些操作方法。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;lxml is the most feature-rich and easy-to-use library for processing XML and HTML in the Python language.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;文中所有代码块都是基于 &lt;code&gt;etree&lt;/code&gt; 来操作的，代码同一行后的注释为运行结果。&lt;/p&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; lxml &lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; etree&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Python" scheme="https://555.xdai.vip/categories/Python/"/>
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netconf" scheme="https://555.xdai.vip/tags/netconf/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用Netmiko进行交互式操作</title>
+    <link href="https://555.xdai.vip/posts/cf2c01e8.html"/>
+    <id>https://555.xdai.vip/posts/cf2c01e8.html</id>
+    <published>2021-02-04T14:46:03.000Z</published>
+    <updated>2021-12-16T16:12:25.504Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Netmiko 的 &lt;code&gt;send_command&lt;/code&gt; 方法可以很方便的在网络设备上执行命令，如各种 show、发送一些基本配置等；但是如果是交互式的操作，例如拷贝文件、升级系统等需要人工确认的操作，貌似就有点不行了。&lt;/p&gt;
+&lt;p&gt;其实 &lt;code&gt;send_command&lt;/code&gt; 方法提供了这个功能，从它的参数中可以看到，有一个&lt;code&gt;expect_string&lt;/code&gt;参数，可以通过这个参数来进行交互式操作。&lt;/p&gt;
+&lt;p&gt;这个参数就是表面意思： &lt;code&gt;期望字符串&lt;/code&gt;，实际使用中，这里需要传入一个&lt;b&gt;&lt;font color=red&gt;正则表达式&lt;/font&gt;&lt;/b&gt;，然后 Netmiko 会从返回的文本中搜索该字符串，找到之后即为执行结束，关闭连接。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netmiko" scheme="https://555.xdai.vip/tags/netmiko/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Netmiko 常用方法</title>
+    <link href="https://555.xdai.vip/posts/f1ca3608.html"/>
+    <id>https://555.xdai.vip/posts/f1ca3608.html</id>
+    <published>2021-02-03T16:04:48.000Z</published>
+    <updated>2021-12-17T18:16:24.240Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;之前文章中，介绍了 Netmiko 中 &lt;code&gt;send_command&lt;/code&gt; 和 &lt;code&gt;send_config_set&lt;/code&gt; 两个方法以及区别。&lt;br&gt;本篇内容来介绍一下 Netmiko 的常用方法以及应用场景。&lt;/p&gt;
+&lt;h2 id=&quot;命令执行相关&quot;&gt;&lt;a href=&quot;#命令执行相关&quot; class=&quot;headerlink&quot; title=&quot;命令执行相关&quot;&gt;&lt;/a&gt;命令执行相关&lt;/h2&gt;&lt;h3 id=&quot;def-send-command-timing&quot;&gt;&lt;a href=&quot;#def-send-command-timing&quot; class=&quot;headerlink&quot; title=&quot;def send_command_timing():&quot;&gt;&lt;/a&gt;def send_command_timing():&lt;/h3&gt;&lt;p&gt;基于时间延迟来执行命令。&lt;br&gt;如果通过这个方法登录到设备执行命令，不管命令有没有执行完成，Netmiko 都会在指定的时间内结束 SSH 连接，一般不推荐使用。&lt;/p&gt;
+&lt;p&gt;这里可以对比一下&lt;code&gt;send_command&lt;/code&gt;，这个方法会检测设备的提示符，例如&lt;code&gt;&amp;gt;&lt;/code&gt;、&lt;code&gt;]&lt;/code&gt;、&lt;code&gt;#&lt;/code&gt; 等，它会一直等待接收数据，直到检测到提示符后再进行退出（也有一个默认的超时时间）。&lt;/p&gt;
+&lt;p&gt;我们可以通过&lt;code&gt;delay_factor&lt;/code&gt;和&lt;code&gt;max_loops&lt;/code&gt;来控制等待时间。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;send_command_timing：默认超时时间约为 15 秒，即登录设备 15 秒后关闭 SSH 连接&lt;/li&gt;
+&lt;li&gt;send_command：默认超时时间约为 100 秒，即 100 秒未检测到提示符就关闭 SSH 连接&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netmiko" scheme="https://555.xdai.vip/tags/netmiko/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python 使用 Netmiko 连接 H3C 网络设备</title>
+    <link href="https://555.xdai.vip/posts/26e9de3c.html"/>
+    <id>https://555.xdai.vip/posts/26e9de3c.html</id>
+    <published>2021-02-02T16:24:30.000Z</published>
+    <updated>2021-12-18T15:41:58.051Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;什么是-Netmiko&quot;&gt;&lt;a href=&quot;#什么是-Netmiko&quot; class=&quot;headerlink&quot; title=&quot;什么是 Netmiko&quot;&gt;&lt;/a&gt;什么是 Netmiko&lt;/h2&gt;&lt;p&gt;是一个基于 &lt;code&gt;paramiko&lt;/code&gt; 二次封装的，可以通过 SSH 连接多种网络设备的库，从 3.0 版本以来，加入了对国内厂商的支持，是非常不错的网络自动化工具。&lt;/p&gt;
+&lt;p&gt;目前支持设备几乎覆盖了市面上大部分设备，包括锐捷、华三、华为、思科、f5 等等，具体的列表见后文。&lt;/p&gt;
+&lt;h2 id=&quot;如何使用&quot;&gt;&lt;a href=&quot;#如何使用&quot; class=&quot;headerlink&quot; title=&quot;如何使用&quot;&gt;&lt;/a&gt;如何使用&lt;/h2&gt;&lt;h3 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h3&gt;&lt;p&gt;首先需要具备&lt;code&gt;Python3.6&lt;/code&gt;以上版本的环境，使用&lt;code&gt;pip&lt;/code&gt;可以直接安装。&lt;br&gt;国内下载速度很慢，可以参考&lt;a href=&quot;/posts/8a28e619.html&quot; title=&quot;Python 下载加速：pip pypi 使用国内源及永久配置 pip 源&quot;&gt;Python 下载加速：pip pypi 使用国内源及永久配置 pip 源&lt;/a&gt;进行配置。&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 安装&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;pip install netmiko&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;出现 &lt;code&gt;Successfully installed netmiko&lt;/code&gt; 即为安装成功。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Python" scheme="https://555.xdai.vip/categories/Python/"/>
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="python" scheme="https://555.xdai.vip/tags/python/"/>
+    
+    <category term="netmiko" scheme="https://555.xdai.vip/tags/netmiko/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用 pysnmp 查询 H3C 网络设备示例</title>
+    <link href="https://555.xdai.vip/posts/1aeac5e3.html"/>
+    <id>https://555.xdai.vip/posts/1aeac5e3.html</id>
+    <published>2020-12-27T12:54:45.000Z</published>
+    <updated>2022-04-12T14:47:41.093Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://pysnmp.readthedocs.io/en/latest/index.html&quot;&gt;pysnmp 文档&lt;/a&gt;：官方文档，查看该模块所有的使用方法&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://download.h3c.com.cn/download.do?id=5426101&quot;&gt;h3c mib 库&lt;/a&gt;：华三官方提供的设备 MIB 值&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.ireasoning.com/mibbrowser.shtml&quot;&gt;mib 浏览器&lt;/a&gt;：可以用来查看 MIB OID 节点&lt;/p&gt;
+&lt;h3 id=&quot;基础环境&quot;&gt;&lt;a href=&quot;#基础环境&quot; class=&quot;headerlink&quot; title=&quot;基础环境&quot;&gt;&lt;/a&gt;基础环境&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Windows 10&lt;/li&gt;
+&lt;li&gt;python 3.8&lt;/li&gt;
+&lt;li&gt;pysnmp 4.4.12&lt;/li&gt;
+&lt;li&gt;HCL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;网络拓扑&quot;&gt;&lt;a href=&quot;#网络拓扑&quot; class=&quot;headerlink&quot; title=&quot;网络拓扑&quot;&gt;&lt;/a&gt;网络拓扑&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/202111201620531.png&quot; alt=&quot;image-20201227184224939&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Python" scheme="https://555.xdai.vip/categories/Python/"/>
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="python" scheme="https://555.xdai.vip/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>paramiko 使用证书免密连接 H3C 设备</title>
+    <link href="https://555.xdai.vip/posts/acfac2f9.html"/>
+    <id>https://555.xdai.vip/posts/acfac2f9.html</id>
+    <published>2020-12-26T08:54:40.000Z</published>
+    <updated>2021-12-16T16:12:46.142Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;设备配置用户&quot;&gt;&lt;a href=&quot;#设备配置用户&quot; class=&quot;headerlink&quot; title=&quot;设备配置用户&quot;&gt;&lt;/a&gt;设备配置用户&lt;/h2&gt;&lt;figure class=&quot;highlight text&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;#&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;local-user admin class manage&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; password simple admin&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; service-type ftp&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; service-type ssh&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; authorization-attribute user-role network-admin&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="paramiko" scheme="https://555.xdai.vip/tags/paramiko/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>产品迭代</title>
+    <link href="https://555.xdai.vip/posts/8ad6508.html"/>
+    <id>https://555.xdai.vip/posts/8ad6508.html</id>
+    <published>2020-07-29T12:23:27.000Z</published>
+    <updated>2021-12-16T16:25:12.265Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;迭代思维与 MVP 产品规划方法&lt;/p&gt;
+&lt;p&gt;MVP： minimum viable product 最小可用产品&lt;/p&gt;
+&lt;p&gt;OOPD：Online&amp;amp;Offline Product Development，线上线下相结合的产品开发方法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;内裤原则：MVP包含了产品的轮廓，核心的功能，让业务可以运转&lt;/li&gt;
+&lt;li&gt;优先线下：能够走线下的，优先走线下流程，让核心的功能先跑起来，快速做用户验证和方案验证&lt;/li&gt;
+&lt;li&gt;MVP的核心：忽略掉一切的细枝末节，做合适的假设和简化，使用最短的时间开发出来&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;迭代思维是最强大的产品思维逻辑，互联网上唯快不破的秘诀。&lt;/p&gt;
+&lt;p&gt;在资源受限的情况下（如人力、时间、资金、技术储备），忽略掉一切细枝末节，做合适的假设和简化，使用最短的时间开发出来简单的功能，之后再进行快速迭代，验证用户的需求。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="未分类" scheme="https://555.xdai.vip/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>解决 Django 导出 csv 乱码问题</title>
+    <link href="https://555.xdai.vip/posts/61f26ef2.html"/>
+    <id>https://555.xdai.vip/posts/61f26ef2.html</id>
+    <published>2020-07-24T14:41:27.000Z</published>
+    <updated>2022-04-12T14:47:41.093Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;利用-Django-输出-CSV-示例&quot;&gt;&lt;a href=&quot;#利用-Django-输出-CSV-示例&quot; class=&quot;headerlink&quot; title=&quot;利用 Django 输出 CSV 示例&quot;&gt;&lt;/a&gt;利用 Django 输出 CSV 示例&lt;/h2&gt;&lt;p&gt;环境：Python3 + Django 2.2.24&lt;/p&gt;
+&lt;p&gt;代码编辑器默认的编码是 UTF-8&lt;/p&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; csv&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; django.http &lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; HttpResponse&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;title function_&quot;&gt;some_view&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;request&lt;/span&gt;):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    response = HttpResponse(content_type=&lt;span class=&quot;string&quot;&gt;&amp;#x27;text/csv&amp;#x27;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    response[&lt;span class=&quot;string&quot;&gt;&amp;#x27;Content-Disposition&amp;#x27;&lt;/span&gt;] = &lt;span class=&quot;string&quot;&gt;&amp;#x27;attachment; filename=&amp;quot;somefilename.csv&amp;quot;&amp;#x27;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    writer = csv.writer(response)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    writer.writerow([&lt;span class=&quot;string&quot;&gt;&amp;#x27;姓名&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;性别&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;年龄&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;地址&amp;#x27;&lt;/span&gt;])&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    writer.writerow([&lt;span class=&quot;string&quot;&gt;&amp;#x27;张三&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;男&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;18&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;北京&amp;#x27;&lt;/span&gt;])&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; response&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="问题记录" scheme="https://555.xdai.vip/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+    
+    <category term="Python" scheme="https://555.xdai.vip/categories/Python/"/>
+    
+    <category term="Django" scheme="https://555.xdai.vip/categories/Python/Django/"/>
+    
+    
+    <category term="django" scheme="https://555.xdai.vip/tags/django/"/>
+    
+    <category term="python" scheme="https://555.xdai.vip/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Django admin 的使用</title>
+    <link href="https://555.xdai.vip/posts/8fc9d4ee.html"/>
+    <id>https://555.xdai.vip/posts/8fc9d4ee.html</id>
+    <published>2020-07-11T15:29:58.000Z</published>
+    <updated>2022-04-12T14:47:41.094Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;初始化&quot;&gt;&lt;a href=&quot;#初始化&quot; class=&quot;headerlink&quot; title=&quot;初始化&quot;&gt;&lt;/a&gt;初始化&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;创建项目：&lt;code&gt;manage.py startproject project_x&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建应用：&lt;code&gt;manage.py startapp app_x&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建管理用户：&lt;code&gt;manage.py createsuperuser &lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在 app_x 里面的 models.py 文件中，创建数据库字段（建模），涉及到字段改动时，&lt;strong&gt;为了保证数据安全性，建议只新增字段而不直接修改原来的字段&lt;/strong&gt;，防止 migrate 时操作数据库时出现问题。&lt;/p&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 使用系统自带的鉴权功能&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; django.contrib.auth.models &lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; User&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;JobTypes = [(&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;quot;技术类&amp;quot;&lt;/span&gt;),(&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;quot;产品类&amp;quot;&lt;/span&gt;),(&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;quot;运营类&amp;quot;&lt;/span&gt;),]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title class_&quot;&gt;Job&lt;/span&gt;(models.Model):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	creator = models.Foreignkey(User,verbose_name=&lt;span class=&quot;string&quot;&gt;&amp;quot;创建人&amp;quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;comment&quot;&gt;# 使用下拉选项，需要定义一个列表 JobTypes&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    job_type = models.SmallIntegerField(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        blank=&lt;span class=&quot;literal&quot;&gt;False&lt;/span&gt;, choices=JobTypes, verbose_name=&lt;span class=&quot;string&quot;&gt;&amp;quot;职位类别&amp;quot;&lt;/span&gt;,help_text=&lt;span class=&quot;string&quot;&gt;&amp;quot;页面上显示的帮助信息。&amp;quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/li&gt;
+&lt;/ol&gt;</summary>
+    
+    
+    
+    <category term="Python" scheme="https://555.xdai.vip/categories/Python/"/>
+    
+    <category term="Django" scheme="https://555.xdai.vip/categories/Python/Django/"/>
+    
+    
+    <category term="django" scheme="https://555.xdai.vip/tags/django/"/>
+    
+    <category term="python" scheme="https://555.xdai.vip/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>kuryr-kubernetes</title>
+    <link href="https://555.xdai.vip/posts/5509f374.html"/>
+    <id>https://555.xdai.vip/posts/5509f374.html</id>
+    <published>2020-07-06T13:12:27.000Z</published>
+    <updated>2022-04-12T14:47:41.094Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Kuryr-kubernetes 是 openstack neutrn 的子项目。&lt;/p&gt;
+&lt;p&gt;本身没有网络能力，是将 openstack neutron 的网络能力提供给 k8s。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/1b8e3cabe00541038b5b4500408ab624.png&quot; alt=&quot;9c7f7b717d793c6db27eb9ea8ae0ab5a.png&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="网络技术" scheme="https://555.xdai.vip/categories/%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="OpenStack" scheme="https://555.xdai.vip/categories/OpenStack/"/>
+    
+    
+    <category term="kubernetes" scheme="https://555.xdai.vip/tags/kubernetes/"/>
+    
+    <category term="网络" scheme="https://555.xdai.vip/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="openstack" scheme="https://555.xdai.vip/tags/openstack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>calico 学习笔记</title>
+    <link href="https://555.xdai.vip/posts/5509f374.html"/>
+    <id>https://555.xdai.vip/posts/5509f374.html</id>
+    <published>2020-07-05T13:12:27.000Z</published>
+    <updated>2022-04-12T14:47:41.094Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Calico 是针对容器、虚机、物理服务器的网络解决方案&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;提供 CNI plugin 与 k8s mesos 集成&lt;/li&gt;
+&lt;li&gt;提供 Libnetwork plugin 与 docker 集成&lt;/li&gt;
+&lt;li&gt;以 neutron plugin 形式与 openstack 集成&lt;/li&gt;
+&lt;li&gt;支持 BGP、IPIP 两种方案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Flannel 方案中，master node 上的 flanneld 进程需要始终检测 k8s api 哪些资源发生了变化并同步 etcd，规模较大时，会造成压力。&lt;br&gt;calico 与 k8s 集成时，使用 BGP 缓解 k8s api 和 etcd 的压力；并且提供了 network policy，实现多个用户之间的网络隔离等。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="网络技术" scheme="https://555.xdai.vip/categories/%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="kubernetes" scheme="https://555.xdai.vip/categories/kubernetes/"/>
+    
+    
+    <category term="kubernetes" scheme="https://555.xdai.vip/tags/kubernetes/"/>
+    
+    <category term="网络" scheme="https://555.xdai.vip/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>flannel 学习笔记</title>
+    <link href="https://555.xdai.vip/posts/1f32c30b.html"/>
+    <id>https://555.xdai.vip/posts/1f32c30b.html</id>
+    <published>2020-07-02T11:17:51.000Z</published>
+    <updated>2022-04-12T14:47:41.088Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Flannel 是一种 CNI 解决方案，也可以为 Dokcer 提供服务，对 k8s 而言，是一个网络插件。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实现了 CNI 的网络控制平面软件&lt;/li&gt;
+&lt;li&gt;属于 coreOS 的子项目&lt;/li&gt;
+&lt;li&gt;通过配置主机路由或者 overlay，避免对物理路由器进行配置&lt;ul&gt;
+&lt;li&gt;VxLAN&lt;/li&gt;
+&lt;li&gt;UDP&lt;/li&gt;
+&lt;li&gt;Host-GW&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="网络技术" scheme="https://555.xdai.vip/categories/%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="kubernetes" scheme="https://555.xdai.vip/categories/kubernetes/"/>
+    
+    
+    <category term="kubernetes" scheme="https://555.xdai.vip/tags/kubernetes/"/>
+    
+    <category term="网络" scheme="https://555.xdai.vip/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>bash history 的几个常用选项</title>
+    <link href="https://555.xdai.vip/posts/79fcabfa.html"/>
+    <id>https://555.xdai.vip/posts/79fcabfa.html</id>
+    <published>2020-06-06T08:07:34.000Z</published>
+    <updated>2021-12-16T16:12:28.901Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;删除无意义命令&quot;&gt;&lt;a href=&quot;#删除无意义命令&quot; class=&quot;headerlink&quot; title=&quot;删除无意义命令&quot;&gt;&lt;/a&gt;删除无意义命令&lt;/h2&gt;&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;export HISTIGNORE=&amp;#x27;pwd:exit:fg:bg:top:clear:history:ls:uptime:df&amp;#x27;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;使用该选项后，在历史记录中就不会记录选项后包含的命令。&lt;/p&gt;
+&lt;h2 id=&quot;忽略敏感命令&quot;&gt;&lt;a href=&quot;#忽略敏感命令&quot; class=&quot;headerlink&quot; title=&quot;忽略敏感命令&quot;&gt;&lt;/a&gt;忽略敏感命令&lt;/h2&gt;&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;export HISTCONTROL=ignorespace&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;例如：你不想在历史记录中出现带有密码的命令，可以在输入密码的命令前添加空格，这样就不会保存在历史记录中。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://555.xdai.vip/categories/Linux/"/>
+    
+    
+    <category term="linux" scheme="https://555.xdai.vip/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux IPv6 操作： ping telnet ssh curl wget</title>
+    <link href="https://555.xdai.vip/posts/799dfd19.html"/>
+    <id>https://555.xdai.vip/posts/799dfd19.html</id>
+    <published>2020-04-27T09:52:16.000Z</published>
+    <updated>2021-12-16T16:12:41.453Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://555.xdai.vip/categories/Linux/"/>
+    
+    
+    <category term="ipv6" scheme="https://555.xdai.vip/tags/ipv6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用 selenium 连接已经打开的 chrome 浏览器</title>
+    <link href="https://555.xdai.vip/posts/94ba5535.html"/>
+    <id>https://555.xdai.vip/posts/94ba5535.html</id>
+    <published>2020-04-23T07:27:29.000Z</published>
+    <updated>2021-12-16T16:12:27.106Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;最近做在一些 web 自动化（其实是用 web 端来配置网络设备）&lt;br&gt;编写脚本时经常用到 debug 去提取网页中的一些元素并做测试，但是每次需要 debug 时都要打开新的浏览器，比较麻烦，所以如果能直接连接到已经打开的浏览器，会非常方便。&lt;/p&gt;
+&lt;p&gt;操作步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;使用参数启动浏览器&lt;br&gt;cmd 定位到 chrome 所在目录，使用以下参数启动：&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;C:\Program Files (x86)\Google\Chrome\Application&amp;gt; .\chrome.exe --remote-debugging-port=9999 --user-data-dir=&amp;quot;C:\test&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;&lt;img src=&quot;https://img-blog.csdnimg.cn/20200423151746470.png&quot; alt=&quot;截图&quot;&gt;&lt;br&gt;参数：&lt;br&gt;port 可以是任意端口，只要不和本地已开放的端口冲突即可；用户目录最好是一个空文件夹，浏览器启动时会以空配置启动，然后将初始化配置放到这个目录里面。&lt;/p&gt;
+&lt;p&gt;另一种简单的方法：可以在桌面新建一个 chrome 的快捷方式，然后再目标里面写上参数（方便，推荐）。&lt;br&gt;&lt;img src=&quot;https://img-blog.csdnimg.cn/20200423151824270.png&quot; alt=&quot;截图&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</summary>
+    
+    
+    
+    <category term="Python" scheme="https://555.xdai.vip/categories/Python/"/>
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Python 下载加速：pip pypi 使用国内源及永久配置 pip 源</title>
+    <link href="https://555.xdai.vip/posts/8a28e619.html"/>
+    <id>https://555.xdai.vip/posts/8a28e619.html</id>
+    <published>2020-04-15T15:23:54.000Z</published>
+    <updated>2021-12-16T16:12:47.366Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;国内常见的-pip-源&quot;&gt;&lt;a href=&quot;#国内常见的-pip-源&quot; class=&quot;headerlink&quot; title=&quot;国内常见的 pip 源&quot;&gt;&lt;/a&gt;国内常见的 pip 源&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;来源&lt;/th&gt;
+&lt;th&gt;链接&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;阿里云&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;http://mirrors.aliyun.com/pypi/simple/&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;中国科技大学&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;https://pypi.mirrors.ustc.edu.cn/simple/&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;豆瓣&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;http://pypi.douban.com/simple/&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;清华大学&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;https://pypi.tuna.tsinghua.edu.cn/simple/&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h2 id=&quot;临时使用方法&quot;&gt;&lt;a href=&quot;#临时使用方法&quot; class=&quot;headerlink&quot; title=&quot;临时使用方法&quot;&gt;&lt;/a&gt;临时使用方法&lt;/h2&gt;&lt;p&gt;-i 加 url，举例：&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip install selenium -i http://pypi.douban.com/simple&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Python" scheme="https://555.xdai.vip/categories/Python/"/>
+    
+    
+    <category term="python" scheme="https://555.xdai.vip/tags/python/"/>
+    
+    <category term="pip" scheme="https://555.xdai.vip/tags/pip/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在Netmiko中使用TextFSM</title>
+    <link href="https://555.xdai.vip/posts/59f6b218.html"/>
+    <id>https://555.xdai.vip/posts/59f6b218.html</id>
+    <published>2020-04-15T05:23:56.000Z</published>
+    <updated>2021-12-16T16:12:28.258Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;在-netmiko-中使用-TextFSM&quot;&gt;&lt;a href=&quot;#在-netmiko-中使用-TextFSM&quot; class=&quot;headerlink&quot; title=&quot;在 netmiko 中使用 TextFSM&quot;&gt;&lt;/a&gt;在 netmiko 中使用 TextFSM&lt;/h3&gt;&lt;h4 id=&quot;安装模板&quot;&gt;&lt;a href=&quot;#安装模板&quot; class=&quot;headerlink&quot; title=&quot;安装模板&quot;&gt;&lt;/a&gt;安装模板&lt;/h4&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ &lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; ~&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ git &lt;span class=&quot;built_in&quot;&gt;clone&lt;/span&gt; https://github.com/networktocode/ntc-templates.git&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h4 id=&quot;查看安装完成&quot;&gt;&lt;a href=&quot;#查看安装完成&quot; class=&quot;headerlink&quot; title=&quot;查看安装完成&quot;&gt;&lt;/a&gt;查看安装完成&lt;/h4&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ &lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; ~&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ &lt;span class=&quot;built_in&quot;&gt;ls&lt;/span&gt; ~/ntc-templates/templates/index&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;Netmiko已配置为自动在〜&amp;#x2F;ntc-template&amp;#x2F;templates&amp;#x2F;index中查找ntc-templates索引文件。另外，可以通过设置以下环境变量来明确告诉Netmiko在哪里寻找TextFSM模板目录（请注意，此目录中必须有一个索引文件）：&lt;br&gt;&lt;code&gt;export NET_TEXTFSM=/path/to/ntc-templates/templates/&lt;/code&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="netmiko" scheme="https://555.xdai.vip/tags/netmiko/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Jinja2 入门教程、基本概念、简单使用及使用 Jinja2 生成交换机配置</title>
+    <link href="https://555.xdai.vip/posts/68254dc6.html"/>
+    <id>https://555.xdai.vip/posts/68254dc6.html</id>
+    <published>2020-04-15T04:44:35.000Z</published>
+    <updated>2021-12-16T16:12:58.257Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;概览&quot;&gt;&lt;a href=&quot;#概览&quot; class=&quot;headerlink&quot; title=&quot;概览&quot;&gt;&lt;/a&gt;概览&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://jinja.palletsprojects.com/en/2.11.x/templates/&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Jinja 模板只是一个文本文件，可以 基于模板生成任何基于文本的格式（HTML、XML、CSV、LaTeX 等），一般用在前端的项目中，渲染 HTML 文件。&lt;/p&gt;
+&lt;p&gt;作为网络工程师，可以将其用来批量生成网络设备的配置。&lt;/p&gt;
+&lt;p&gt;或者其他需要批量生成文本的场景中。&lt;/p&gt;
+&lt;p&gt;模板包含&lt;strong&gt;变量&lt;/strong&gt;或&lt;strong&gt;表达式&lt;/strong&gt;，这两者在模板求值的时候会被替换为值。模板中还有&lt;strong&gt;标签&lt;/strong&gt;，控制模板的逻辑。模板语法的大量灵感来自于 Django 和 Python。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="NetDevOps" scheme="https://555.xdai.vip/categories/NetDevOps/"/>
+    
+    
+    <category term="python" scheme="https://555.xdai.vip/tags/python/"/>
+    
+    <category term="jinja" scheme="https://555.xdai.vip/tags/jinja/"/>
+    
+  </entry>
+  
+</feed>

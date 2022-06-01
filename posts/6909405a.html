@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fefefe">
+  <meta name="msvalidate.01" content="8DAA4873BEFC66EB6071E0A8562B64FF">
+  <meta name="baidu-site-verification" content="code-epf7zfvuoz">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/pace-js@1.2.4/themes/silver/pace-theme-minimal.css">
+  <script src="https://unpkg.com/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":260,"display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#ccc","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="NetBox 安装系统环境：Ubuntu20.04 LTS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="netbox 在 Ubuntu20 系统上的安装记录">
+<meta property="og:url" content="https://555.xdai.vip/posts/6909405a.html">
+<meta property="og:site_name" content="xdai">
+<meta property="og:description" content="NetBox 安装系统环境：Ubuntu20.04 LTS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/image-20220209215651236.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/image-20220209224251052.png">
+<meta property="article:published_time" content="2022-02-09T14:58:04.000Z">
+<meta property="article:modified_time" content="2022-06-01T06:39:26.358Z">
+<meta property="article:author" content="某呆">
+<meta property="article:tag" content="netbox">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/image-20220209215651236.png">
+
+
+<link rel="canonical" href="https://555.xdai.vip/posts/6909405a.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/6909405a.html","path":"posts/6909405a.html","title":"netbox 在 Ubuntu20 系统上的安装记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>netbox 在 Ubuntu20 系统上的安装记录 | xdai</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9de2876f250b395fc8c1bffb43afd6b4"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="xdai" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xdai</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">^_^</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">21</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NetBox-%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">NetBox 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-PGSQL"><span class="nav-number">1.1.</span> <span class="nav-text">安装 PGSQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Redis"><span class="nav-number">1.2.</span> <span class="nav-text">安装 Redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Netbox"><span class="nav-number">1.3.</span> <span class="nav-text">安装 Netbox</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Python"><span class="nav-number">1.3.1.</span> <span class="nav-text">安装 Python</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD-NetBox"><span class="nav-number">1.3.2.</span> <span class="nav-text">下载 NetBox</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA-NetBox-%E5%88%9B%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7"><span class="nav-number">1.3.3.</span> <span class="nav-text">为 NetBox 创建系统用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-NetBox-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.4.</span> <span class="nav-text">修改 NetBox 配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%85%B6%E4%BB%96%E5%8F%AF%E9%80%89%E7%9A%84%E7%BB%84%E4%BB%B6"><span class="nav-number">1.3.5.</span> <span class="nav-text">安装其他可选的组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%8D%87%E7%BA%A7%E8%84%9A%E6%9C%AC"><span class="nav-number">1.3.6.</span> <span class="nav-text">运行升级脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-django-%E7%AE%A1%E7%90%86%E5%91%98%E7%94%A8%E6%88%B7"><span class="nav-number">1.3.7.</span> <span class="nav-text">创建 django 管理员用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%87%AA%E5%8A%A8%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.3.8.</span> <span class="nav-text">设置自动清理任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E8%BF%90%E8%A1%8C"><span class="nav-number">1.3.9.</span> <span class="nav-text">测试运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Gunicorn-%E8%BF%90%E8%A1%8C-Django-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.3.10.</span> <span class="nav-text">使用 Gunicorn 运行 Django 服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8-NetBox-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.3.11.</span> <span class="nav-text">启动 NetBox 服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-nginx-%E6%9D%A5%E5%A4%84%E7%90%86%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.12.</span> <span class="nav-text">使用 nginx 来处理静态文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-uwsgi-%E6%9D%A5%E5%90%AF%E5%8A%A8-NetBox-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.</span> <span class="nav-text">使用 uwsgi 来启动 NetBox 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-uwsgi"><span class="nav-number">1.4.1.</span> <span class="nav-text">安装 uwsgi</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.4.2.</span> <span class="nav-text">编辑配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.3.</span> <span class="nav-text">启动服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%BE%91-service-%E6%96%87%E4%BB%B6"><span class="nav-number">1.4.4.</span> <span class="nav-text">编辑 service 文件</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="某呆"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">某呆</p>
+  <div class="site-description" itemprop="description">记录，分享</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xdai555" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xdai555" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vip@xdai.vip" title="E-Mail → mailto:vip@xdai.vip" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/q965844841qq?type=blog" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;q965844841qq?type&#x3D;blog" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-copyright fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://gitee.com/xdai555/nornir_docs_cn" title="https:&#x2F;&#x2F;gitee.com&#x2F;xdai555&#x2F;nornir_docs_cn" rel="noopener external nofollow noreferrer" target="_blank">Nornir 中文手册</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://textfsm.xdai.vip/" title="http:&#x2F;&#x2F;textfsm.xdai.vip&#x2F;" rel="noopener external nofollow noreferrer" target="_blank">TextFSM 在线解析</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com/" title="https:&#x2F;&#x2F;kalacloud.com" rel="noopener external nofollow noreferrer" target="_blank">卡拉云低代码工具</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+        <!-- <h3 class="widget-title">Tag Cloud</h3>  #为标签云命名，建议不命名，直接删除此行 -->
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ipv6/" rel="tag">ipv6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jinja/" rel="tag">jinja</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netbox/" rel="tag">netbox</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netconf/" rel="tag">netconf</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netmiko/" rel="tag">netmiko</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nornir/" rel="tag">nornir</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openstack/" rel="tag">openstack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ospf/" rel="tag">ospf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/" rel="tag">pip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/6909405a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="某呆">
+      <meta itemprop="description" content="记录，分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          netbox 在 Ubuntu20 系统上的安装记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-02-09 22:58:04" itemprop="dateCreated datePublished" datetime="2022-02-09T22:58:04+08:00">2022-02-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NetDevOps/" itemprop="url" rel="index"><span itemprop="name">NetDevOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/6909405a.html" class="post-meta-item leancloud_visitors" data-flag-title="netbox 在 Ubuntu20 系统上的安装记录" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="NetBox-安装"><a href="#NetBox-安装" class="headerlink" title="NetBox 安装"></a>NetBox 安装</h2><p>系统环境：Ubuntu20.04 LTS</p>
+<span id="more"></span>
+
+<h3 id="安装-PGSQL"><a href="#安装-PGSQL" class="headerlink" title="安装 PGSQL"></a>安装 PGSQL</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y postgresql</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看版本信息：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xdai@xdai-vm:~$ psql -V</span><br><span class="line">psql (PostgreSQL) 12.9 (Ubuntu 12.9-0ubuntu0.20.04.1)</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>启动数据库并设置为开机自启</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start postgresql</span><br><span class="line">sudo systemctl enable postgresql</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>创建数据库</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 进入数据库</span><br><span class="line">sudo <span class="operator">-</span>u postgres psql</span><br><span class="line"># 建库授权</span><br><span class="line"><span class="keyword">CREATE</span> DATABASE netbox;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> netbox <span class="keyword">WITH</span> PASSWORD <span class="string">&#x27;VIP@xdai.vip&#x27;</span>;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> DATABASE netbox <span class="keyword">TO</span> netbox;</span><br><span class="line"># 退出</span><br><span class="line">\q</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>验证数据库状态</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">xdai@xdai-vm:~$  psql --username netbox --password --host localhost netbox</span><br><span class="line">Password: $&#123;这里输入上一步的密码&#125;</span><br><span class="line">psql (12.9 (Ubuntu 12.9-0ubuntu0.20.04.1))</span><br><span class="line">SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)</span><br><span class="line">Type &quot;help&quot; for help.</span><br><span class="line"></span><br><span class="line">netbox=&gt; \conninfo</span><br><span class="line">You are connected to database &quot;netbox&quot; as user &quot;netbox&quot; on host &quot;localhost&quot; (address &quot;127.0.0.1&quot;) at port &quot;5432&quot;.</span><br><span class="line">SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)</span><br><span class="line">netbox=&gt; \q</span><br><span class="line">xdai@xdai-vm:~$ </span><br></pre></td></tr></table></figure>
+
+<p>可以看到数据库已经可以连接，信息为：<code>host &quot;localhost&quot; (address &quot;127.0.0.1&quot;) at port &quot;5432&quot;</code></p>
+<h3 id="安装-Redis"><a href="#安装-Redis" class="headerlink" title="安装 Redis"></a>安装 Redis</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y redis-server</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看版本信息</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xdai@xdai-vm:~$ redis-server -v</span><br><span class="line">Redis server v=5.0.7 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=636cde3b5c7a3923</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>验证服务状态</li>
+</ol>
+<p>使用 <code>redis-cli ping</code> 来验证，返回 <code>PONG</code> 表示正常。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xdai@xdai-vm:~$ redis-cli ping</span><br><span class="line">PONG</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-Netbox"><a href="#安装-Netbox" class="headerlink" title="安装 Netbox"></a>安装 Netbox</h3><h4 id="安装-Python"><a href="#安装-Python" class="headerlink" title="安装 Python"></a>安装 Python</h4><p>NetBox v3.0 开始最低支持 Python3.7，从 NetBox v3.2 开始将最低支持 Python3.8。</p>
+<p>最新的 Ubuntu20.04 默认的 Python 版本为 3.8.10，但是仍缺少一些相关的依赖包。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 Python 相关依赖包</span></span><br><span class="line">sudo apt install -y python3 python3-pip python3-venv python3-dev build-essential libxml2-dev libxslt1-dev libffi-dev libpq-dev libssl-dev zlib1g-dev</span><br></pre></td></tr></table></figure>
+
+<h4 id="下载-NetBox"><a href="#下载-NetBox" class="headerlink" title="下载 NetBox"></a>下载 NetBox</h4><p>可以通过 wget 或者 git 来下载。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /opt/netbox/</span><br><span class="line">cd /opt/netbox/</span><br><span class="line">sudo git clone -b master --depth 1 https://github.com/netbox-community/netbox.git .</span><br><span class="line"></span><br><span class="line">Cloning into &#x27;.&#x27;...</span><br><span class="line">remote: Enumerating objects: 1173, done.</span><br><span class="line">remote: Counting objects: 100% (1173/1173), done.</span><br><span class="line">remote: Compressing objects: 100% (1097/1097), done.</span><br><span class="line">remote: Total 1173 (delta 210), reused 427 (delta 49), pack-reused 0</span><br><span class="line">Receiving objects: 100% (1173/1173), 4.31 MiB | 1.90 MiB/s, done.</span><br><span class="line">Resolving deltas: 100% (210/210), done.</span><br><span class="line">xdai@xdai-vm:/opt/netbox$ </span><br></pre></td></tr></table></figure>
+
+<h4 id="为-NetBox-创建系统用户"><a href="#为-NetBox-创建系统用户" class="headerlink" title="为 NetBox 创建系统用户"></a>为 NetBox 创建系统用户</h4><p>创建系统用户的目的是为了将 WSGI 和 HTTP 服务配置为在这个帐户下运行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 创建系统用户</span><br><span class="line">xdai@xdai-vm:/opt/netbox$ sudo adduser --system --group netbox</span><br><span class="line">sudo chown --recursive netbox /opt/netbox/netbox/media/Adding system user `netbox&#x27; (UID 115) ...</span><br><span class="line">Adding new group `netbox&#x27; (GID 120) ...</span><br><span class="line">Adding new user `netbox&#x27; (UID 115) with group `netbox&#x27; ...</span><br><span class="line">Creating home directory `/home/netbox&#x27; ...</span><br><span class="line"># 将 /opt/netbox/netbox/media/ 目录设置成 netbox 用户权限，这个文件夹下是前端页面</span><br><span class="line">xdai@xdai-vm:/opt/netbox$ sudo chown --recursive netbox /opt/netbox/netbox/media/</span><br><span class="line">xdai@xdai-vm:/opt/netbox$ </span><br></pre></td></tr></table></figure>
+
+<h4 id="修改-NetBox-配置文件"><a href="#修改-NetBox-配置文件" class="headerlink" title="修改 NetBox 配置文件"></a>修改 NetBox 配置文件</h4><p>复制一份默认的配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/netbox/netbox/netbox/</span><br><span class="line">sudo cp configuration.example.py configuration.py</span><br></pre></td></tr></table></figure>
+
+<p>先生成一个密钥，用来维护 HTTP 用户会话状态，配置文件里面要用到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xdai@xdai-vm:/opt/netbox/netbox/netbox$ python3 ../generate_secret_key.py </span><br><span class="line">lKCyYG-q5qW0&amp;3zK=*U9%Ga@yOzZOwEIz9JhrlIIdd*CXE0b#z</span><br></pre></td></tr></table></figure>
+
+<p>第一次使用的话，最小话的配置文件需要下面几个参数就可以运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xdai@xdai-vm:/opt/netbox/netbox/netbox$ sudo vim  configuration.py</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>第 11 行：允许谁可以访问前端页面</li>
+</ol>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ALLOWED_HOSTS</span> = [<span class="string">&#x27;*&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>第 15~22 行：数据库，修改用户名和密码为之前设置的信息</li>
+</ol>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">DATABASE</span> = &#123; </span><br><span class="line">    &#x27;NAME&#x27;: &#x27;netbox&#x27;,</span><br><span class="line">    &#x27;USER&#x27;: &#x27;netbox&#x27;, <span class="comment"># 修改用户名</span></span><br><span class="line">    &#x27;PASSWORD&#x27;: &#x27;VIP@xdai.vip&#x27;,  <span class="comment"># 修改密码</span></span><br><span class="line">    &#x27;HOST&#x27;: &#x27;localhost&#x27;,</span><br><span class="line">    &#x27;PORT&#x27;: &#x27;&#x27;,</span><br><span class="line">    &#x27;CONN_MAX_AGE&#x27;: 300,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>redis 使用默认配置即可</p>
+</li>
+<li><p>第 60 行：SECRET_KEY</p>
+</li>
+</ol>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">SECRET_KEY</span> = <span class="string">&#x27;lKCyYG-q5qW0&amp;3zK=*U9%Ga@yOzZOwEIz9JhrlIIdd*CXE0b#z&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>（可选配置）第 203 行：修改时区，默认是 UTC，需要改为中国标准时间</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TIME_ZONE = &#x27;Asia/Shanghai&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>修改完配置文件之后，保存退出。</p>
+<h4 id="安装其他可选的组件"><a href="#安装其他可选的组件" class="headerlink" title="安装其他可选的组件"></a>安装其他可选的组件</h4><p>NetBox 还支持一些可选的软件包。如果需要，第一次安装的时候这些包必须在 NetBox 根目录的 local_requirements.txt 中写上，这样 NetBox 会自动进行安装；或者也可以后期按需手动安装。</p>
+<p>官方提供了两个组件：</p>
+<ul>
+<li>napalm 用于从网络设备获取实时数据</li>
+<li>django-storages 用于连接远程文件存储（默认是使用本地存储）</li>
+</ul>
+<p>这里我只需要 napalm 来对接华三的网络设备，所以需要安装两个包：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c &quot;echo &#x27;napalm&#x27; &gt;&gt; /opt/netbox/local_requirements.txt&quot;</span><br><span class="line">sudo sh -c &quot;echo &#x27;napalm-h3c-comware&#x27; &gt;&gt; /opt/netbox/local_requirements.txt&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行升级脚本"><a href="#运行升级脚本" class="headerlink" title="运行升级脚本"></a>运行升级脚本</h4><p>运行自带的 <code>upgrade.sh</code> 来完成以下操作：</p>
+<ul>
+<li><p>创建 Python 虚拟环境 </p>
+</li>
+<li><p>安装所有必需的 Python 包（根目录下 requirements.txt 和 local_requirements.txt 包含的软件）</p>
+</li>
+<li><p>运行 Django 的数据库迁移</p>
+</li>
+<li><p>在本地生成离线文档</p>
+</li>
+<li><p>在磁盘上聚合静态资源文件</p>
+</li>
+</ul>
+<p>默认 pip 安装会很慢，参考<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/q965844841qq/article/details/105547362">pip 下载加速</a>来设置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /opt/netbox/upgrade.sh</span><br></pre></td></tr></table></figure>
+
+<p>安装完成之后会有如下提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Upgrade complete! Don&#x27;t forget to restart the NetBox services:</span><br><span class="line">  &gt; sudo systemctl restart netbox netbox-rq</span><br></pre></td></tr></table></figure>
+
+<p>如果是升级 NetBox，需要重启一下服务，因为本次是新安装，所以不用关注，继续往下进行。</p>
+<h4 id="创建-django-管理员用户"><a href="#创建-django-管理员用户" class="headerlink" title="创建 django 管理员用户"></a>创建 django 管理员用户</h4><p>NetBox 没有默认用户，所以需要创建一个超级用户（管理帐户）才能登录 NetBox。</p>
+<p>进入到升级脚本创建的 Python 虚拟环境，之后命令行前面都会有个 <code>(venv)</code> 的提示符，表示当前在虚拟环境中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /opt/netbox/venv/bin/activate</span><br></pre></td></tr></table></figure>
+
+<p>创建用户，邮箱可以留空不填。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(venv) xdai@xdai-vm:/opt/netbox/netbox/netbox$ cd /opt/netbox/netbox</span><br><span class="line">(venv) xdai@xdai-vm:/opt/netbox/netbox$ python3 manage.py createsuperuser</span><br><span class="line">Username (leave blank to use &#x27;xdai&#x27;): admin</span><br><span class="line">Email address:       </span><br><span class="line">Password: </span><br><span class="line">Password (again): </span><br><span class="line">Superuser created successfully.</span><br><span class="line">(venv) xdai@xdai-vm:/opt/netbox/netbox$ </span><br></pre></td></tr></table></figure>
+
+<h4 id="设置自动清理任务"><a href="#设置自动清理任务" class="headerlink" title="设置自动清理任务"></a>设置自动清理任务</h4><p>NetBox 包含了 <code>housekeeping</code> 管理命令用来处理一些定期清理任务，例如清除旧会话和过期的更改记录。</p>
+<p>尽管可以手动运行此命令来进行清理操作，不过还是建议使用系统的 cron 守护程序或类似其他的定时任务来运行清理任务。</p>
+<p>使用以下命令来为脚本创建一个 cron 任务，<strong>注意脚本的路径，如果 NetBox 安装在其他路径，需要使用正确的绝对路径</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /opt/netbox/contrib/netbox-housekeeping.sh /etc/cron.daily/netbox-housekeeping</span><br></pre></td></tr></table></figure>
+
+<h4 id="测试运行"><a href="#测试运行" class="headerlink" title="测试运行"></a>测试运行</h4><p>到这里 NetBox 已经安装的差不多了，可以使用 django 的命令来测试运行一下，没有问题后再使用 WSGI 来启动服务。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver 0.0.0.0:8000 --insecure</span><br></pre></td></tr></table></figure>
+
+<p>然后使用浏览器访问这个服务器的 <code>8000</code> 端口测试一下！</p>
+<p>如果服务已经正常启动，但是无法访问的话，请自行检查系统的防火墙或者 iptables 设置，放行 8000 端口。</p>
+<p>可以正常登录~</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/image-20220209215651236.png" alt="image-20220209215651236"></p>
+<p>一般开发的时候使用这种方式来测试服务的运行情况，实际部署时，需要结合 WSGI 来运行服务，必要时还需要配置 nginx 来使用。</p>
+<p>先 crtl + C 停止服务，进行下一步操作。</p>
+<h4 id="使用-Gunicorn-运行-Django-服务"><a href="#使用-Gunicorn-运行-Django-服务" class="headerlink" title="使用 Gunicorn 运行 Django 服务"></a>使用 Gunicorn 运行 Django 服务</h4><p> NetBox 作为 HTTP 服务器后面的 WSGI 应用程序运行。 NetBox 默认使用的是 gunicorn，<strong>但是它不能处理静态文件，还要结合 nginx 才能正常使用</strong>，而 uwsgi 支持静态文件的映射。这里先使用官方提供的 gunicorn 来启动服务。</p>
+<p>复制一份默认的配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /opt/netbox/contrib/gunicorn.py /opt/netbox/gunicorn.py</span><br></pre></td></tr></table></figure>
+
+<p>使用默认的配置文件即可，如果修改配置的话，后面 nginx 的配置需要同步修改。</p>
+<h4 id="启动-NetBox-服务"><a href="#启动-NetBox-服务" class="headerlink" title="启动 NetBox 服务"></a>启动 NetBox 服务</h4><p>NetBox 默认为我们写好了 systemd 的服务文件，复制到系统目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo cp -v /opt/netbox/contrib/*.service /etc/systemd/system/</span><br><span class="line">sudo systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+
+<p><strong>这里还要注意：如果 NetBox 安装在其他路径，需要在 service 文件中将几个服务修改为你安装的绝对路径</strong>，或者也可以使用软连接，将你的安装路径链接到<code>/opt/netbox/</code> 目录下，参考以下命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s Your/NetBox/Root/Path /opt/netbox</span><br></pre></td></tr></table></figure>
+
+<p>复制完 service 文件之后，启动服务并设置为开机自启动。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start netbox netbox-rq</span><br><span class="line">sudo systemctl enable netbox netbox-rq</span><br></pre></td></tr></table></figure>
+
+<p>查看服务状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status netbox.service</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用-nginx-来处理静态文件"><a href="#使用-nginx-来处理静态文件" class="headerlink" title="使用 nginx 来处理静态文件"></a>使用 nginx 来处理静态文件</h4><p>上一步已经启动了 web 服务，但是访问时会出现 <code>Static Media Failure</code> 的错误信息，就是因为 gunicorn 不能处理静态文件的映射，需要借助其他方式来实现（uwsgi 支持）。</p>
+<p>安装 nginx</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y nginx</span><br></pre></td></tr></table></figure>
+
+<p>编写配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /opt/netbox/contrib/nginx.conf /etc/nginx/sites-available/netbox</span><br><span class="line"># 使用软连接覆盖默认配置</span><br><span class="line">sudo rm /etc/nginx/sites-enabled/default</span><br><span class="line">sudo ln -s /etc/nginx/sites-available/netbox /etc/nginx/sites-enabled/netbox</span><br></pre></td></tr></table></figure>
+
+<p>不想使用 https 的话，可以修改 NetBox 提供的默认 nginx 配置文件：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sudo vim /etc/nginx/sites-available/netbox</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="comment"># 监听 80 端口</span></span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span> ipv6only=<span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">client_max_body_size</span> <span class="number">25m</span>;</span><br><span class="line">    <span class="comment"># 这里做了 静态文件的映射</span></span><br><span class="line">    <span class="section">location</span> /static/ &#123;</span><br><span class="line">        <span class="attribute">alias</span> /opt/netbox/netbox/static/;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="comment"># 将 80 端口的访问请求转发到 gunicorn 的服务上</span></span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:8001;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Host <span class="variable">$http_host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重启 nginx 服务：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart nginx</span><br></pre></td></tr></table></figure>
+
+<p>使用 80 端口来访问：</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/image-20220209224251052.png" alt="image-20220209224251052"></p>
+<p>至此，NetBox 搭建完成！</p>
+<h3 id="使用-uwsgi-来启动-NetBox-服务"><a href="#使用-uwsgi-来启动-NetBox-服务" class="headerlink" title="使用 uwsgi 来启动 NetBox 服务"></a>使用 uwsgi 来启动 NetBox 服务</h3><p>NetBox 默认使用 gunicorn 作为 WSGI 来提供服务，<strong>但是它不能处理静态文件，还要结合 nginx 才能正常使用</strong>，而 uwsgi 支持静态文件的映射。这里给出使用方法。</p>
+<h4 id="安装-uwsgi"><a href="#安装-uwsgi" class="headerlink" title="安装 uwsgi"></a>安装 uwsgi</h4><p>进入到升级脚本创建的 Python 虚拟环境，之后命令行前面都会有个 <code>(venv)</code> 的提示符，表示当前在虚拟环境中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source /opt/netbox/venv/bin/activate</span><br><span class="line">sudo /opt/netbox/venv/bin/pip3 install uwsgi</span><br></pre></td></tr></table></figure>
+
+<h4 id="编辑配置文件"><a href="#编辑配置文件" class="headerlink" title="编辑配置文件"></a>编辑配置文件</h4><p>仅供参考，勿用于生产。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># sudo vim /opt/netbox/uwsgi.ini</span><br><span class="line">[uwsgi]</span><br><span class="line"># 程序根目录，对于 django 就是 manage.py 所在目录</span><br><span class="line">chdir=/opt/netbox/netbox</span><br><span class="line"># python虚拟环境目录</span><br><span class="line">home=/opt/netbox/venv</span><br><span class="line"># 模块文件名，加载一个 WSGI 模块</span><br><span class="line">module=netbox.wsgi:application</span><br><span class="line"># 启用主进程</span><br><span class="line">master=true</span><br><span class="line"># 进程数</span><br><span class="line">process=4</span><br><span class="line"># 绑定地址</span><br><span class="line">http=0.0.0.0:8080</span><br><span class="line"># 启动uwsgi的用户名和用户组</span><br><span class="line">uid=netbox</span><br><span class="line">gid=netbox</span><br><span class="line"># sock文件路径</span><br><span class="line">socket=/tmp/netbox.sock</span><br><span class="line"># pid文件目路径</span><br><span class="line">pidfile=/tmp/netbox.pid</span><br><span class="line"># log文件路径</span><br><span class="line">daemonize=/tmp/netbox.log</span><br><span class="line"># 当服务停止的时候自动移除 socket 和 pid 文件</span><br><span class="line">vacuum=true</span><br><span class="line"># 启用线程</span><br><span class="line">enable-threads=true</span><br><span class="line"># 设置缓冲</span><br><span class="line">post-buffering=4096</span><br><span class="line"># 静态文件映射</span><br><span class="line">static-map=/static=/opt/netbox/netbox/static</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /opt/netbox/venv/bin/uwsgi --ini /opt/netbox/uwsgi.ini</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以通过 8080 端口来访问服务，而且不会报无法找到静态文件的错误。</p>
+<p>但是生产环境中还是建议使用专门的 webserver 例如 nginx、apache 来和 WSGI 进行对接。</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.zhihu.com/question/30560394">使用了Gunicorn或者uWSGI,为什么还需要Nginx？</a></p>
+<h4 id="编辑-service-文件"><a href="#编辑-service-文件" class="headerlink" title="编辑 service 文件"></a>编辑 service 文件</h4><p>如果想要使用 systemd 来启动 uwsgi 服务，需要编辑一个 service 文件，可以参考<a target="_blank" rel="noopener external nofollow noreferrer" href="https://uwsgi-docs-zh.readthedocs.io/zh_CN/latest/Systemd.html">官方文档</a>。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\101f7898.html" rel="bookmark">netbox 使用问题记录</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\ad63b5a0.html" rel="bookmark">使用 netmiko 的 is_alive() 方法实现 ssh 保活机制</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\9a4bdb5a.html" rel="bookmark">使用多线程操作 paramiko 执行命令</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/netbox/" rel="tag"><i class="fa fa-tag"></i> netbox</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/101f7898.html" rel="prev" title="netbox 使用问题记录">
+                  <i class="fa fa-chevron-left"></i> netbox 使用问题记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/f161c36b.html" rel="next" title="SSH 端口转发配置">
+                  SSH 端口转发配置 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="far fa-grin-wink"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">某呆</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:09</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.7/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"8MMinwRrMsuJe3aSCaWDvsK6-gzGzoHsz","app_key":"Bkx590nLq6gdEa1laXiWsWQC","server_url":"https://8mminwrr.lc-cn-n1-shared.com","security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

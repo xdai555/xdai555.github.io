@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fefefe">
+  <meta name="msvalidate.01" content="8DAA4873BEFC66EB6071E0A8562B64FF">
+  <meta name="baidu-site-verification" content="code-epf7zfvuoz">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/pace-js@1.2.4/themes/silver/pace-theme-minimal.css">
+  <script src="https://unpkg.com/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":260,"display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#ccc","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Flannel 是一种 CNI 解决方案，也可以为 Dokcer 提供服务，对 k8s 而言，是一个网络插件。  实现了 CNI 的网络控制平面软件 属于 coreOS 的子项目 通过配置主机路由或者 overlay，避免对物理路由器进行配置 VxLAN UDP Host-GW">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flannel 学习笔记">
+<meta property="og:url" content="https://555.xdai.vip/posts/1f32c30b.html">
+<meta property="og:site_name" content="xdai">
+<meta property="og:description" content="Flannel 是一种 CNI 解决方案，也可以为 Dokcer 提供服务，对 k8s 而言，是一个网络插件。  实现了 CNI 的网络控制平面软件 属于 coreOS 的子项目 通过配置主机路由或者 overlay，避免对物理路由器进行配置 VxLAN UDP Host-GW">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/cb1fdf9361814352acf0dde7b610d3b7.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/c212e02daa004bea9274384d818f7a0c.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/9a28346a36c34ec48625faf2cb798116.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/1894bebf5e304dcd8567521f76e427bf.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/41e04f84473b429c8681e52ef56aea40.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/de11dfd3c1b547eab756b7674f6b7f3f.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/48011100fe07463887b9271e161a70bd.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/65cb77b580e14a44bf68480fa25b0f83.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/8bb165ba7ae74e7fa9648e13c660b42d.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/ce7d008af56c44b2862fa2705aeb0fa7.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/e80aa803a47f47278272b7f5daa254d3.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/8189732dfa6d406b802d5e7f0edb1b0d.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/8ad51f8196b449959361ac3028095525.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/1b4f1e1199ce46cc968252a5a607befb.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/9a63b0df93454d8f857dd421baf25f09.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/c090d6db08f5463daee24f827f9fbc41.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/d491e1966cd3432485407baf659b9920.png">
+<meta property="article:published_time" content="2020-07-02T11:17:51.000Z">
+<meta property="article:modified_time" content="2022-04-12T14:47:41.088Z">
+<meta property="article:author" content="某呆">
+<meta property="article:tag" content="kubernetes">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/cb1fdf9361814352acf0dde7b610d3b7.png">
+
+
+<link rel="canonical" href="https://555.xdai.vip/posts/1f32c30b.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/1f32c30b.html","path":"posts/1f32c30b.html","title":"flannel 学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>flannel 学习笔记 | xdai</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9de2876f250b395fc8c1bffb43afd6b4"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="xdai" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xdai</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">^_^</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">21</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#host-gw-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">host-gw 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%93%8D"><span class="nav-number">2.2.</span> <span class="nav-text">实操</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VxLAN-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">VxLAN 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86-1"><span class="nav-number">3.1.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flannel-%E7%9A%84-VxLAN-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">Flannel 的 VxLAN 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Direct-routing-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.1.</span> <span class="nav-text">Direct routing 实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%93%8D-1"><span class="nav-number">3.3.</span> <span class="nav-text">实操</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP-%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">UDP 实现</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="某呆"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">某呆</p>
+  <div class="site-description" itemprop="description">记录，分享</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xdai555" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xdai555" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vip@xdai.vip" title="E-Mail → mailto:vip@xdai.vip" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/q965844841qq?type=blog" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;q965844841qq?type&#x3D;blog" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-copyright fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://gitee.com/xdai555/nornir_docs_cn" title="https:&#x2F;&#x2F;gitee.com&#x2F;xdai555&#x2F;nornir_docs_cn" rel="noopener external nofollow noreferrer" target="_blank">Nornir 中文手册</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://textfsm.xdai.vip/" title="http:&#x2F;&#x2F;textfsm.xdai.vip&#x2F;" rel="noopener external nofollow noreferrer" target="_blank">TextFSM 在线解析</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com/" title="https:&#x2F;&#x2F;kalacloud.com" rel="noopener external nofollow noreferrer" target="_blank">卡拉云低代码工具</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+        <!-- <h3 class="widget-title">Tag Cloud</h3>  #为标签云命名，建议不命名，直接删除此行 -->
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ipv6/" rel="tag">ipv6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jinja/" rel="tag">jinja</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netbox/" rel="tag">netbox</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netconf/" rel="tag">netconf</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netmiko/" rel="tag">netmiko</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nornir/" rel="tag">nornir</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openstack/" rel="tag">openstack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ospf/" rel="tag">ospf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/" rel="tag">pip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/1f32c30b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="某呆">
+      <meta itemprop="description" content="记录，分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          flannel 学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-07-02 19:17:51" itemprop="dateCreated datePublished" datetime="2020-07-02T19:17:51+08:00">2020-07-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">网络技术</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kubernetes/" itemprop="url" rel="index"><span itemprop="name">kubernetes</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/1f32c30b.html" class="post-meta-item leancloud_visitors" data-flag-title="flannel 学习笔记" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Flannel 是一种 CNI 解决方案，也可以为 Dokcer 提供服务，对 k8s 而言，是一个网络插件。</p>
+<ul>
+<li>实现了 CNI 的网络控制平面软件</li>
+<li>属于 coreOS 的子项目</li>
+<li>通过配置主机路由或者 overlay，避免对物理路由器进行配置<ul>
+<li>VxLAN</li>
+<li>UDP</li>
+<li>Host-GW</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+
+<p>和 k8s 集成时，运行在 work node 上面，监听 k8s master 的状态，共用 k8s 的控制节点的 etcd 作为自己的数据库。<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/cb1fdf9361814352acf0dde7b610d3b7.png" alt="205826f29a20b12c84a5940a76d121f0.png"></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>节点分布<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/c212e02daa004bea9274384d818f7a0c.png" alt="37ae6a952c139971c3cdbac8588173f6.png"></p>
+<ol>
+<li><p>master node</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># 初始化 master 节点</span><br><span class="line">sudo kubeadm reset</span><br><span class="line">sudo kubeadm init --config kubadm.yaml </span><br><span class="line"># 下载 flannel 配置文件</span><br><span class="line">wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br><span class="line"># 修改配置文件，net-json 改为 k8s 安装的 podSubnet，type 默认为 vxlan </span><br><span class="line">  net-conf.json: |</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;Network&quot;: &quot;10.244.0.0/16&quot;,</span><br><span class="line">      &quot;Backend&quot;: &#123;</span><br><span class="line">        &quot;Type&quot;: &quot;vxlan&quot;,</span><br><span class="line">   &quot;Directrouting&quot;: false</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"># 部署</span><br><span class="line">kubectl apply -f kube-flannel.yml</span><br><span class="line"># 查看</span><br><span class="line">kubectl get pods --all-namespaces</span><br><span class="line">---</span><br><span class="line">NAMESPACE     NAME                           READY   STATUS              RESTARTS   AGE</span><br><span class="line">kube-system   coredns-66bff467f8-m7ghl       0/1     ContainerCreating   0          11m</span><br><span class="line">kube-system   coredns-66bff467f8-mgnj7       0/1     ContainerCreating   0          11m</span><br><span class="line">kube-system   etcd-x-vm                      1/1     Running             0          11m</span><br><span class="line">kube-system   kube-apiserver-x-vm            1/1     Running             1          11m</span><br><span class="line">kube-system   kube-controller-manager-x-vm   1/1     Running             0          11m</span><br><span class="line">kube-system   kube-flannel-ds-amd64-g7hl9    1/1     Running             0          35s</span><br><span class="line">kube-system   kube-proxy-5x7l5               1/1     Running             0          11m</span><br><span class="line">kube-system   kube-scheduler-x-vm            1/1     Running             0          11m</span><br><span class="line"># 多次查看，可以看到 coredns Pending -&gt; ContainerCreating -&gt; Running，因为 flannel 初始化初始化完成之后，k8s 认为当前节点可用，就创建了 coredns</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>worker node</p>
+<p>安装 docker、kubeadm，关闭 swap，加入到集群中,hostname 不能重复</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 在 master node 上初始化完成之后，会输出如下 token</span><br><span class="line">kubeadm join 192.168.121.137:6443 --token abcdef.0123456789abcdef \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:719b052641c7681b770f9609e82d6a8001ef9aa1125db6cea7b1a452d555c34a</span><br><span class="line"># 加入完成后，在 master node 上查看</span><br><span class="line">kubectl get nodes</span><br><span class="line">NAME     STATUS   ROLES    AGE   VERSION</span><br><span class="line">worker   Ready    &lt;none&gt;   52s   v1.18.4</span><br><span class="line">x-vm     Ready    master   23m   v1.18.4</span><br></pre></td></tr></table></figure>
+
+<p>在 worker node 上查看容器,确认 flannel、kube-proxy 已经运行<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/9a28346a36c34ec48625faf2cb798116.png" alt="4378c8c0098fd036be47a1d0177623c3.png"></p>
+</li>
+<li><p>调整 coredns，使其分布到 worker node 上</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># -n 指定 namespace，先删除</span><br><span class="line">kubectl scale -n kube-system  deployment.v1.apps/coredns --replicas=0</span><br><span class="line"># 再将数量调整为 2，期望结果是两个 codedns 的 pod 分布到两个节点上</span><br><span class="line">kubectl scale -n kube-system  deployment.v1.apps/coredns --replicas=2</span><br></pre></td></tr></table></figure>
+
+<p>查看 pod 分布情况 <code>kubectl get pods --all-namespaces -o wide</code>,已经分布到两个节点上<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/1894bebf5e304dcd8567521f76e427bf.png" alt="216db286ae71b105eb3bd7b2a136de02.png"></p>
+<p>查看 worker node 网卡信息，可以看到 doredns 容器对应的 veth 已经存在，而且也有了 cni 网卡<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/41e04f84473b429c8681e52ef56aea40.png" alt="f027622b6f15a60cb387bb86f214d02e.png"></p>
+</li>
+</ol>
+<h2 id="host-gw-实现"><a href="#host-gw-实现" class="headerlink" title="host-gw 实现"></a>host-gw 实现</h2><h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>在 kube-net 网络实现中：</p>
+<ul>
+<li>同 node 中的 pod 互相通信是通过 cbr0 网桥二层互通</li>
+<li>跨 node 通信是通过主机的默认路由，路由到物理网络中进行数据转发，此时需要在物理路由器上进行路由相关的配置</li>
+</ul>
+<p>部署 flannel 时，将配置文件中 <code>net-json</code> 字段的 <code>Type</code> 修改为 <code>host-gw</code> 。<br>Flannel host-gw 实现方案中，由于 linux 具有路由转发功能，所以可以将物理路由器相关的配置下沉到 work node (主机)上，由主机进行路由，类似于DVR，也避免了单点故障。<br>Flannel 连接 k8s 的数据库，每个 node 上的 flanned 进程知道所有 podSubnet 对应的 node，进而在主机的网络空间中配置 podSubnet 的路由指向对应的 node。<br>Flannel 环境中连接 pod 的 Linuxbridge 为 cni0（kube-net 是 cbr0），<strong>所有的 work node 必须在同一个二层网络中（添加路由时必须是二层可达才会生效）</strong></p>
+<h3 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h3><p>Flannel 安装完成后，查看路由信息：<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/de11dfd3c1b547eab756b7674f6b7f3f.png" alt="查看路由信息.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 在 master node 上创建一个临时的 pod，使用 nodeSelector 指定运行的 node</span><br><span class="line">kubectl run -it --rm --restart=Never test1 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;x-vm&quot;&#125;&#125;&#125;&#x27; sh</span><br><span class="line"># 新开一个窗口，在 work node 上创建一个临时的 pod</span><br><span class="line">kubectl run -it --rm --restart=Never test2 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;worker&quot;&#125;&#125;&#125;&#x27; sh</span><br></pre></td></tr></table></figure>
+
+<p>新开一个窗口，检查一个 pod 运行情况，可以看到分布在两个 node 上,IP 分别是 11.0.0.5 和 11.0.1.3<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/48011100fe07463887b9271e161a70bd.png" alt="7de41a1c0421d0999013099aa1f28edd.png"><br>用 pod test1 去 ping test2，在 work node 上抓包<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/65cb77b580e14a44bf68480fa25b0f83.png" alt="5ef90a49d64b4faa06f19d3273a2e4aa.png"><br>可以从物理网卡抓到两个 pod 之间的通信流量<br>在 pod test1 上 traceroute test2，可以看到路径经过了 work node 到达 test2<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/8bb165ba7ae74e7fa9648e13c660b42d.png" alt="460c4781a35299373800e1bd52c187f0.png"></p>
+<h2 id="VxLAN-实现"><a href="#VxLAN-实现" class="headerlink" title="VxLAN 实现"></a>VxLAN 实现</h2><h3 id="基本原理-1"><a href="#基本原理-1" class="headerlink" title="基本原理"></a>基本原理</h3><ul>
+<li>Ethernet Frame 封装到 UDP 中</li>
+<li>不考虑物理网络冲突问题</li>
+<li>封装需要额外的 50 字节（网卡默认 MTU 为 1450）</li>
+<li>允许 woker node 分布到三层网络中</li>
+</ul>
+<p>VxLAN 数据包封装：<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/ce7d008af56c44b2862fa2705aeb0fa7.png" alt="24d7e3e98a34313a7f7b2a54047828aa.png"></p>
+<p>Flannel VxLAN 基于 Linux 原生的方式实现 VxLAN</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Linux 通过 VxLAN 字节口实现 VxLAN 的封装解封装</span><br><span class="line">ip link add vxlan0 type vxlan id 1 \</span><br><span class="line">remote 192.168.121.137 \</span><br><span class="line">local 192.168.121.138 \</span><br><span class="line">dstport 8472 \</span><br><span class="line">dev eth0</span><br><span class="line"># 通过监听端口来拦截数据进行封装解封装</span><br></pre></td></tr></table></figure>
+
+<h3 id="Flannel-的-VxLAN-实现"><a href="#Flannel-的-VxLAN-实现" class="headerlink" title="Flannel 的 VxLAN 实现"></a>Flannel 的 VxLAN 实现</h3><p>Flannel 会在 node 上额外创建 <code>flannel.&lt;vni&gt;</code> 设备，挂载的 ip 为当前 node podSubnet 的第 0 个地址作为 VTEP 地址。</p>
+<p>当有多个 node 时，如果按照 Linux 原生方式实现 VxLAN 时，每个 node 都要和其他 node 建立 VxLAN 隧道，也就是每个 node 上都要创建多个类型为 vxlan 的 netdev 设备，这样子接口的数量就是 n^2。</p>
+<p>为了避免这种情况，flannel 添加 flannel.vni 子接口的时候，并没有指定 remote ip，而是添加了对端 flannel.vni 的静态 arp 表项，并添加二层转规则（bridge fdb 查看），如果是发往对端的 flannel.vni 的 MAC 地址的话，从本端子接口发出，且指定了远端的 VTEP 地址。</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/e80aa803a47f47278272b7f5daa254d3.png" alt="83b6071b31e417bfa2ed3d00c4fae740.png"></p>
+<h4 id="Direct-routing-实现"><a href="#Direct-routing-实现" class="headerlink" title="Direct routing 实现"></a>Direct routing 实现</h4><p>传统的 VXLAN 使用隧道的通信方式会导致报文开销及流量增大，对于节点之间二层网络的通信，可以直接使用路由的方式而不用隧道，仅在跨三层通信时使用隧道封装，这样可以大大节省开销，二层通信性能也接近物理网络。</p>
+<p>仅使用 VXLAN，未启用 direct routing 时，路由表中同一二层网络的节点，路由表显示下一跳为 flannel.vni；启用 direct routing 后，路由表中下一跳变为物理网卡。</p>
+<p>启用方式，修改配置文件中 <code>Directrouting</code> 字段为 true</p>
+<h3 id="实操-1"><a href="#实操-1" class="headerlink" title="实操"></a>实操</h3><ol>
+<li><p>清理 host-gw 环境，修改配置文件，重新部署 flannel</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 删除 flannel</span><br><span class="line">kubectl delete -f kube-flannel.yml</span><br><span class="line"># 删除 coredns</span><br><span class="line">kubectl scale -n kube-system  deployment.v1.apps/coredns --replicas=0</span><br><span class="line"># 修改 kube-flannel.yml 中 net-json type 为 vxlan</span><br><span class="line"># 重新部署</span><br><span class="line">kubectl apply -f kube-flannel.yml</span><br><span class="line"># 添加 coredns</span><br><span class="line">kubectl scale -n kube-system  deployment.v1.apps/coredns --replicas=2</span><br></pre></td></tr></table></figure></li>
+<li><p>查看网卡信息</p>
+<p>ip addr，可以看到 vni 接口<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/8189732dfa6d406b802d5e7f0edb1b0d.png" alt="d90f30a8130cb9d4ac028ee94ea35d0d.png"><br>查看 arp 表<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/8ad51f8196b449959361ac3028095525.png" alt="a6869b22d10a7855cafd6f35fd084946.png"><br>查看转发数据库，bridge fdb<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/1b4f1e1199ce46cc968252a5a607befb.png" alt="849787945a8e0d6b0f3e35c36ff1121f.png"><br>在 work node 上查看接口，MAC 地址和 master node 上的转发表一致<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/9a63b0df93454d8f857dd421baf25f09.png" alt="88fe04fcaf7986867947389112ac51f2.png"></p>
+</li>
+<li><p>创建 pod ，抓包验证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 在 master node 上创建一个临时的 pod，使用 nodeSelector 指定运行的 node</span><br><span class="line">kubectl run -it --rm --restart=Never test1 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;x-vm&quot;&#125;&#125;&#125;&#x27; sh</span><br><span class="line"># 新开一个窗口，在 work node 上创建一个临时的 pod</span><br><span class="line">kubectl run -it --rm --restart=Never test2 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;worker&quot;&#125;&#125;&#125;&#x27; sh</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>查看 pods 分布情况：<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/c090d6db08f5463daee24f827f9fbc41.png" alt="b4b779f57a9c73b69244c34a23134b32.png"></p>
+<p>用 test1 ping test2 ，在 worker 物理接口上抓包，可以看到封装数据包的内容<br><img data-src="https://cdn.jsdelivr.net/gh/xdai555/picture_hosting@main/imgs/d491e1966cd3432485407baf659b9920.png" alt="2ba4920d026f368064eefa2c74f118e8.png"></p>
+</li>
+</ol>
+<h2 id="UDP-实现"><a href="#UDP-实现" class="headerlink" title="UDP 实现"></a>UDP 实现</h2><p>非 VxLAN 的 UDP 数据封装，不推荐使用<br>数据经过用户态转发，性能低</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\5509f374.html" rel="bookmark">kuryr-kubernetes</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kubernetes/" rel="tag"><i class="fa fa-tag"></i> kubernetes</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/79fcabfa.html" rel="prev" title="bash history 的几个常用选项">
+                  <i class="fa fa-chevron-left"></i> bash history 的几个常用选项
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/5509f374.html" rel="next" title="calico 学习笔记">
+                  calico 学习笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="far fa-grin-wink"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">某呆</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:09</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.7/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"8MMinwRrMsuJe3aSCaWDvsK6-gzGzoHsz","app_key":"Bkx590nLq6gdEa1laXiWsWQC","server_url":"https://8mminwrr.lc-cn-n1-shared.com","security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

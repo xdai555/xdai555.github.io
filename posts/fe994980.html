@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fefefe">
+  <meta name="msvalidate.01" content="8DAA4873BEFC66EB6071E0A8562B64FF">
+  <meta name="baidu-site-verification" content="code-epf7zfvuoz">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/pace-js@1.2.4/themes/silver/pace-theme-minimal.css">
+  <script src="https://unpkg.com/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":260,"display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#ccc","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="XML 相关的知识可以在 w3school 上进行了解。假设你已经对 XML 的基本概念有一些了解，本文介绍了 Python lxml 模块对 XML 的一些操作方法。  lxml is the most feature-rich and easy-to-use library for processing XML and HTML in the Python language.  文中所有代码块">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python lxml 模块操作 XML 的基本使用">
+<meta property="og:url" content="https://555.xdai.vip/posts/fe994980.html">
+<meta property="og:site_name" content="xdai">
+<meta property="og:description" content="XML 相关的知识可以在 w3school 上进行了解。假设你已经对 XML 的基本概念有一些了解，本文介绍了 Python lxml 模块对 XML 的一些操作方法。  lxml is the most feature-rich and easy-to-use library for processing XML and HTML in the Python language.  文中所有代码块">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-12T16:28:17.000Z">
+<meta property="article:modified_time" content="2021-12-16T16:12:49.404Z">
+<meta property="article:author" content="某呆">
+<meta property="article:tag" content="netconf">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://555.xdai.vip/posts/fe994980.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/fe994980.html","path":"posts/fe994980.html","title":"Python lxml 模块操作 XML 的基本使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python lxml 模块操作 XML 的基本使用 | xdai</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9de2876f250b395fc8c1bffb43afd6b4"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="xdai" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xdai</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">^_^</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">21</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Element-%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">Element 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Element-%E7%B1%BB%E5%8F%AF%E4%BB%A5%E4%BD%9C%E4%B8%BA%E5%88%97%E8%A1%A8%E6%9D%A5%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">Element 类可以作为列表来操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Element-%E7%B1%BB%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E5%AD%97%E5%85%B8%E6%9D%A5%E6%90%BA%E5%B8%A6%E5%B1%9E%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">Element 类可以使用字典来携带属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99-Element-%E5%86%99%E5%85%A5%E5%80%BC"><span class="nav-number">4.</span> <span class="nav-text">给 Element 写入值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-XPATH-%E6%9D%A5%E6%9F%A5%E6%89%BE%E5%80%BC"><span class="nav-number">5.</span> <span class="nav-text">使用 XPATH 来查找值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Namaspaces%EF%BC%88%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">Namaspaces（命名空间）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-E-factory-%E6%9B%BF%E4%BB%A3-Element-%E5%92%8C-SubElement-%E6%9D%A5%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90-xml"><span class="nav-number">8.</span> <span class="nav-text">使用 E-factory 替代 Element 和 SubElement 来快速生成 xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElementPath-%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0"><span class="nav-number">9.</span> <span class="nav-text">ElementPath 查找元素</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="某呆"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">某呆</p>
+  <div class="site-description" itemprop="description">记录，分享</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xdai555" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xdai555" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vip@xdai.vip" title="E-Mail → mailto:vip@xdai.vip" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/q965844841qq?type=blog" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;q965844841qq?type&#x3D;blog" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-copyright fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://gitee.com/xdai555/nornir_docs_cn" title="https:&#x2F;&#x2F;gitee.com&#x2F;xdai555&#x2F;nornir_docs_cn" rel="noopener external nofollow noreferrer" target="_blank">Nornir 中文手册</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://textfsm.xdai.vip/" title="http:&#x2F;&#x2F;textfsm.xdai.vip&#x2F;" rel="noopener external nofollow noreferrer" target="_blank">TextFSM 在线解析</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com/" title="https:&#x2F;&#x2F;kalacloud.com" rel="noopener external nofollow noreferrer" target="_blank">卡拉云低代码工具</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+        <!-- <h3 class="widget-title">Tag Cloud</h3>  #为标签云命名，建议不命名，直接删除此行 -->
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ipv6/" rel="tag">ipv6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jinja/" rel="tag">jinja</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netbox/" rel="tag">netbox</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netconf/" rel="tag">netconf</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netmiko/" rel="tag">netmiko</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nornir/" rel="tag">nornir</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openstack/" rel="tag">openstack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ospf/" rel="tag">ospf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/" rel="tag">pip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/fe994980.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="某呆">
+      <meta itemprop="description" content="记录，分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python lxml 模块操作 XML 的基本使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-13 00:28:17" itemprop="dateCreated datePublished" datetime="2021-03-13T00:28:17+08:00">2021-03-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NetDevOps/" itemprop="url" rel="index"><span itemprop="name">NetDevOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/fe994980.html" class="post-meta-item leancloud_visitors" data-flag-title="Python lxml 模块操作 XML 的基本使用" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>XML 相关的知识可以在 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.w3school.com.cn/xml/index.asp">w3school</a> 上进行了解。<br>假设你已经对 XML 的基本概念有一些了解，本文介绍了 Python lxml 模块对 XML 的一些操作方法。</p>
+<blockquote>
+<p>lxml is the most feature-rich and easy-to-use library for processing XML and HTML in the Python language.</p>
+</blockquote>
+<p>文中所有代码块都是基于 <code>etree</code> 来操作的，代码同一行后的注释为运行结果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<h2 id="Element-类"><a href="#Element-类" class="headerlink" title="Element 类"></a>Element 类</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个元素（初始化类）</span></span><br><span class="line">root = etree.Element(<span class="string">&quot;ROOT&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(root.tag)     <span class="comment"># ROOT</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 append() 方法添加子元素</span></span><br><span class="line">root.append(etree.Element(<span class="string">&quot;child1&quot;</span>))</span><br><span class="line"><span class="comment"># 使用 SubElement 方式添加子元素，需要将父元素传入</span></span><br><span class="line">child2 = etree.SubElement(root,<span class="string">&quot;child2&quot;</span>)</span><br><span class="line">child3 = etree.SubElement(root,<span class="string">&quot;child3&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 tostring 方法查看创建的 xml，这里注意输出的是二进制</span></span><br><span class="line"><span class="built_in">print</span>(etree.tostring(root))     <span class="comment"># b&#x27;&lt;ROOT&gt;&lt;child1/&gt;&lt;child2/&gt;&lt;child3/&gt;&lt;/ROOT&gt;&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(root))               <span class="comment"># &lt;class &#x27;lxml.etree._Element&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Element-类可以作为列表来操作"><a href="#Element-类可以作为列表来操作" class="headerlink" title="Element 类可以作为列表来操作"></a>Element 类可以作为列表来操作</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 接上节代码块</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(root))    <span class="comment"># 3</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> root:</span><br><span class="line">    <span class="built_in">print</span>(i.tag)    <span class="comment"># child1 child2 child3</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Element-类可以使用字典来携带属性"><a href="#Element-类可以使用字典来携带属性" class="headerlink" title="Element 类可以使用字典来携带属性"></a>Element 类可以使用字典来携带属性</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 接上节代码块</span></span><br><span class="line">root = etree.Element(<span class="string">&quot;ROOT&quot;</span>,test1=<span class="string">&quot;18&quot;</span>,test2=<span class="string">&quot;test2&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(etree.tostring(root))     <span class="comment"># b&#x27;&lt;ROOT test1=&quot;18&quot; test2=&quot;test2&quot;/&gt;&#x27;</span></span><br><span class="line"><span class="comment"># 获取属性的值</span></span><br><span class="line"><span class="built_in">print</span>(root.get(<span class="string">&quot;test1&quot;</span>))        <span class="comment"># 18</span></span><br><span class="line"><span class="comment"># 取所有属性、所有值，返回值都是列表</span></span><br><span class="line"><span class="built_in">print</span>(root.keys(),root.values())    <span class="comment"># [&#x27;test1&#x27;, &#x27;test2&#x27;] [&#x27;18&#x27;, &#x27;test2&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="给-Element-写入值"><a href="#给-Element-写入值" class="headerlink" title="给 Element 写入值"></a>给 Element 写入值</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 接上节代码块</span></span><br><span class="line"><span class="comment"># 使用 .text 为元素写入值</span></span><br><span class="line">root.text = <span class="string">&quot;TEXT&quot;</span></span><br><span class="line"><span class="built_in">print</span>(root.text)                <span class="comment"># TEXT</span></span><br><span class="line"><span class="built_in">print</span>(etree.tostring(root))     <span class="comment"># b&#x27;&lt;ROOT test1=&quot;18&quot; test2=&quot;test2&quot;&gt;TEXT&lt;/ROOT&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Tree 迭代来添加元素并赋值</span></span><br><span class="line">root = etree.Element(<span class="string">&quot;root&quot;</span>)    </span><br><span class="line">etree.SubElement(root, <span class="string">&quot;child&quot;</span>).text = <span class="string">&quot;Child 1&quot;</span></span><br><span class="line">etree.SubElement(root, <span class="string">&quot;child&quot;</span>).text = <span class="string">&quot;Child 2&quot;</span></span><br><span class="line">etree.SubElement(root, <span class="string">&quot;another&quot;</span>).text = <span class="string">&quot;Child 3&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-XPATH-来查找值"><a href="#使用-XPATH-来查找值" class="headerlink" title="使用 XPATH 来查找值"></a>使用 XPATH 来查找值</h2><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.w3school.com.cn/xpath/xpath_syntax.asp">w3school XPATH 语法</a></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(root.xpath(<span class="string">&quot;string()&quot;</span>))   <span class="comment"># Child 1Child 2Child 3</span></span><br><span class="line"><span class="built_in">print</span>(root.xpath(<span class="string">&quot;//text()&quot;</span>))   <span class="comment"># [&#x27;Child 1&#x27;, &#x27;Child 2&#x27;, &#x27;Child 3&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><p>把字符串转换为 Element 对象</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这是一个定义了 H3C 接口信息的 xml 文本格式</span></span><br><span class="line">xml = <span class="string">&quot;&quot;&quot;&lt;top&gt;</span></span><br><span class="line"><span class="string">&lt;Ifmgr&gt;</span></span><br><span class="line"><span class="string">&lt;Interfaces&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;</span></span><br><span class="line"><span class="string">&lt;Name&gt;&lt;/Name&gt;</span></span><br><span class="line"><span class="string">&lt;AdminStatus&gt;&lt;/AdminStatus&gt;</span></span><br><span class="line"><span class="string">&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;/Interfaces&gt;</span></span><br><span class="line"><span class="string">&lt;/Ifmgr&gt;</span></span><br><span class="line"><span class="string">&lt;/top&gt;&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 将其转换为 Element 对象</span></span><br><span class="line"><span class="comment"># 第一种方法</span></span><br><span class="line">data = etree.XML(xml)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(data))       <span class="comment"># &lt;class &#x27;lxml.etree._Element&#x27;&gt;</span></span><br><span class="line"><span class="comment"># 第二种方法</span></span><br><span class="line">data = etree.fromstring(xml)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(data))</span><br></pre></td></tr></table></figure>
+
+<h2 id="Namaspaces（命名空间）"><a href="#Namaspaces（命名空间）" class="headerlink" title="Namaspaces（命名空间）"></a>Namaspaces（命名空间）</h2><p>在 XML 中，元素名称是由开发者定义的，当两个不同的文档使用相同的元素名时，就会发生命名冲突。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.w3school.com.cn/xml/xml_namespaces.asp">w3school 命名空间</a></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义一个 top 的 Element，它属于私有命名空间</span></span><br><span class="line">root = etree.Element(<span class="string">&quot;&#123;http://www.h3c.com/netconf/data:1.0&#125;top&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(etree.tostring(root))     <span class="comment"># b&#x27;&lt;ns0:top xmlns:ns0=&quot;http://www.h3c.com/netconf/data:1.0&quot;/&gt;&#x27;</span></span><br><span class="line"><span class="comment"># 为了保证属于同一个命名空间，每次添加子元素时，都要写上命名空间的前缀，否则就会不识别，但是这种方式很繁琐且低效</span></span><br><span class="line">Ifmgr = etree.SubElement(root, <span class="string">&quot;&#123;http://www.h3c.com/netconf/data:1.0&#125;Ifmgr&quot;</span>)</span><br><span class="line">Ifmgr.text = <span class="string">&quot;G0/0&quot;</span></span><br><span class="line"><span class="built_in">print</span>(etree.tostring(root))     <span class="comment"># b&#x27;&lt;ns0:top xmlns:ns0=&quot;http://www.h3c.com/netconf/data:1.0&quot;&gt;&lt;ns0:Ifmgr&gt;G0/0&lt;/ns0:Ifmgr&gt;&lt;/ns0:top&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Element 工厂函数定义默认的命名空间</span></span><br><span class="line">H3C_DATA_1_0 = <span class="string">&quot;http://www.h3c.com/netconf/data:1.0&quot;</span></span><br><span class="line">FULL_NS = <span class="string">&quot;&#123;%s&#125;&quot;</span> %H3C_DATA_1_0</span><br><span class="line"><span class="comment"># 定义了默认的命名空间后，子元素里面可以不显示前缀（None）</span></span><br><span class="line">root = etree.Element(FULL_NS + <span class="string">&quot;top&quot;</span>, nsmap=&#123;<span class="literal">None</span>:H3C_DATA_1_0&#125;)</span><br><span class="line">Ifmgr = etree.SubElement(root, <span class="string">&quot;Ifmgr&quot;</span>)</span><br><span class="line">Ifmgr.text = <span class="string">&quot;G0/0&quot;</span></span><br><span class="line"><span class="comment"># 这样定义后，显示结果就很清爽</span></span><br><span class="line"><span class="built_in">print</span>(etree.tostring(root))     <span class="comment"># b&#x27;&lt;top xmlns=&quot;http://www.h3c.com/netconf/data:1.0&quot;&gt;&lt;Ifmgr&gt;G0/0&lt;/Ifmgr&gt;&lt;/top&gt;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-E-factory-替代-Element-和-SubElement-来快速生成-xml"><a href="#使用-E-factory-替代-Element-和-SubElement-来快速生成-xml" class="headerlink" title="使用 E-factory 替代 Element 和 SubElement 来快速生成 xml"></a>使用 E-factory 替代 Element 和 SubElement 来快速生成 xml</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml.builder <span class="keyword">import</span> ElementMaker</span><br><span class="line"><span class="comment"># 设置默认命名空间</span></span><br><span class="line">E = ElementMaker(namespace=H3C_DATA_1_0,nsmap=&#123;<span class="literal">None</span>:H3C_DATA_1_0&#125;)</span><br><span class="line"><span class="comment"># 通过嵌套方式来快速生成 XML</span></span><br><span class="line">top = E.top(</span><br><span class="line">    E.Ifmgr(</span><br><span class="line">        E.Interfaces(</span><br><span class="line">            E.Interface()</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(etree.tostring(top))  <span class="comment"># b&#x27;&lt;top xmlns=&quot;http://www.h3c.com/netconf/data:1.0&quot;&gt;&lt;Ifmgr&gt;&lt;Interfaces&gt;&lt;Interface/&gt;&lt;/Interfaces&gt;&lt;/Ifmgr&gt;&lt;/top&gt;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ElementPath-查找元素"><a href="#ElementPath-查找元素" class="headerlink" title="ElementPath 查找元素"></a>ElementPath 查找元素</h2><p>提供四种查找方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find()      # 返回第一个匹配项，未找到则返回 None</span><br><span class="line">findtext()  # 返回第一个匹配项的 text</span><br><span class="line">findall()   # 返回所有匹配项列表</span><br><span class="line">iterfind()  # 返回所有匹配项的迭代器</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这是一个精简过的使用 netconf 协议从网络设备上拉取的接口信息</span></span><br><span class="line">ret_no_ns = <span class="string">&quot;&quot;&quot;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="string">&lt;rpc-reply&gt;</span></span><br><span class="line"><span class="string">&lt;data&gt;</span></span><br><span class="line"><span class="string">&lt;top&gt;</span></span><br><span class="line"><span class="string">&lt;Ifmgr&gt;</span></span><br><span class="line"><span class="string">&lt;Interfaces&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;&lt;IfIndex&gt;1&lt;/IfIndex&gt;&lt;Name&gt;GigabitEthernet0/0&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;&lt;IfIndex&gt;2&lt;/IfIndex&gt;&lt;Name&gt;GigabitEthernet0/1&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;&lt;IfIndex&gt;129&lt;/IfIndex&gt;&lt;Name&gt;NULL0&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;&lt;IfIndex&gt;130&lt;/IfIndex&gt;&lt;Name&gt;InLoopBack0&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;/Interfaces&gt;&lt;/Ifmgr&gt;&lt;/top&gt;&lt;/data&gt;&lt;/rpc-reply&gt;&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 先将结果转化为 Element，注意转码</span></span><br><span class="line">ret = etree.XML(ret_no_ns.encode())</span><br><span class="line"><span class="comment"># 四种查找方法的基本使用方法</span></span><br><span class="line"><span class="comment"># 只能查找子元素</span></span><br><span class="line"><span class="built_in">print</span>(ret.find(<span class="string">&quot;data&quot;</span>))         <span class="comment"># &lt;Element data at 0x7efcee610680&gt;</span></span><br><span class="line"><span class="built_in">print</span>(ret.find(<span class="string">&quot;data&quot;</span>).tag)     <span class="comment"># data</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在任意位置查找元素，并取 tag</span></span><br><span class="line"><span class="built_in">print</span>(ret.find(<span class="string">&quot;.//Name&quot;</span>).tag) <span class="comment"># Name</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在任意位置查找元素并取 text，两种方法相同</span></span><br><span class="line"><span class="built_in">print</span>(ret.findtext(<span class="string">&quot;.//Name&quot;</span>))  <span class="comment"># GigabitEthernet0/0</span></span><br><span class="line"><span class="built_in">print</span>(ret.find(<span class="string">&quot;.//Name&quot;</span>).text) <span class="comment"># GigabitEthernet0/0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回所有匹配项，列表</span></span><br><span class="line"><span class="built_in">print</span>(ret.findall(<span class="string">&quot;.//Name&quot;</span>))   <span class="comment"># [&lt;Element Name at 0x7f6cd2d1c900&gt;,..., &lt;Element Name at 0x7f6cd2d1ca00&gt;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回所有匹配项，迭代器</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(ret.iterfind(<span class="string">&quot;../Name&quot;</span>)))    <span class="comment"># &lt;class &#x27;generator&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这是实际返回内容，其中带有命名空间</span></span><br><span class="line">ret = <span class="string">&quot;&quot;&quot;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="string">&lt;rpc-reply xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot; message-id=&quot;urn:uuid:c94f3285-d747-4e19-abd3-efbe281e3133&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;data&gt;</span></span><br><span class="line"><span class="string">&lt;top xmlns=&quot;http://www.h3c.com/netconf/data:1.0&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;Ifmgr&gt;</span></span><br><span class="line"><span class="string">&lt;Interfaces&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;&lt;IfIndex&gt;1&lt;/IfIndex&gt;&lt;Name&gt;GigabitEthernet0/0&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;&lt;IfIndex&gt;2&lt;/IfIndex&gt;&lt;Name&gt;GigabitEthernet0/1&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;&lt;IfIndex&gt;129&lt;/IfIndex&gt;&lt;Name&gt;NULL0&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;Interface&gt;&lt;IfIndex&gt;130&lt;/IfIndex&gt;&lt;Name&gt;InLoopBack0&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;/Interface&gt;</span></span><br><span class="line"><span class="string">&lt;/Interfaces&gt;&lt;/Ifmgr&gt;&lt;/top&gt;&lt;/data&gt;&lt;/rpc-reply&gt;&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 先转化为 Element</span></span><br><span class="line">ret = etree.fromstring(ret.encode())</span><br><span class="line"><span class="comment"># 查找命名空间下的所有 Name 元素，即设备的接口名称列表</span></span><br><span class="line">data = ret.findall(<span class="string">&#x27;.//&#123;http://www.h3c.com/netconf/data:1.0&#125;Name&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取值</span></span><br><span class="line">IfList = [i.text <span class="keyword">for</span> i <span class="keyword">in</span> data]</span><br><span class="line"><span class="comment"># 从 xml 文件中解析到了具体的接口信息</span></span><br><span class="line"><span class="built_in">print</span>(IfList)       <span class="comment"># [&#x27;GigabitEthernet0/0&#x27;, &#x27;GigabitEthernet0/1&#x27;, &#x27;NULL0&#x27;, &#x27;InLoopBack0&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\f57ab1ee.html" rel="bookmark">格式化输出NETCONF回显内容</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\3e542090.html" rel="bookmark">Python 使用 NETCONF 管理配置 H3C 网络设备</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\ad63b5a0.html" rel="bookmark">使用 netmiko 的 is_alive() 方法实现 ssh 保活机制</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\6909405a.html" rel="bookmark">netbox 在 Ubuntu20 系统上的安装记录</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/netconf/" rel="tag"><i class="fa fa-tag"></i> netconf</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/cf2c01e8.html" rel="prev" title="使用Netmiko进行交互式操作">
+                  <i class="fa fa-chevron-left"></i> 使用Netmiko进行交互式操作
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/3e542090.html" rel="next" title="Python 使用 NETCONF 管理配置 H3C 网络设备">
+                  Python 使用 NETCONF 管理配置 H3C 网络设备 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="far fa-grin-wink"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">某呆</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:09</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.7/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"8MMinwRrMsuJe3aSCaWDvsK6-gzGzoHsz","app_key":"Bkx590nLq6gdEa1laXiWsWQC","server_url":"https://8mminwrr.lc-cn-n1-shared.com","security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

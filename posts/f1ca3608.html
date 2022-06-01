@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fefefe">
+  <meta name="msvalidate.01" content="8DAA4873BEFC66EB6071E0A8562B64FF">
+  <meta name="baidu-site-verification" content="code-epf7zfvuoz">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/pace-js@1.2.4/themes/silver/pace-theme-minimal.css">
+  <script src="https://unpkg.com/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":260,"display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#ccc","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="之前文章中，介绍了 Netmiko 中 send_command 和 send_config_set 两个方法以及区别。本篇内容来介绍一下 Netmiko 的常用方法以及应用场景。 命令执行相关def send_command_timing():基于时间延迟来执行命令。如果通过这个方法登录到设备执行命令，不管命令有没有执行完成，Netmiko 都会在指定的时间内结束 SSH 连接，一般不推荐使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netmiko 常用方法">
+<meta property="og:url" content="https://555.xdai.vip/posts/f1ca3608.html">
+<meta property="og:site_name" content="xdai">
+<meta property="og:description" content="之前文章中，介绍了 Netmiko 中 send_command 和 send_config_set 两个方法以及区别。本篇内容来介绍一下 Netmiko 的常用方法以及应用场景。 命令执行相关def send_command_timing():基于时间延迟来执行命令。如果通过这个方法登录到设备执行命令，不管命令有没有执行完成，Netmiko 都会在指定的时间内结束 SSH 连接，一般不推荐使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-03T16:04:48.000Z">
+<meta property="article:modified_time" content="2021-12-17T18:16:24.240Z">
+<meta property="article:author" content="某呆">
+<meta property="article:tag" content="netmiko">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://555.xdai.vip/posts/f1ca3608.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/f1ca3608.html","path":"posts/f1ca3608.html","title":"Netmiko 常用方法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Netmiko 常用方法 | xdai</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9de2876f250b395fc8c1bffb43afd6b4"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="xdai" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xdai</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">^_^</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">21</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text">命令执行相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#def-send-command-timing"><span class="nav-number">1.1.</span> <span class="nav-text">def send_command_timing():</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#def-send-config-from-file"><span class="nav-number">1.2.</span> <span class="nav-text">def send_config_from_file():</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%A8%A1%E5%BC%8F%E7%9B%B8%E5%85%B3"><span class="nav-number">2.</span> <span class="nav-text">操作模式相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#enable"><span class="nav-number">2.1.</span> <span class="nav-text">enable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config-mode"><span class="nav-number">2.2.</span> <span class="nav-text">config_mode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#check-config-mode"><span class="nav-number">2.3.</span> <span class="nav-text">check_config_mode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#check-enable-mode"><span class="nav-number">2.4.</span> <span class="nav-text">check_enable_mode</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#def-is-alive"><span class="nav-number">3.1.</span> <span class="nav-text">def is_alive():</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9ANetmiko-%E4%B8%AD%E6%89%80%E6%9C%89%E5%8F%AF%E4%BB%A5%E8%B0%83%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">附录：Netmiko 中所有可以调用的方法</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="某呆"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">某呆</p>
+  <div class="site-description" itemprop="description">记录，分享</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xdai555" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xdai555" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vip@xdai.vip" title="E-Mail → mailto:vip@xdai.vip" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/q965844841qq?type=blog" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;q965844841qq?type&#x3D;blog" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-copyright fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://gitee.com/xdai555/nornir_docs_cn" title="https:&#x2F;&#x2F;gitee.com&#x2F;xdai555&#x2F;nornir_docs_cn" rel="noopener external nofollow noreferrer" target="_blank">Nornir 中文手册</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://textfsm.xdai.vip/" title="http:&#x2F;&#x2F;textfsm.xdai.vip&#x2F;" rel="noopener external nofollow noreferrer" target="_blank">TextFSM 在线解析</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com/" title="https:&#x2F;&#x2F;kalacloud.com" rel="noopener external nofollow noreferrer" target="_blank">卡拉云低代码工具</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+        <!-- <h3 class="widget-title">Tag Cloud</h3>  #为标签云命名，建议不命名，直接删除此行 -->
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ipv6/" rel="tag">ipv6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jinja/" rel="tag">jinja</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netbox/" rel="tag">netbox</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netconf/" rel="tag">netconf</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netmiko/" rel="tag">netmiko</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nornir/" rel="tag">nornir</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openstack/" rel="tag">openstack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ospf/" rel="tag">ospf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/" rel="tag">pip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/f1ca3608.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="某呆">
+      <meta itemprop="description" content="记录，分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Netmiko 常用方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-04 00:04:48" itemprop="dateCreated datePublished" datetime="2021-02-04T00:04:48+08:00">2021-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NetDevOps/" itemprop="url" rel="index"><span itemprop="name">NetDevOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/f1ca3608.html" class="post-meta-item leancloud_visitors" data-flag-title="Netmiko 常用方法" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>之前文章中，介绍了 Netmiko 中 <code>send_command</code> 和 <code>send_config_set</code> 两个方法以及区别。<br>本篇内容来介绍一下 Netmiko 的常用方法以及应用场景。</p>
+<h2 id="命令执行相关"><a href="#命令执行相关" class="headerlink" title="命令执行相关"></a>命令执行相关</h2><h3 id="def-send-command-timing"><a href="#def-send-command-timing" class="headerlink" title="def send_command_timing():"></a>def send_command_timing():</h3><p>基于时间延迟来执行命令。<br>如果通过这个方法登录到设备执行命令，不管命令有没有执行完成，Netmiko 都会在指定的时间内结束 SSH 连接，一般不推荐使用。</p>
+<p>这里可以对比一下<code>send_command</code>，这个方法会检测设备的提示符，例如<code>&gt;</code>、<code>]</code>、<code>#</code> 等，它会一直等待接收数据，直到检测到提示符后再进行退出（也有一个默认的超时时间）。</p>
+<p>我们可以通过<code>delay_factor</code>和<code>max_loops</code>来控制等待时间。</p>
+<ul>
+<li>send_command_timing：默认超时时间约为 15 秒，即登录设备 15 秒后关闭 SSH 连接</li>
+<li>send_command：默认超时时间约为 100 秒，即 100 秒未检测到提示符就关闭 SSH 连接</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="def-send-config-from-file"><a href="#def-send-config-from-file" class="headerlink" title="def send_config_from_file():"></a>def send_config_from_file():</h3><p>读取一个配置文件，然后将配置文件发送到设备上。</p>
+<p>这个方法的本质是和<code>send_config_set</code>是一样的，只不过程序帮我们读取了配置而不用再在脚本中输入。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 具体的实现方式</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">send_config_from_file</span>(<span class="params">self, config_file=<span class="literal">None</span>, **kwargs</span>):</span><br><span class="line">    <span class="keyword">with</span> io.<span class="built_in">open</span>(config_file, <span class="string">&quot;rt&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> cfg_file:</span><br><span class="line">    <span class="keyword">return</span> self.send_config_set(cfg_file, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<h2 id="操作模式相关"><a href="#操作模式相关" class="headerlink" title="操作模式相关"></a>操作模式相关</h2><p>Netmiko 中，模式相关的方法后端都是通过根据不同的设备发送相应的命令来实现；检查模式时是通过正则表达式匹配来实现。</p>
+<h3 id="enable"><a href="#enable" class="headerlink" title="enable"></a>enable</h3><p>进入 <code>enable</code> 模式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 具体实现方式，思科设备为例</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">enable</span>(<span class="params"></span></span><br><span class="line"><span class="params">    self,</span></span><br><span class="line"><span class="params">    cmd=<span class="string">&quot;enable&quot;</span>,</span></span><br><span class="line"><span class="params">    pattern=<span class="string">&quot;ssword&quot;</span>,</span></span><br><span class="line"><span class="params">    enable_pattern=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    re_flags=re.IGNORECASE,</span></span><br><span class="line"><span class="params"></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Enter enable mode.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">super</span>().enable(</span><br><span class="line">        cmd=cmd, pattern=pattern, enable_pattern=enable_pattern, re_flags=re_flags</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<h3 id="config-mode"><a href="#config-mode" class="headerlink" title="config_mode"></a>config_mode</h3><p>进入 <code>config</code> 模式。</p>
+<h3 id="check-config-mode"><a href="#check-config-mode" class="headerlink" title="check_config_mode"></a>check_config_mode</h3><p>检查是否处于<code>config</code>模式，返回结果为 True &#x2F; False</p>
+<h3 id="check-enable-mode"><a href="#check-enable-mode" class="headerlink" title="check_enable_mode"></a>check_enable_mode</h3><p>检查是否处于<code>enable</code>模式，返回结果为 True &#x2F; False</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 具体实现方式</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_enable_mode</span>(<span class="params">self, check_string=<span class="string">&quot;#&quot;</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Check if in enable mode. Return boolean.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">super</span>().check_enable_mode(check_string=check_string)</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="def-is-alive"><a href="#def-is-alive" class="headerlink" title="def is_alive():"></a>def is_alive():</h3><p>通过向 SSH 隧道发送空字符串，来判定是否连接仍然正常，返回结果为 True &#x2F; False 。</p>
+<h2 id="附录：Netmiko-中所有可以调用的方法"><a href="#附录：Netmiko-中所有可以调用的方法" class="headerlink" title="附录：Netmiko 中所有可以调用的方法"></a>附录：Netmiko 中所有可以调用的方法</h2><p>Netmiko 中所有的网络设备的类都是基于<code>BaseConnection</code>类来实现的，通过查看该类来浏览所有方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># _ 开头的为私有方法，以下只查看外部可以直接使用的方法</span></span><br><span class="line"><span class="keyword">from</span> netmiko.base_connection <span class="keyword">import</span> BaseConnection</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">dir</span>(BaseConnection):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> i.startswith(<span class="string">&#x27;_&#x27;</span>):</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">check_config_mode</span><br><span class="line">check_enable_mode</span><br><span class="line">cleanup</span><br><span class="line">clear_buffer</span><br><span class="line">close_session_log</span><br><span class="line">commit</span><br><span class="line">config_mode</span><br><span class="line">disable_paging</span><br><span class="line">disconnect</span><br><span class="line">enable</span><br><span class="line">establish_connection</span><br><span class="line">exit_config_mode</span><br><span class="line">exit_enable_mode</span><br><span class="line">find_prompt</span><br><span class="line">is_alive</span><br><span class="line">normalize_cmd</span><br><span class="line">normalize_linefeeds</span><br><span class="line">open_session_log</span><br><span class="line">paramiko_cleanup</span><br><span class="line">read_channel</span><br><span class="line">read_until_pattern</span><br><span class="line">read_until_prompt</span><br><span class="line">read_until_prompt_or_pattern</span><br><span class="line">save_config</span><br><span class="line">select_delay_factor</span><br><span class="line">send_command</span><br><span class="line">send_command_expect</span><br><span class="line">send_command_timing</span><br><span class="line">send_config_from_file</span><br><span class="line">send_config_set</span><br><span class="line">serial_login</span><br><span class="line">session_preparation</span><br><span class="line">set_base_prompt</span><br><span class="line">set_terminal_width</span><br><span class="line">special_login_handler</span><br><span class="line">strip_ansi_escape_codes</span><br><span class="line">strip_backspaces</span><br><span class="line">strip_command</span><br><span class="line">strip_prompt</span><br><span class="line">telnet_login</span><br><span class="line">write_channel</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\ad63b5a0.html" rel="bookmark">使用 netmiko 的 is_alive() 方法实现 ssh 保活机制</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\cf2c01e8.html" rel="bookmark">使用Netmiko进行交互式操作</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\26e9de3c.html" rel="bookmark">Python 使用 Netmiko 连接 H3C 网络设备</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\6909405a.html" rel="bookmark">netbox 在 Ubuntu20 系统上的安装记录</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\101f7898.html" rel="bookmark">netbox 使用问题记录</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/netmiko/" rel="tag"><i class="fa fa-tag"></i> netmiko</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/26e9de3c.html" rel="prev" title="Python 使用 Netmiko 连接 H3C 网络设备">
+                  <i class="fa fa-chevron-left"></i> Python 使用 Netmiko 连接 H3C 网络设备
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/cf2c01e8.html" rel="next" title="使用Netmiko进行交互式操作">
+                  使用Netmiko进行交互式操作 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="far fa-grin-wink"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">某呆</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:09</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.7/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"8MMinwRrMsuJe3aSCaWDvsK6-gzGzoHsz","app_key":"Bkx590nLq6gdEa1laXiWsWQC","server_url":"https://8mminwrr.lc-cn-n1-shared.com","security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

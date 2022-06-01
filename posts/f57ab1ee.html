@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fefefe">
+  <meta name="msvalidate.01" content="8DAA4873BEFC66EB6071E0A8562B64FF">
+  <meta name="baidu-site-verification" content="code-epf7zfvuoz">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/pace-js@1.2.4/themes/silver/pace-theme-minimal.css">
+  <script src="https://unpkg.com/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":260,"display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#ccc","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="在 《Python 使用 NETCONF 管理配置 H3C 网络设备》中，简单介绍了 Python 使用 NETCONF 操作网络设备。 对于配置类的操作，即 edit-config，NETCONF 的回显内容一般情况下为 ok 或者具体的报错信息；对于查询类的操作，即 get get-config 等，回显内容为 XML 格式，可读性较差，此时需要对查询到的内容进行格式化。 思路对于 XML 格">
+<meta property="og:type" content="article">
+<meta property="og:title" content="格式化输出NETCONF回显内容">
+<meta property="og:url" content="https://555.xdai.vip/posts/f57ab1ee.html">
+<meta property="og:site_name" content="xdai">
+<meta property="og:description" content="在 《Python 使用 NETCONF 管理配置 H3C 网络设备》中，简单介绍了 Python 使用 NETCONF 操作网络设备。 对于配置类的操作，即 edit-config，NETCONF 的回显内容一般情况下为 ok 或者具体的报错信息；对于查询类的操作，即 get get-config 等，回显内容为 XML 格式，可读性较差，此时需要对查询到的内容进行格式化。 思路对于 XML 格">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-26T14:02:49.000Z">
+<meta property="article:modified_time" content="2021-12-16T16:11:11.349Z">
+<meta property="article:author" content="某呆">
+<meta property="article:tag" content="netconf">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://555.xdai.vip/posts/f57ab1ee.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/f57ab1ee.html","path":"posts/f57ab1ee.html","title":"格式化输出NETCONF回显内容"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>格式化输出NETCONF回显内容 | xdai</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9de2876f250b395fc8c1bffb43afd6b4"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="xdai" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xdai</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">^_^</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">21</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%8E%A5%E5%8F%A3%E5%88%97%E8%A1%A8"><span class="nav-number">2.1.</span> <span class="nav-text">查询接口列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E4%BF%A1%E6%81%AF"><span class="nav-number">2.1.1.</span> <span class="nav-text">获取信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AE%B9%E6%8B%86%E8%A7%A3"><span class="nav-number">2.1.2.</span> <span class="nav-text">内容拆解</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E4%BF%A1%E6%81%AF%E5%B9%B6%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%BA%E5%AD%97%E5%85%B8"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">获取所有信息并格式化为字典</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9A%E4%BF%A1%E6%81%AF%E5%B9%B6%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%BA%E5%AD%97%E5%85%B8%EF%BC%88%E4%BC%98%E5%8C%96%E6%98%BE%E7%A4%BA%EF%BC%89"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">获取指定信息并格式化为字典（优化显示）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.3.</span> <span class="nav-text">对比</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">简单方法</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="某呆"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">某呆</p>
+  <div class="site-description" itemprop="description">记录，分享</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xdai555" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xdai555" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vip@xdai.vip" title="E-Mail → mailto:vip@xdai.vip" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/q965844841qq?type=blog" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;q965844841qq?type&#x3D;blog" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-copyright fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://gitee.com/xdai555/nornir_docs_cn" title="https:&#x2F;&#x2F;gitee.com&#x2F;xdai555&#x2F;nornir_docs_cn" rel="noopener external nofollow noreferrer" target="_blank">Nornir 中文手册</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://textfsm.xdai.vip/" title="http:&#x2F;&#x2F;textfsm.xdai.vip&#x2F;" rel="noopener external nofollow noreferrer" target="_blank">TextFSM 在线解析</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com/" title="https:&#x2F;&#x2F;kalacloud.com" rel="noopener external nofollow noreferrer" target="_blank">卡拉云低代码工具</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+        <!-- <h3 class="widget-title">Tag Cloud</h3>  #为标签云命名，建议不命名，直接删除此行 -->
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ipv6/" rel="tag">ipv6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jinja/" rel="tag">jinja</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netbox/" rel="tag">netbox</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netconf/" rel="tag">netconf</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netmiko/" rel="tag">netmiko</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nornir/" rel="tag">nornir</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openstack/" rel="tag">openstack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ospf/" rel="tag">ospf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/" rel="tag">pip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/f57ab1ee.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="某呆">
+      <meta itemprop="description" content="记录，分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xdai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          格式化输出NETCONF回显内容
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-05-26 22:02:49" itemprop="dateCreated datePublished" datetime="2021-05-26T22:02:49+08:00">2021-05-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NetDevOps/" itemprop="url" rel="index"><span itemprop="name">NetDevOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/f57ab1ee.html" class="post-meta-item leancloud_visitors" data-flag-title="格式化输出NETCONF回显内容" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>14k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>在 《Python 使用 NETCONF 管理配置 H3C 网络设备》中，简单介绍了 Python 使用 NETCONF 操作网络设备。</p>
+<p>对于配置类的操作，即 <code>edit-config</code>，NETCONF 的回显内容一般情况下为 <code>ok</code> 或者具体的报错信息；对于查询类的操作，即 <code>get</code> <code>get-config</code> 等，回显内容为 XML 格式，可读性较差，此时需要对查询到的内容进行格式化。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>对于 XML 格式的数据，可以直接使用 XML 模块来进行解析，由于查询信息时，已经传入了一个 XML，那么进行解析时，可以根据这个 XML 来进行操作，使用 lxml 模块来进行实际操作。</p>
+<p>针对网络设备的回显信息，先解析为 lxml 支持的格式如 <code>Element</code> ，再使用 lxml 中 find 相关的方法，并添加上命名空间和具体的查询元素，查找到最终想要的信息。</p>
+<span id="more"></span>
+
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="查询接口列表"><a href="#查询接口列表" class="headerlink" title="查询接口列表"></a>查询接口列表</h3><h4 id="获取信息"><a href="#获取信息" class="headerlink" title="获取信息"></a>获取信息</h4><p>首先构建查询接口信息的 XML。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">get_all_iface = &quot;&quot;&quot;</span><br><span class="line"><span class="tag">&lt;<span class="name">top</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.h3c.com/netconf/data:1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Ifmgr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Interfaces</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Name</span>&gt;</span><span class="tag">&lt;/<span class="name">Name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">InetAddressIPV4</span>&gt;</span><span class="tag">&lt;/<span class="name">InetAddressIPV4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Interfaces</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Ifmgr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">top</span>&gt;</span></span><br><span class="line">&quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>然后将 XML 内容下发到设备上，获取信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ncclient <span class="keyword">import</span> manager</span><br><span class="line"></span><br><span class="line">host = &#123;</span><br><span class="line">    <span class="string">&#x27;host&#x27;</span>: <span class="string">&#x27;192.168.56.20&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;username&#x27;</span>: <span class="string">&#x27;netdevops&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;password&#x27;</span>: <span class="string">&#x27;netdevops&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;port&#x27;</span>: <span class="number">830</span>,</span><br><span class="line">    <span class="string">&#x27;device_params&#x27;</span>: &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;h3c&#x27;</span>&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 对于 ssh 协议，连接设备时会先保存对端的 key，并从本机查找并验证，使用以下两个 False 的参数来跳过检查</span></span><br><span class="line">conn = manager.connect(**host, hostkey_verify=<span class="literal">False</span>, look_for_keys=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 获取设备所有接口的名称、IP地址、状态</span></span><br><span class="line">ret = conn.get((<span class="string">&#x27;subtree&#x27;</span>, top))</span><br><span class="line"><span class="built_in">print</span>(ret,<span class="built_in">type</span>(ret),<span class="built_in">dir</span>(ret))</span><br></pre></td></tr></table></figure>
+
+<p>获取到的信息如下，主要看回显信息的类型和支持的方法。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><span class="tag">&lt;<span class="name">rpc-reply</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;</span> <span class="attr">message-id</span>=<span class="string">&quot;urn:uuid:e667b24e-14c9-4126-9581-7b25b7835b45&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">data</span>&gt;</span><span class="tag">&lt;<span class="name">top</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.h3c.com/netconf/data:1.0&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">Ifmgr</span>&gt;</span><span class="tag">&lt;<span class="name">Interfaces</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>1<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet0/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;<span class="name">InetAddressIPV4</span>&gt;</span>192.168.56.20<span class="tag">&lt;/<span class="name">InetAddressIPV4</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>2<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet0/1<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>3<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet0/2<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>4<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Serial1/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>5<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Serial2/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>6<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Serial3/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>7<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Serial4/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>8<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet5/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>9<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet5/1<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>10<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet6/0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>11<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>GigabitEthernet6/1<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>129<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>NULL0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>130<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>InLoopBack0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;<span class="name">InetAddressIPV4</span>&gt;</span>127.0.0.1<span class="tag">&lt;/<span class="name">InetAddressIPV4</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">Interface</span>&gt;</span><span class="tag">&lt;<span class="name">IfIndex</span>&gt;</span>131<span class="tag">&lt;/<span class="name">IfIndex</span>&gt;</span><span class="tag">&lt;<span class="name">Name</span>&gt;</span>Register-Tunnel0<span class="tag">&lt;/<span class="name">Name</span>&gt;</span><span class="tag">&lt;<span class="name">AdminStatus</span>&gt;</span>1<span class="tag">&lt;/<span class="name">AdminStatus</span>&gt;</span><span class="tag">&lt;/<span class="name">Interface</span>&gt;</span><span class="tag">&lt;/<span class="name">Interfaces</span>&gt;</span><span class="tag">&lt;/<span class="name">Ifmgr</span>&gt;</span><span class="tag">&lt;/<span class="name">top</span>&gt;</span><span class="tag">&lt;/<span class="name">data</span>&gt;</span><span class="tag">&lt;/<span class="name">rpc-reply</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">class</span> &#x27;<span class="attr">ncclient.operations.retrieve.GetReply</span>&#x27;&gt;</span></span><br><span class="line">[&#x27;ERROR_CLS&#x27;, &#x27;__class__&#x27;, &#x27;__delattr__&#x27;, &#x27;__dict__&#x27;, &#x27;__dir__&#x27;, &#x27;__doc__&#x27;, &#x27;__eq__&#x27;, &#x27;__format__&#x27;, &#x27;__ge__&#x27;, &#x27;__getattribute__&#x27;, &#x27;__gt__&#x27;, &#x27;__hash__&#x27;, &#x27;__init__&#x27;, &#x27;__init_subclass__&#x27;, &#x27;__le__&#x27;, &#x27;__lt__&#x27;, &#x27;__module__&#x27;, &#x27;__ne__&#x27;, &#x27;__new__&#x27;, &#x27;__reduce__&#x27;, &#x27;__reduce_ex__&#x27;, &#x27;__repr__&#x27;, &#x27;__setattr__&#x27;, &#x27;__sizeof__&#x27;, &#x27;__str__&#x27;, &#x27;__subclasshook__&#x27;, &#x27;__weakref__&#x27;, &#x27;_data&#x27;, &#x27;_errors&#x27;, &#x27;_huge_tree&#x27;, &#x27;_parsed&#x27;, &#x27;_parsing_hook&#x27;, &#x27;_raw&#x27;, &#x27;_root&#x27;, &#x27;data&#x27;, &#x27;data_ele&#x27;, &#x27;data_xml&#x27;, &#x27;error&#x27;, &#x27;errors&#x27;, &#x27;ok&#x27;, &#x27;parse&#x27;, &#x27;xml&#x27;]</span><br></pre></td></tr></table></figure>
+
+<p>从上面的内容可以看到，通过 ncclient 模块执行 get 操作后，返回值是一个 <code>GetReply</code> 的类，它支持 <code>[‘data&#39;, &#39;data_ele&#39;, &#39;data_xml&#39;, &#39;error&#39;, &#39;errors&#39;, &#39;ok&#39;, &#39;parse&#39;, &#39;xml&#39;]</code>方法。</p>
+<p>可以使用 <code>data</code> 或者 <code>data_ele</code> ，这两个方法最终的结果是相同的，都是返回 <code>Element</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="built_in">print</span>(ret.data,<span class="built_in">type</span>(ret.data))</span><br><span class="line"><span class="built_in">print</span>(ret.data==ret.data_ele)</span><br></pre></td></tr></table></figure>
+
+<p>返回结果如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Element</span> &#123;<span class="attr">urn:ietf:params:xml:ns:netconf:base:1.0</span>&#125;<span class="attr">data</span> <span class="attr">at</span> <span class="attr">0x7fc9c8ab2180</span>&gt;</span> <span class="tag">&lt;<span class="name">class</span> &#x27;<span class="attr">lxml.etree._Element</span>&#x27;&gt;</span></span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+
+<h4 id="内容拆解"><a href="#内容拆解" class="headerlink" title="内容拆解"></a>内容拆解</h4><p>网络设备接口有很多，因此使用 <code>Element</code> 的 findall() 方法，并加上命名空间和想要查找的元素。</p>
+<p>上文查询信息的 XML 中，接口是以 <code>&lt;Interface&gt;...&lt;/Interface&gt;</code> 来进行筛选的，返回值也是如此，所以以该元素作为查找值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(ret.data.findall(<span class="string">&#x27;.//&#123;http://www.h3c.com/netconf/data:1.0&#125;Interface&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>回显信息：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5400</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5480</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5380</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5580</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5600</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5680</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5700</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5780</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5800</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5880</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5900</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5980</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5a00</span>&gt;, &lt;Element &#123;http://www.h3c.com/netconf/data:<span class="number">1.0</span>&#125;Interface at <span class="number">0x7f681f2e5a80</span>&gt;]</span><br></pre></td></tr></table></figure>
+
+<p>回显信息为列表格式，且每个接口又有自己独立的 <code>Element</code>，又需要进行二次解析。</p>
+<p>二次解析时，如果使用 findall 方法，只能按照每个接口的属性返回相应的列表；如接口的状态为一个列表，接口的名称为一个列表，接口的 IP 地址又是另一个列表；这时会有一个问题，<font color=red>使用 NETCONF 查询信息时，如果接口没有该属性，返回的 XML 内容中就不会有这个元素</font>，上文的返回值中便是一个例子：如果接口下没有 IP 地址如 GigabitEthernet0&#x2F;2，返回的 XML 中就没有 <code>InetAddressIPV4</code> 这个元素， 如果使用 for 循环将每个接口的每个属性都放到单独的列表里面，接口信息将无法对应。</p>
+<p>针对这种情况，可以有四种办法（第一种是当时的头脑风暴，现在仅作记录）：</p>
+<ol>
+<li>针对单个接口的每个元素进行 find，并将单个接口的信息放入一个字典中；</li>
+<li>使用 <code>Element</code> 的 getchildren() 方法，通过获取 tag 和 text，直接将接口信息转换为字典；</li>
+<li>针对单个接口只使用 find 查找想要的信息，并将单个接口的信息放入一个字典中；</li>
+<li>不重复造轮子，使用现成的模块 lxmltodict。</li>
+</ol>
+<h5 id="获取所有信息并格式化为字典"><a href="#获取所有信息并格式化为字典" class="headerlink" title="获取所有信息并格式化为字典"></a>获取所有信息并格式化为字典</h5><p>采用上面说的第二种的方法来获取每个接口的所有信息，最终效果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">H3C_DATA = <span class="string">&quot;http://www.h3c.com/netconf/data:1.0&quot;</span></span><br><span class="line">H3C_DATA_C = <span class="string">&#x27;&#123;&#x27;</span> + H3C_DATA_1_0 + <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 findall 封装成一个函数，便于复用</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_all_in_data</span>(<span class="params">elem, value</span>):</span><br><span class="line">    <span class="keyword">return</span> _findall(elem, c, value)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_findall</span>(<span class="params">elem, ns, value</span>):</span><br><span class="line">    <span class="keyword">return</span> elem.findall(<span class="string">&#x27;.//&#123;&#125;&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(ns, value))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">elem_to_dict_all</span>(<span class="params">elem, ns</span>):</span><br><span class="line">    to_dict = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> elem.getchildren():</span><br><span class="line">        to_dict[e.tag.replace(ns,<span class="string">&#x27;&#x27;</span>)] = e.text</span><br><span class="line">    <span class="keyword">return</span> to_dict</span><br><span class="line"></span><br><span class="line"><span class="comment"># ret 为上面直接从设备上获取到的返回值</span></span><br><span class="line"><span class="comment"># 根据上面的返回值，先获取到包含所有接口信息元素的列表，即上一个代码框中的回显信息</span></span><br><span class="line">ifaces = find_all_in_data(ret.data,<span class="string">&#x27;Interface&#x27;</span>)</span><br><span class="line"><span class="comment"># 使用 Element 的 getchildren() 方法将所有的内容获取为字典，并将所有结果放入到一个列表里面</span></span><br><span class="line">result = [elem_to_dict_all(iface, H3C_DATA_C) <span class="keyword">for</span> iface <span class="keyword">in</span> ifaces]</span><br><span class="line"><span class="comment"># 打印结果</span></span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[&#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet0/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;InetAddressIPV4&#x27;</span>: <span class="string">&#x27;192.168.56.20&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet0/1&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet0/2&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;4&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;Serial1/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;5&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;Serial2/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;6&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;Serial3/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;Serial4/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;8&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet5/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;9&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet5/1&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;10&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet6/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;11&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet6/1&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;129&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;NULL0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;, </span><br><span class="line"> &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;130&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;InLoopBack0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;InetAddressIPV4&#x27;</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>&#125;, &#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;131&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;Register-Tunnel0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>可以看到已经以字典方式获取到了所有接口的信息，之后再进行处理时，就更加容易了。</p>
+<p>关于 getchildren() 方法，我们获取到的单个接口信息转换为字符串，就是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">ifaces = find_all_in_data(ret.data,<span class="string">&#x27;Interface&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(etree.tostring(ifaces[<span class="number">0</span>]))</span><br><span class="line"><span class="comment"># 得到结果如下：</span></span><br><span class="line"><span class="string">b&#x27;&lt;Interface xmlns=&quot;http://www.h3c.com/netconf/data:1.0&quot;&gt;&lt;IfIndex&gt;1&lt;/IfIndex&gt;&lt;Name&gt;GigabitEthernet0/0&lt;/Name&gt;&lt;AdminStatus&gt;1&lt;/AdminStatus&gt;&lt;InetAddressIPV4&gt;192.168.56.20&lt;/InetAddressIPV4&gt;&lt;/Interface&gt;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>从 XML 基础知识的角度来说明上面的结果： <code>&lt;Interface&gt;</code> 是一个根元素，<code>&lt;IfIndex&gt;</code> <code>&lt;Name&gt;</code> 等四项内容是根的子元素，<code>xmlns</code> 是根的属性，转换到 lxml 中，可以用 tag，text 两个属性来获取到具体的内容。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ifaces[<span class="number">0</span>]:</span><br><span class="line">    <span class="built_in">print</span>(i.tag, i.text)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;http://www.h3c.com/netconf/data:1.0&#125;IfIndex 1</span><br><span class="line">&#123;http://www.h3c.com/netconf/data:1.0&#125;Name GigabitEthernet0/0</span><br><span class="line">&#123;http://www.h3c.com/netconf/data:1.0&#125;AdminStatus 1</span><br><span class="line">&#123;http://www.h3c.com/netconf/data:1.0&#125;InetAddressIPV4 192.168.56.20</span><br></pre></td></tr></table></figure>
+
+<p>已经是我们想要得到的数据了！之后用字符串替换掉命名空间，写入字典，就得到了下面这个函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">elem_to_dict_all</span>(<span class="params">elem, ns</span>):</span><br><span class="line">    to_dict = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> elem.getchildren():</span><br><span class="line">        to_dict[e.tag.replace(ns,<span class="string">&#x27;&#x27;</span>)] = e.text</span><br><span class="line">    <span class="keyword">return</span> to_dict</span><br></pre></td></tr></table></figure>
+
+<p>经过上面的步骤，已经得到了接口信息，是一个字典形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet0/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;InetAddressIPV4&#x27;</span>: <span class="string">&#x27;192.168.56.20&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到这一步应该算成功了， XML 内容转换为了清晰可读的字典。</p>
+<h5 id="获取指定信息并格式化为字典（优化显示）"><a href="#获取指定信息并格式化为字典（优化显示）" class="headerlink" title="获取指定信息并格式化为字典（优化显示）"></a>获取指定信息并格式化为字典（优化显示）</h5><p>首先，要想获取指定信息，前提是要有一个获取信息的列表，这里我采用的类型是字典而不是列表，为的是替换原始的 key，增加可读性，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">H3C_DATA = <span class="string">&quot;http://www.h3c.com/netconf/data:1.0&quot;</span></span><br><span class="line">H3C_DATA_C = <span class="string">&#x27;&#123;&#x27;</span> + H3C_DATA_1_0 + <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line">iface_key_map = &#123;</span><br><span class="line">    <span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;Name&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;MTU&#x27;</span>: <span class="string">&#x27;ActualMTU&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;IP 地址&#x27;</span>: <span class="string">&#x27;InetAddressIPV4&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;掩码&#x27;</span>: <span class="string">&#x27;InetAddressIPV4Mask&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;配置状态&#x27;</span>：<span class="string">&#x27;AdminStatus&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">elem_to_dict</span>(<span class="params">elem, ns, key_map</span>):</span><br><span class="line">    to_dict = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> k,v <span class="keyword">in</span> key_map.items():</span><br><span class="line">        <span class="comment"># 传递的 elem 是具体接口的信息，属性不会重复，所以这里使用 find 方法</span></span><br><span class="line">        field = elem.find(<span class="string">&#x27;.//&#123;&#125;&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(ns, v))</span><br><span class="line">        <span class="keyword">if</span> field <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            text = field.text</span><br><span class="line">            to_dict[k] = text</span><br><span class="line">    <span class="keyword">return</span> to_dict</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">data_elem_to_dict</span>(<span class="params">elem, key_map</span>):</span><br><span class="line">    <span class="keyword">return</span> elem_to_dict(elem, H3C_DATA_C, key_map)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ret 为上面直接从设备上获取到的返回值</span></span><br><span class="line">ifaces = find_all_in_data(ret.data,<span class="string">&#x27;Interface&#x27;</span>)</span><br><span class="line"><span class="comment"># 获取字典里面指定的信息</span></span><br><span class="line">result = [data_elem_to_dict(iface,iface_key_map) <span class="keyword">for</span> iface <span class="keyword">in</span> ifaces]</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[&#123;<span class="string">&#x27;IP 地址&#x27;</span>: <span class="string">&#x27;192.168.56.20&#x27;</span>, <span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;GigabitEthernet0/0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;GigabitEthernet0/1&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;GigabitEthernet0/2&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;Serial1/0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;Serial2/0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;Serial3/0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;Serial4/0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;GigabitEthernet5/0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;GigabitEthernet5/1&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;GigabitEthernet6/0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;GigabitEthernet6/1&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;NULL0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;IP 地址&#x27;</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;InLoopBack0&#x27;</span>&#125;,</span><br><span class="line"> &#123;<span class="string">&#x27;接口名称&#x27;</span>: <span class="string">&#x27;Register-Tunnel0&#x27;</span>&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>通过这种方式，不但得到了字典形式的接口信息，而且对 key 进行可可读性处理。</p>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p>上面内容拆解中，说明了两种方法来实现对设备接口信息的格式化处理，这两种方式有各自应用场景。</p>
+<p>个人观点：使用 XML 获取接口信息时，可以直接获取接口的所有状态。</p>
+<ol>
+<li>如果是交给程序调用，可以使用 getchildren() 的方法，获取到接口的所有信息并格式化为字典，之后交由其他模块来处理；</li>
+<li>如果是呈现到使用者，例如前端或者 CLI 展示，可以使用获取指定信息的方法，提高返回值的可读性。</li>
+</ol>
+<h3 id="简单方法"><a href="#简单方法" class="headerlink" title="简单方法"></a>简单方法</h3><p>有现成的模块可以直接将 xml 格式转换为字典，就是 <code>xmltodict</code> 模块。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install xmltodict</span><br></pre></td></tr></table></figure>
+
+<p>这个模块使用了 OrderedDict 类来实现，也解决了上面提到的字典无序导致的无法进行值对应的问题。</p>
+<blockquote>
+<p>Python 中的字典是无序的，因为它是按照 HASH 来存储的，不过 Python 中有个模块 collections，里面自带了一个子类 OrderedDict，实现了对字典对象中元素的排序。</p>
+</blockquote>
+<p>使用方法也很简单，直接传入 XML 内容即可进行解析。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xmltodict</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"><span class="comment"># ret 为上面直接从设备上获取到的返回值</span></span><br><span class="line">ifaces = find_all_in_data(ret.data,<span class="string">&#x27;Interface&#x27;</span>)</span><br><span class="line">result = xmltodict.parse(etree.tostring(ifaces[<span class="number">0</span>]))</span><br><span class="line"><span class="built_in">print</span>(result)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">dict</span>(result[<span class="string">&#x27;Interface&#x27;</span>]))</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">OrderedDict([(<span class="string">&#x27;Interface&#x27;</span>, OrderedDict([(<span class="string">&#x27;@xmlns&#x27;</span>, <span class="string">&#x27;http://www.h3c.com/netconf/data:1.0&#x27;</span>), (<span class="string">&#x27;IfIndex&#x27;</span>, <span class="string">&#x27;1&#x27;</span>), (<span class="string">&#x27;Name&#x27;</span>, <span class="string">&#x27;GigabitEthernet0/0&#x27;</span>), (<span class="string">&#x27;AdminStatus&#x27;</span>, <span class="string">&#x27;1&#x27;</span>), (<span class="string">&#x27;InetAddressIPV4&#x27;</span>, <span class="string">&#x27;192.168.56.20&#x27;</span>)]))])</span><br><span class="line">&#123;<span class="string">&#x27;@xmlns&#x27;</span>: <span class="string">&#x27;http://www.h3c.com/netconf/data:1.0&#x27;</span>, <span class="string">&#x27;IfIndex&#x27;</span>: <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;Name&#x27;</span>: <span class="string">&#x27;GigabitEthernet0/0&#x27;</span>, <span class="string">&#x27;AdminStatus&#x27;</span>: <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;InetAddressIPV4&#x27;</span>: <span class="string">&#x27;192.168.56.20&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 xmltodict 可以一步到位，直接将结果转换为字典！可以将 xmltodict 进行二次封装，进行可读处理等。</p>
+<p>现成的轮子还是很方便 T_T ~</p>
+<p>不过不论哪种方法提取数据，适合自己的才是最好的，手写简单的轮子可以更理解的更深入一点 (* ￣︿￣)。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\3e542090.html" rel="bookmark">Python 使用 NETCONF 管理配置 H3C 网络设备</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\fe994980.html" rel="bookmark">Python lxml 模块操作 XML 的基本使用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\ad63b5a0.html" rel="bookmark">使用 netmiko 的 is_alive() 方法实现 ssh 保活机制</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\posts\6909405a.html" rel="bookmark">netbox 在 Ubuntu20 系统上的安装记录</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/netconf/" rel="tag"><i class="fa fa-tag"></i> netconf</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/3e542090.html" rel="prev" title="Python 使用 NETCONF 管理配置 H3C 网络设备">
+                  <i class="fa fa-chevron-left"></i> Python 使用 NETCONF 管理配置 H3C 网络设备
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/ee91bfce.html" rel="next" title="一张图了解 Nornir 基础概念及用法">
+                  一张图了解 Nornir 基础概念及用法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="far fa-grin-wink"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">某呆</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">142k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:09</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.7/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"8MMinwRrMsuJe3aSCaWDvsK6-gzGzoHsz","app_key":"Bkx590nLq6gdEa1laXiWsWQC","server_url":"https://8mminwrr.lc-cn-n1-shared.com","security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>
