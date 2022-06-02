@@ -33,20 +33,20 @@
 <meta property="og:site_name" content="xDai&#39;s Site">
 <meta property="og:description" content="捕获过滤器Wireshark 中，捕获过滤器使用了伯克利包过滤（Berkeley Packet Filter，BPF），它采用了一种与自然语言很接近的语法，利用这种语法构成的字符串可以确定保留哪些数据包以及忽略掉哪些数据包，限定符有 3 种：  type：host（默认）、net、port dir：src、dst proto：ether、ip、tcp、arp 等  举例：  src host 19">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202112132329896.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202112132329898.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202112132329900.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202112132329901.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202112132329902.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202112132329903.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202112132329904.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202112132329905.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/202112132329896.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/202112132329898.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/202112132329900.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/202112132329901.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/202112132329902.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/202112132329903.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/202112132329904.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/202112132329905.png">
 <meta property="article:published_time" content="2020-03-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-02T09:53:04.379Z">
+<meta property="article:modified_time" content="2022-06-02T11:33:40.874Z">
 <meta property="article:author" content="某呆">
 <meta property="article:tag" content="抓包">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://oss.xdai.vip/md-note/imgs/202112132329896.png">
+<meta name="twitter:image" content="http://oss.xdai.vip/md-note/imgs/202112132329896.png">
 
 
 <link rel="canonical" href="https://555.xdai.vip/posts/f77b58f5.html">
@@ -362,13 +362,13 @@
 
 <p><strong>高级用法</strong>：可以进行精确到位的操作，针对数据报文中的每个字段进行过滤控制，语法为 <code>proto[expr:size]</code> ，其中 <code>expr</code> 为偏移量，<code>size</code> 为要操作的字节数，默认为 1。</p>
 <p>例如：一个 IP 数据包头部长度为 20 字节，其中 12~15 这四个字节表示的是源地址，如果要过滤源地址为 192.168.1.1 的数据包（需要把 IP 地址转换为 16 进制），表达式可以写为：<code>ip[12:4] = 0xC0A80101</code>。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329896.png"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329896.png"></p>
 <h2 id="显示过滤器"><a href="#显示过滤器" class="headerlink" title="显示过滤器"></a>显示过滤器</h2><p>显示过滤器是在捕获数据之后再使用，语法与捕获过滤器不同。</p>
 <p>一般由三部分组成：字段名称、关系、值，例如 <code>ip.src == 192.168.1.1</code>，Wireshark 过滤器输入框具有联想功能，可以显示出协议的可选字段（如下图），方便进行过滤器的编写。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329898.png" alt="过滤器"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329898.png" alt="过滤器"></p>
 <p>一个过滤表达式编写完成且格式正确时，输入框会显示为绿色；反之，则为红色，需要表达式进行修改。</p>
 <p>Wireshark 还可以使用数据包中的指定字段来创建过滤表达式。首先在数据包列表处选中一个数据包，然后在数据包详细信息栏处查看这个数据包的详细内容，这里会以行的形式展示数据包的信息，当选中其中一行时（见下图），例如 IP 地址，那么在状态栏处就会显示出该数据包该行对应的过滤器表达式。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329900.png" alt="状态栏显示过滤器"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329900.png" alt="状态栏显示过滤器"></p>
 <p>还有更简单的办法，就是在选中的字段单击右键，在弹出菜单中选择“作为过滤器应用”，并根据二级菜单进行选择“选中”，就可以在输入栏中看到生成的表达式了。</p>
 <h2 id="远程捕获数据包"><a href="#远程捕获数据包" class="headerlink" title="远程捕获数据包"></a>远程捕获数据包</h2><p>在实际工作中，经常会碰到捕捉其他设备通信数据包的情况，例如在机房的服务器，可以登录但却不能直接触碰。多数情况下，会采用在远程设备上安装 Wireshark，再通过远程桌面的方式进行操作，这样不但会加大工作量，也产生了不必要的数据包。</p>
 <p>Wireshark 提供了远程捕获数据包的功能，可以很方便的监控远程服务器上的流量，只需要在服务器上安装 <code>rpcap</code> 即可，Windows 操作系统安装了 WinPcap 后，就自带了该工具。</p>
@@ -377,17 +377,17 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">rpcapd -h</span></span><br><span class="line"></span><br><span class="line">USAGE:</span><br><span class="line"> rpcapd [-b &lt;address&gt;] [-p &lt;port&gt;] [-6] [-l &lt;host_list&gt;] [-a &lt;host,port&gt;]</span><br><span class="line">        [-n] [-v] [-d] [-s &lt;file&gt;] [-f &lt;file&gt;]</span><br><span class="line">  -b &lt;address&gt;: the address to bind to (either numeric or literal).</span><br><span class="line">      Default: it binds to all local IPv4 addresses</span><br><span class="line">  -p &lt;port&gt;: the port to bind to. Default: it binds to port 2002</span><br><span class="line">  -4: use only IPv4 (default both IPv4 and IPv6 waiting sockets are used)</span><br><span class="line">  -l &lt;host_list&gt;: a file that keeps the list of the hosts which are allowed</span><br><span class="line">      to connect to this server (if more than one, list them one per line).</span><br><span class="line">      We suggest to use literal names (instead of numeric ones) in order to</span><br><span class="line">      avoid problems with different address families</span><br><span class="line">  -n: permit NULL authentication (usually used with &#x27;-l&#x27;)</span><br><span class="line">  -a &lt;host,port&gt;: run in active mode when connecting to &#x27;host&#x27; on port &#x27;port&#x27;</span><br><span class="line">      In case &#x27;port&#x27; is omitted, the default port (2003) is used</span><br><span class="line">  -v: run in active mode only (default: if &#x27;-a&#x27; is specified, it accepts</span><br><span class="line">      passive connections as well</span><br><span class="line">  -d: run in daemon mode (UNIX only) or as a service (Win32 only)</span><br><span class="line">      Warning (Win32): this switch is provided automatically when the service</span><br><span class="line">      is started from the control panel</span><br><span class="line">  -s &lt;file&gt;: save the current configuration to file</span><br><span class="line">  -f &lt;file&gt;: load the current configuration from file; all the switches</span><br><span class="line">      specified from the command line are ignored</span><br><span class="line">  -h: print this help screen</span><br></pre></td></tr></table></figure>
 
 <p>例如：在 远程服务器中运行了 <code>rpcapd -4 -n -p 8888</code>，那么可以在本地 Wireshark 中，添加远程抓包，如下图：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329901.png" alt="开启远程抓包"></p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329902.png" alt="wireshark 配置连接远程抓包"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329901.png" alt="开启远程抓包"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329902.png" alt="wireshark 配置连接远程抓包"></p>
 <p>之后，就可以在本地的 Wireshark 抓到远程服务器上的数据包了。</p>
 <h2 id="解密数据包"><a href="#解密数据包" class="headerlink" title="解密数据包"></a>解密数据包</h2><p>Chrome 浏览器添加运行参数 ：<code>--ssl-key-log-file=&quot;C:\Users\xdai\Desktop\sslkeylog.log&quot;</code>，可以将访问网站的 SSL Key 信息保存下来，或者为系统添加环境变量 <code>SSHKEYLOGFILE = &quot;/Path/to/log&quot;</code> 来保存 log 文件，对于 Windows 系统，环境变量重启系统会才会生效&#x2F;取消生效，Linux 系统使用 <code>export</code> 立即生效。</p>
 <p>然后打开 Wireshark 开启抓包，打开 Chrome 访问百度；抓取到数据包后，导入已经出现的 SSL Key 信息：“编辑”→“首选项”，然后在打开的“首选项”窗口中选中“Protocols”，找到 TLS 并导入文件。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329903.png" alt="ssl key 设置"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329903.png" alt="ssl key 设置"></p>
 <p>可以看到之前为加密的数据包，导入 Key 之后，以明文的方式显示出来了（例如，403 和 408）。</p>
 <p>解密前：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329904.png" alt="解密前报文"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329904.png" alt="解密前报文"></p>
 <p>解密后：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329905.png" alt="解密后报文"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329905.png" alt="解密后报文"></p>
 
     </div>
 

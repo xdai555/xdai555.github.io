@@ -103,7 +103,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ip route-static 100.64.0.0 16 null 0</span><br><span class="line">ip route-static 10.1.0.0 16 null 0</span><br></pre></td></tr></table></figure>
 
 <p>注：在一些新的设备上面，会默认产生引入聚合 NULL0 路由和区域间聚合 NULL0 路由，且 NULL0 路由优先级为 255，如下：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220410193127230.png" alt="image-20220410193127230"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20220410193127230.png" alt="image-20220410193127230"></p>
 </li>
 </ul>
 <h2 id="快速收敛"><a href="#快速收敛" class="headerlink" title="快速收敛"></a>快速收敛</h2><ul>
@@ -142,7 +142,7 @@
 
 <span id="more"></span>
 
-<h3 id="SSH做反向隧道-远程端口转发-实例"><a href="#SSH做反向隧道-远程端口转发-实例" class="headerlink" title="SSH做反向隧道(远程端口转发)实例"></a>SSH做反向隧道(远程端口转发)实例</h3><p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220214213238533.png" alt="image-20220214213238533"></p>
+<h3 id="SSH做反向隧道-远程端口转发-实例"><a href="#SSH做反向隧道-远程端口转发-实例" class="headerlink" title="SSH做反向隧道(远程端口转发)实例"></a>SSH做反向隧道(远程端口转发)实例</h3><p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20220214213238533.png" alt="image-20220214213238533"></p>
 <ol>
 <li>server的配置</li>
 </ol>
@@ -313,7 +313,7 @@
 <p>然后使用浏览器访问这个服务器的 <code>8000</code> 端口测试一下！</p>
 <p>如果服务已经正常启动，但是无法访问的话，请自行检查系统的防火墙或者 iptables 设置，放行 8000 端口。</p>
 <p>可以正常登录~</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220209215651236.png" alt="image-20220209215651236"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20220209215651236.png" alt="image-20220209215651236"></p>
 <p>一般开发的时候使用这种方式来测试服务的运行情况，实际部署时，需要结合 WSGI 来运行服务，必要时还需要配置 nginx 来使用。</p>
 <p>先 crtl + C 停止服务，进行下一步操作。</p>
 <h4 id="使用-Gunicorn-运行-Django-服务"><a href="#使用-Gunicorn-运行-Django-服务" class="headerlink" title="使用 Gunicorn 运行 Django 服务"></a>使用 Gunicorn 运行 Django 服务</h4><p> NetBox 作为 HTTP 服务器后面的 WSGI 应用程序运行。 NetBox 默认使用的是 gunicorn，<strong>但是它不能处理静态文件，还要结合 nginx 才能正常使用</strong>，而 uwsgi 支持静态文件的映射。这里先使用官方提供的 gunicorn 来启动服务。</p>
@@ -347,7 +347,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl restart nginx</span><br></pre></td></tr></table></figure>
 
 <p>使用 80 端口来访问：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220209224251052.png" alt="image-20220209224251052"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20220209224251052.png" alt="image-20220209224251052"></p>
 <p>至此，NetBox 搭建完成！</p>
 <h3 id="使用-uwsgi-来启动-NetBox-服务"><a href="#使用-uwsgi-来启动-NetBox-服务" class="headerlink" title="使用 uwsgi 来启动 NetBox 服务"></a>使用 uwsgi 来启动 NetBox 服务</h3><p>NetBox 默认使用 gunicorn 作为 WSGI 来提供服务，<strong>但是它不能处理静态文件，还要结合 nginx 才能正常使用</strong>，而 uwsgi 支持静态文件的映射。这里给出使用方法。</p>
 <h4 id="安装-uwsgi"><a href="#安装-uwsgi" class="headerlink" title="安装 uwsgi"></a>安装 uwsgi</h4><p>进入到升级脚本创建的 Python 虚拟环境，之后命令行前面都会有个 <code>(venv)</code> 的提示符，表示当前在虚拟环境中：</p>
@@ -410,7 +410,7 @@
 <p>因为 netbox 的导出<strong>只使用了 csv 格式</strong>，所以把编码格式固定不会对 netbox 运行造成影响，只是修改了导出的格式。</p>
 <p>最终解决方法见上方。</p>
 <h3 id="Netbox-时区不对"><a href="#Netbox-时区不对" class="headerlink" title="Netbox 时区不对"></a>Netbox 时区不对</h3><p>修改文件： <code>./netbox-docker/configuration/extra.py</code></p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/cfb24c60cdf2fa4a2edca8df1f59bbe.png"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/cfb24c60cdf2fa4a2edca8df1f59bbe.png"></p>
 ]]></content>
       <categories>
         <category>NetDevOps</category>
@@ -422,12 +422,12 @@
   <entry>
     <title>使用 docker 安装部署 Zabbix5.0 并进行优化</title>
     <url>/posts/b9dcfcd4.html</url>
-    <content><![CDATA[<h2 id="架构概览"><a href="#架构概览" class="headerlink" title="架构概览"></a>架构概览</h2><p><img data-src="https://oss.xdai.vip/md-note/imgs/zabbix_deploy.svg" alt="zabbix_deploy"></p>
+    <content><![CDATA[<h2 id="架构概览"><a href="#架构概览" class="headerlink" title="架构概览"></a>架构概览</h2><p><img data-src="http://oss.xdai.vip/md-note/imgs/zabbix_deploy.svg" alt="zabbix_deploy"></p>
 <p>网络环境不宜说太多：四朵独立的云，中间通过防火墙隔离，需要搭建一套监控系统对全网的网络设备进行监控，通过 Zabbix Server + Proxy 分布式部署方式来实现。</p>
 <h2 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h2><p>截止目前，Zabbix 已经发布了 6.0 pre-release，稳定版也已经来到了 5.4。</p>
 <p>在生产环境部署时，为稳定起见，建议使用 <strong>Long-term support</strong> (<strong>LTS</strong>) 版本。</p>
 <p>本次部署选用的是 <a href="https://www.zabbix.com/cn/rn/rn5.0.19">Zabbix 5.0 LTS</a> 版本。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229090438953.png" alt="版本及软件依赖"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229090438953.png" alt="版本及软件依赖"></p>
 <span id="more"></span>
 
 <p>存储空间要求：</p>
@@ -486,7 +486,7 @@
   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-&#x27;EOF&#x27;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [&quot;https://docker.mirrors.ustc.edu.cn&quot;]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
 
 <p> 使用 <code>docker info</code> 命令查看国内镜像配置是否生效：</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211228232224039.png" alt="image-20211228232224039" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211228232224039.png" alt="image-20211228232224039" style="zoom:67%;" />
 
 <p>本文使用的 Docker 版本：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker --version</span><br><span class="line">Docker version 20.10.12, build e91ed57</span><br></pre></td></tr></table></figure>
@@ -497,7 +497,7 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker pull zabbix/zabbix-web-nginx-mysql:5.0-centos-latest</span><br><span class="line">docker pull zabbix/zabbix-server-mysql:5.0-centos-latest</span><br><span class="line">docker pull zabbix/zabbix-proxy-mysql:5.0-centos-latest</span><br><span class="line">docker pull zabbix/zabbix-snmptraps:5.0-centos-latest</span><br><span class="line">docker pull zabbix/zabbix-agent:5.0-centos-latest</span><br><span class="line">docker pull mysql:5.7</span><br></pre></td></tr></table></figure>
 
 <p>镜像拉取完成后，可以通过 <code>docker images</code> 查看镜像列表。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211228232758646.png" alt="image-20211228232758646" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211228232758646.png" alt="image-20211228232758646" style="zoom:67%;" />
 
 
 
@@ -506,7 +506,7 @@
 
 <p>启动完成后，通过 <code>docker ps</code> 查看所有容器已经正在运行，之后通过访问 <code>http://ip:8080</code> 即可访问！</p>
 <p>默认用户名&#x2F;密码是：<code>Admin/zabbix</code></p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229203922391.png" alt="image-20211229203922391"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229203922391.png" alt="image-20211229203922391"></p>
 <h2 id="生产环境部署"><a href="#生产环境部署" class="headerlink" title="生产环境部署"></a>生产环境部署</h2><h3 id="网络模式"><a href="#网络模式" class="headerlink" title="网络模式"></a>网络模式</h3><p>默认情况下，容器的网卡都是经过 NAT 的，为了保证相关服务可以正常被外部访问，容器都使用主机模式的网络（<code>--network=host</code>），即端口连接、端口监听都使用物理机的地址。</p>
 <h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>如果已经有现成的数据库，则不用使用本地数据库，直接配置指定远程数据库即可。</p>
 <p>Zabbix 支持 MySQL、PostgreSQL 等，使用不同后端数据库，需要选择对应的 Zabbix 容器镜像。</p>
@@ -514,7 +514,7 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name zbx5-mysql -td \</span><br><span class="line">    --network=host \</span><br><span class="line">    -e MYSQL_DATABASE=&quot;zabbix&quot; \</span><br><span class="line">    -e MYSQL_USER=&quot;zabbix&quot; \</span><br><span class="line">    -e MYSQL_PASSWORD=&quot;zabbix&quot; \</span><br><span class="line">    -e MYSQL_ROOT_PASSWORD=&quot;root&quot; \</span><br><span class="line">    --restart unless-stopped mysql:5.7 \</span><br><span class="line">    --character-set-server=utf8 --collation-server=utf8_bin \</span><br><span class="line">    --default-authentication-plugin=mysql_native_password</span><br></pre></td></tr></table></figure>
 
 <p>运行之后，一个本地数据库就搭建完成了，之后可以在 Linux 中使用 <code>docker exec -it zbx5-mysql mysql -proot</code> 来连接到本地数据库，其中 <code>MYSQL_DATABASE</code> 为新建的数据库，<code>MYSQL_ROOT_PASSWORD</code> 为数据库超级管理员 root 的密码<strong>（生产环境中请使用符合密码策略的强密码）</strong>。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229002522793.png" alt="image-20211229002522793" style="zoom: 67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229002522793.png" alt="image-20211229002522793" style="zoom: 67%;" />
 
 
 
@@ -547,7 +547,7 @@
 
 <p>运行完成之后，通过 <code>docker logs $&#123;docker_id&#125;</code> 可以看到运行日志，首先进行了数据库的初始化，之后写入配置文件，最后启动 Server 端。</p>
 <p>如果是已有数据库已有数据表，则不会再次进行初始化。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229015713693.png" alt="image-20211229015713693" style="zoom: 67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229015713693.png" alt="image-20211229015713693" style="zoom: 67%;" />
 
 <p>运行成功后，将原始容器的启动脚本拷贝出来进行修改。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ~</span><br><span class="line">mkdir docker-build/zbx_server -p</span><br><span class="line">docker cp zbx5-server-mysql:/usr/bin/docker-entrypoint.sh ./docker-build/zbx_server</span><br><span class="line">cd docker-build/zbx_server</span><br></pre></td></tr></table></figure>
@@ -555,15 +555,15 @@
 <p>编辑原始启动文件：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">vim docker-entrypoint.sh</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">移动到 440 行左右，这里的配置就是调用函数更新配置，在这里添加需要的 `Include` 参数</span></span><br><span class="line">...</span><br><span class="line">    update_config_var $ZBX_CONFIG &quot;Include&quot; &quot;$&#123;ZBX_INCLUDE&#125;&quot;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229112406476.png" alt="image-20211229112406476"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229112406476.png" alt="image-20211229112406476"></p>
 <p>编辑 Dockerfile，制作新的镜像：</p>
 <figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cat Dockerfile</span></span><br><span class="line"><span class="keyword">FROM</span> zabbix/zabbix-server-mysql:<span class="number">5.0</span>-centos-latest</span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> ./docker-entrypoint.sh /usr/bin/docker-entrypoint.sh</span></span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229112709803.png" alt="image-20211229112709803"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229112709803.png" alt="image-20211229112709803"></p>
 <p>重新打包镜像：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">使用当前目录的 Dockerfile 创建镜像，新镜像标签为 xdai/zabbix-server-mysql:v1</span></span><br><span class="line">docker build -t xdai/zabbix-server-mysql:v1 .</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229113707531.png" alt="image-20211229113707531"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229113707531.png" alt="image-20211229113707531"></p>
 <p>之后使用 <code>v1</code> 这个版本的镜像启动时，就可以支持 <code>Include</code> 参数了。</p>
 <h4 id="自定义-Zabbix-Proxy-镜像"><a href="#自定义-Zabbix-Proxy-镜像" class="headerlink" title="自定义 Zabbix Proxy 镜像"></a>自定义 Zabbix Proxy 镜像</h4><p>原理同上。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">启动 Proxy 容器，因为测试环境 Proxy 和 Server 在同一台机器上启动，端口无法重用，所以指定监听端口为 11111</span></span><br><span class="line">docker run --name zbx5-proxy-mysql -t \</span><br><span class="line">    -e DB_SERVER_HOST=&quot;127.0.0.1&quot; \</span><br><span class="line">    -e ZBX_LISTENPORT=11111 \</span><br><span class="line">    -e ZBX_HOSTNAME=&quot;zabbix-proxy-test1&quot; \</span><br><span class="line">    -e ZBX_SERVER_HOST=&quot;127.0.0.1&quot; \</span><br><span class="line">    -e MYSQL_USER=&quot;zabbix&quot; \</span><br><span class="line">    -e MYSQL_PASSWORD=&quot;zabbix&quot; \</span><br><span class="line">	-e MYSQL_ROOT_PASSWORD=&quot;root&quot; \</span><br><span class="line">    --network=host \</span><br><span class="line">    --restart unless-stopped \</span><br><span class="line">    -d zabbix/zabbix-proxy-mysql:5.0-centos-latest</span><br></pre></td></tr></table></figure>
@@ -653,21 +653,21 @@
 
 <p>Proxy 启动后，可以在前端 Web 上进行添加测试一下。</p>
 <p>被动模式，端口 11111。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211230005830309.png" alt="image-20211230005830309" style="zoom: 67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211230005830309.png" alt="image-20211230005830309" style="zoom: 67%;" />
 
 <p>添加成功后，上次在线时间（Last seen）会一直重置为 0，表示 Proxy 可被正常检测到。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211230010013164.png" alt="image-20211230010013164" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211230010013164.png" alt="image-20211230010013164" style="zoom:67%;" />
 
 
 
 <h4 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h4><p>Zabbix Server 端启动后，会默认监控本机的 10050 端口（zabbix_agent 端口）来对本机进行监控，如果没有运行 agent，系统会提示该主机离线。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211230010402200.png" alt="image-20211230010402200" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211230010402200.png" alt="image-20211230010402200" style="zoom:67%;" />
 
 <p>启动 Agent 容器，本机监控一般不需要额外的参数：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name zabbix-agent -d \</span><br><span class="line">    -e ZBX_HOSTNAME=&quot;local-agent&quot; \</span><br><span class="line">    -e ZBX_SERVER_HOST=&quot;127.0.0.1&quot;  \</span><br><span class="line">    --network=host \</span><br><span class="line">    -v /etc/localtime:/etc/localtime \</span><br><span class="line">    --restart unless-stopped \</span><br><span class="line">    zabbix/zabbix-agent:5.0-centos-latest</span><br></pre></td></tr></table></figure>
 
 <p>Agent 端启动后，Web 上可以看到本机状态恢复正常。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211230010908510.png" alt="image-20211230010908510" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211230010908510.png" alt="image-20211230010908510" style="zoom:67%;" />
 
 <h4 id="SNMPTraps"><a href="#SNMPTraps" class="headerlink" title="SNMPTraps"></a>SNMPTraps</h4><p>如果使用的 SNMPv3 版本，需要把每台网络设备的信息都录入进去，主要是 engine-id 不同；SNMPv2版本只需要写上只读只写的团体字即可。</p>
 <p>SNMPTrap 的配置文件如下，配置文件的编写参考 <a href="http://www.net-snmp.org/wiki/index.php/TUT:Configuring_snmptrapd_to_receive_SNMPv3_notifications">net-snmp</a>：</p>
@@ -1289,7 +1289,7 @@
 <li>pysnmp 4.4.12</li>
 <li>HCL</li>
 </ul>
-<h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p><img data-src="https://oss.xdai.vip/md-note/imgs/202111201620531.png" alt="image-20201227184224939"></p>
+<h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p><img data-src="http://oss.xdai.vip/md-note/imgs/202111201620531.png" alt="image-20201227184224939"></p>
 <span id="more"></span>
 
 <h3 id="配置信息"><a href="#配置信息" class="headerlink" title="配置信息"></a>配置信息</h3><h4 id="路由器配置"><a href="#路由器配置" class="headerlink" title="路由器配置"></a>路由器配置</h4><p>路由器开启了 v2c 和 v3 两个版本来进行实验</p>
@@ -1437,14 +1437,14 @@
 <p>UTF-8 不需要 BOM，尽管 Unicode 标准允许在 UTF-8 中使用 BOM。<br>所以不含 BOM 的 UTF-8 才是标准形式，在 UTF-8 文件中放置 BOM 主要是微软的习惯（顺便提一下：把带有 BOM 的小端序 UTF-16 称作「Unicode」而又不详细说明，这也是微软的习惯）。<br>BOM（byte order mark）是为 UTF-16 和 UTF-32 准备的，用于标记字节序（byte order）。微软在 UTF-8 中使用 BOM 是因为这样可以把 UTF-8 和 ASCII 等编码明确区分开，但这样的文件在 Windows 之外的操作系统里会带来问题。</p>
 </blockquote>
 <p>使用 Windows 记事本打开导出的文件后，可以看到编码是 UTF-8</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/20210724223341.png" alt="image-20210724223341736"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/20210724223341.png" alt="image-20210724223341736"></p>
 <h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>可以在构建 response 对象时设置编码为带有 BOM 的编码格式：<code>utf-8-sig</code></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">some_view</span>(<span class="params">request</span>):</span><br><span class="line">    response = HttpResponse(content_type=<span class="string">&#x27;text/csv&#x27;</span>)</span><br><span class="line">    <span class="comment"># 设置带 BOM 的编码</span></span><br><span class="line">    response.charset = <span class="string">&#x27;utf-8-sig&#x27;</span></span><br><span class="line">    response[<span class="string">&#x27;Content-Disposition&#x27;</span>] = <span class="string">&#x27;attachment; filename=&quot;somefilename.csv&quot;&#x27;</span></span><br><span class="line">    writer = csv.writer(response)</span><br><span class="line">    writer.writerow([<span class="string">&#x27;姓名&#x27;</span>, <span class="string">&#x27;性别&#x27;</span>, <span class="string">&#x27;年龄&#x27;</span>, <span class="string">&#x27;地址&#x27;</span>])</span><br><span class="line">    writer.writerow([<span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;男&#x27;</span>, <span class="string">&#x27;18&#x27;</span>, <span class="string">&#x27;北京&#x27;</span>])</span><br><span class="line">    <span class="keyword">return</span> response</span><br></pre></td></tr></table></figure>
 
 
 
 <p>这样导出文件后可以直接用 Excel 打开而不会乱码；使用 Windows 记事本打开后，显示编码为 带有 BOM 的 UTF-8。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/20210724223535.png" alt="image-20210724223535196"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/20210724223535.png" alt="image-20210724223535196"></p>
 <h2 id="进一步思考"><a href="#进一步思考" class="headerlink" title="进一步思考"></a>进一步思考</h2><p>可以使用 request 中的 User-Agent 进行客户端系统判断，如果用户的系统是 Windows，那么给导出的文件编码设置为带有 BOM 的 UTF-8，否则使用 UTF-8。</p>
 <p>实现示例：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">some_view</span>(<span class="params">request</span>):</span><br><span class="line">    response = HttpResponse(content_type=<span class="string">&#x27;text/csv&#x27;</span>)</span><br><span class="line">    <span class="comment"># 通过 User-Agent 判断客户端系统，然后设置带 BOM 的编码</span></span><br><span class="line">    response.charset = <span class="string">&#x27;utf-8-sig&#x27;</span> <span class="keyword">if</span> <span class="string">&quot;Windows&quot;</span> <span class="keyword">in</span> request.headers.get(<span class="string">&#x27;User-Agent&#x27;</span>) <span class="keyword">else</span> <span class="string">&#x27;utf-8&#x27;</span></span><br><span class="line">    response[<span class="string">&#x27;Content-Disposition&#x27;</span>] = <span class="string">&#x27;attachment; filename=&quot;somefilename.csv&quot;&#x27;</span></span><br><span class="line">    writer = csv.writer(response)</span><br><span class="line">    writer.writerow([<span class="string">&#x27;姓名&#x27;</span>, <span class="string">&#x27;性别&#x27;</span>, <span class="string">&#x27;年龄&#x27;</span>, <span class="string">&#x27;地址&#x27;</span>])</span><br><span class="line">    writer.writerow([<span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;男&#x27;</span>, <span class="string">&#x27;18&#x27;</span>, <span class="string">&#x27;北京&#x27;</span>])</span><br><span class="line">    <span class="keyword">return</span> response</span><br></pre></td></tr></table></figure>
@@ -1453,7 +1453,7 @@
 
 <h2 id="修改-UTF-8-编码为带有-BOM-的UTF-8"><a href="#修改-UTF-8-编码为带有-BOM-的UTF-8" class="headerlink" title="修改 UTF-8 编码为带有 BOM 的UTF-8"></a>修改 UTF-8 编码为带有 BOM 的UTF-8</h2><p>如果你已经有 CSV 文件的编码是 UTF-8，那么需要另存为新的文件，并设置编码。</p>
 <p>如下，使用 Windows 记事本另存为：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/20210724224035.png" alt="image-20210724224035330"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/20210724224035.png" alt="image-20210724224035330"></p>
 ]]></content>
       <categories>
         <category>Python</category>
@@ -1719,7 +1719,7 @@
 <li>部署 Django 应用容器和 Web 服务器（uWSGI、gunicorn、Daphne、Hypercorn、Uvicorn），不提供静态资源的加载，静态资源要放在前端 Nginx 上</li>
 </ul>
 <p>用户（<a href="http://www.baidu.com)---&gt;/">www.baidu.com）---&gt;</a> Nginx 服务器（proxy_pass localhost;） —&gt; Django Server</p>
-<h4 id="应用部署架构"><a href="#应用部署架构" class="headerlink" title="应用部署架构"></a>应用部署架构</h4><p><img data-src="https://oss.xdai.vip/md-note/imgs/20210809214849.png" alt="image-20210809214848841"></p>
+<h4 id="应用部署架构"><a href="#应用部署架构" class="headerlink" title="应用部署架构"></a>应用部署架构</h4><p><img data-src="http://oss.xdai.vip/md-note/imgs/20210809214849.png" alt="image-20210809214848841"></p>
 <p>密钥管理：文件、环境变量、KeyServer</p>
 <p>开源的 KeyServer：vault、keywhiz、knox</p>
 <p>免费的 SSL 证书机构：Let’s Encrypt，90 天到期，可以自动续期。</p>
@@ -1757,7 +1757,7 @@
     <url>/posts/5509f374.html</url>
     <content><![CDATA[<p>Kuryr-kubernetes 是 openstack neutrn 的子项目。</p>
 <p>本身没有网络能力，是将 openstack neutron 的网络能力提供给 k8s。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/1b8e3cabe00541038b5b4500408ab624.png" alt="9c7f7b717d793c6db27eb9ea8ae0ab5a.png"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/1b8e3cabe00541038b5b4500408ab624.png" alt="9c7f7b717d793c6db27eb9ea8ae0ab5a.png"></p>
 <span id="more"></span>
 
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><ul>
@@ -1778,8 +1778,8 @@
 <h2 id="资源对应关系"><a href="#资源对应关系" class="headerlink" title="资源对应关系"></a>资源对应关系</h2><p>pod 网卡 &lt;—&gt; Neutron port</p>
 <p>pod 子网和 service 子网 &lt;—&gt; Neutron Subnet</p>
 <p>Service &lt;—&gt; Neutron LoadBalancer</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/e7d665dacb6d40fbaa2d5ca57fd73765.png" alt="98fe4087983cc8f4d3532c3845f185c7.png"></p>
-<h2 id="最终实现效果"><a href="#最终实现效果" class="headerlink" title="最终实现效果"></a>最终实现效果</h2><p><img data-src="https://oss.xdai.vip/md-note/imgs/a0ed916ce7ac48a8bac476f0f6cfa72a.png" alt="42f6cd5ce8a32fdd6244828ab642c9ad.png"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/e7d665dacb6d40fbaa2d5ca57fd73765.png" alt="98fe4087983cc8f4d3532c3845f185c7.png"></p>
+<h2 id="最终实现效果"><a href="#最终实现效果" class="headerlink" title="最终实现效果"></a>最终实现效果</h2><p><img data-src="http://oss.xdai.vip/md-note/imgs/a0ed916ce7ac48a8bac476f0f6cfa72a.png" alt="42f6cd5ce8a32fdd6244828ab642c9ad.png"></p>
 ]]></content>
       <categories>
         <category>网络技术</category>
@@ -1847,19 +1847,19 @@
 <ul>
 <li>pod 内的网络<br>  pod 内只有 169.254.1.1 的默认路由，即访问任何数据都三层转发到 veth 设备。  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/ # ip route</span><br><span class="line">default via 169.254.1.1 dev eth0 </span><br><span class="line">169.254.1.1 dev eth0 scope link</span><br><span class="line">/ # arping 169.254.1.1</span><br><span class="line">ARPING 169.254.1.1 from 11.0.82.3 eth0</span><br><span class="line">Unicast reply from 169.254.1.1 [ee:ee:ee:ee:ee:ee] 0.015ms</span><br><span class="line">Unicast reply from 169.254.1.1 [ee:ee:ee:ee:ee:ee] 0.097ms</span><br></pre></td></tr></table></figure>
  如何转发？通过主机 arp proxy 来实现。<br> pod 的 veth pair 一边连接 pod ，另一边挂在主机的网络命名空间，通过配置主机网络命名空间的 proxy 选项，为 pod 提供三层转发的 arp 应答，这样 pod 的数据包转发到了主机命名空间，挂在主机命名空间的网卡收到数据包后，calico 配置开启了这个网卡的 forwarding 选选项，这样就会查找主机的路由表。 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">x@x-vm:~$ cat /proc/sys/net/ipv4/conf/cali99c376db89a/proxy_arp</span><br><span class="line">1</span><br><span class="line">x@x-vm:~$ cat /proc/sys/net/ipv4/neigh/cali99c376db89a/proxy_delay </span><br><span class="line">0</span><br><span class="line">x@x-vm:~$ cat /proc/sys/net/ipv4/conf/cali99c376db89a/forwarding  </span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-  <img data-src="https://oss.xdai.vip/md-note/imgs/c03908d42c4e49bc8a4f246c1d5f6ad6.png" alt="9299b099584c3923aa79801bb2991bb2.png"></li>
+  <img data-src="http://oss.xdai.vip/md-note/imgs/c03908d42c4e49bc8a4f246c1d5f6ad6.png" alt="9299b099584c3923aa79801bb2991bb2.png"></li>
 </ul>
 <h4 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h4><p>分别在两个node上各创建一个临时的 pod</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kubectl run -it --rm --restart=Never test1 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;x-vm&quot;&#125;&#125;&#125;&#x27; sh </span><br><span class="line">kubectl run -it --rm --restart=Never test2 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;worker&quot;&#125;&#125;&#125;&#x27; sh</span><br></pre></td></tr></table></figure>
-<p>在主机上 brctl show ,只有一个 docker0 网桥，未挂载任何网卡<br><img data-src="https://oss.xdai.vip/md-note/imgs/124695c8a56746a1a2b6beb78a1e8e0f.png" alt="81e0d93c767f93cfe28017f53230c565.png"><br>在 pod 内发送 arp 请求，在 node 上抓包<br><img data-src="https://oss.xdai.vip/md-note/imgs/a8b5421a53bb42359b19c36f7a216bdf.png" alt="e1dbf464487e10784a39f0020538cbc8.png"><br><img data-src="https://oss.xdai.vip/md-note/imgs/7f6cf71357f54c349dfb67097d1dedf5.png" alt="b39270e48c3b0f504d1b65d9f6c0f751.png"><br>查看 master node 的路由表<br><img data-src="https://oss.xdai.vip/md-note/imgs/50fcabce0f8944f99b0b1bcd56bd7c74.png" alt="170c6be1d931b2ab64b57a5107bdde6f.png"><br>查看 worker node 的路由表<br><img data-src="https://oss.xdai.vip/md-note/imgs/470af4f404b24f67b7602c3915385866.png" alt="3885e04cc52b51af9d9bcde2688d0dfd.png"><br>在 pod 上 traceroute 查看数据转发路径（跨 node ）<br><img data-src="https://oss.xdai.vip/md-note/imgs/2a87555a8ab240cf8adb2cd42dd5b356.png" alt="8a374dbb35e40ab2eb25d2fa78605c47.png"><br>在 pod 上 traceroute 查看转发路径（同 node）<br><img data-src="https://oss.xdai.vip/md-note/imgs/bedd790a18cb47e7b0a372bd0f1be401.png" alt="d8e1cb9ffea64e07e4bba730f1594fe7.png"></p>
-<h3 id="IPIP"><a href="#IPIP" class="headerlink" title="IPIP"></a>IPIP</h3><p>Pure BGP 实现的时候，同一个 node 网卡出来的数据包会有多个源 IP，而且 pod 网络可能会与物理网络冲突。<br>Calico 使用 IP in IP 封装协议来实现，外层 IP Header 协议号是 4，也是一种隧道技术，但是封装简单，无法实现多租户（GRE 可以）。<br>实现方式与 flannel 类似，会新增一个 ipip 类型的 netdev 设备，路由表中将远端 node 的路由指向 ipip 设备，进行封装。<br>同 work node pod 通信，与 pure BGP 一样，直接通过主机明细通信；跨 work node 通信，多了一层 ipip 的封装。<br><img data-src="https://oss.xdai.vip/md-note/imgs/090ec11ace8c4d1f84ac8bab417b62ad.png" alt="ac657457ee5f50ef8d7efad6de5ddc08.png"></p>
+<p>在主机上 brctl show ,只有一个 docker0 网桥，未挂载任何网卡<br><img data-src="http://oss.xdai.vip/md-note/imgs/124695c8a56746a1a2b6beb78a1e8e0f.png" alt="81e0d93c767f93cfe28017f53230c565.png"><br>在 pod 内发送 arp 请求，在 node 上抓包<br><img data-src="http://oss.xdai.vip/md-note/imgs/a8b5421a53bb42359b19c36f7a216bdf.png" alt="e1dbf464487e10784a39f0020538cbc8.png"><br><img data-src="http://oss.xdai.vip/md-note/imgs/7f6cf71357f54c349dfb67097d1dedf5.png" alt="b39270e48c3b0f504d1b65d9f6c0f751.png"><br>查看 master node 的路由表<br><img data-src="http://oss.xdai.vip/md-note/imgs/50fcabce0f8944f99b0b1bcd56bd7c74.png" alt="170c6be1d931b2ab64b57a5107bdde6f.png"><br>查看 worker node 的路由表<br><img data-src="http://oss.xdai.vip/md-note/imgs/470af4f404b24f67b7602c3915385866.png" alt="3885e04cc52b51af9d9bcde2688d0dfd.png"><br>在 pod 上 traceroute 查看数据转发路径（跨 node ）<br><img data-src="http://oss.xdai.vip/md-note/imgs/2a87555a8ab240cf8adb2cd42dd5b356.png" alt="8a374dbb35e40ab2eb25d2fa78605c47.png"><br>在 pod 上 traceroute 查看转发路径（同 node）<br><img data-src="http://oss.xdai.vip/md-note/imgs/bedd790a18cb47e7b0a372bd0f1be401.png" alt="d8e1cb9ffea64e07e4bba730f1594fe7.png"></p>
+<h3 id="IPIP"><a href="#IPIP" class="headerlink" title="IPIP"></a>IPIP</h3><p>Pure BGP 实现的时候，同一个 node 网卡出来的数据包会有多个源 IP，而且 pod 网络可能会与物理网络冲突。<br>Calico 使用 IP in IP 封装协议来实现，外层 IP Header 协议号是 4，也是一种隧道技术，但是封装简单，无法实现多租户（GRE 可以）。<br>实现方式与 flannel 类似，会新增一个 ipip 类型的 netdev 设备，路由表中将远端 node 的路由指向 ipip 设备，进行封装。<br>同 work node pod 通信，与 pure BGP 一样，直接通过主机明细通信；跨 work node 通信，多了一层 ipip 的封装。<br><img data-src="http://oss.xdai.vip/md-note/imgs/090ec11ace8c4d1f84ac8bab417b62ad.png" alt="ac657457ee5f50ef8d7efad6de5ddc08.png"></p>
 <h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>修改 calico 配置文件，打开 ipip 选项，可以不用重新部署，直接在之前 pure bgp 的基础之上，导出相关的配置文件进行修改。<br>将当前的 ipPool 配置导出，修改 ipip 选项为 always</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 查看当前的 ipPool 配置</span><br><span class="line">x@x-vm:~$ calicoctl get ipPool -o wide</span><br><span class="line">NAME                  CIDR          NAT    IPIPMODE   VXLANMODE   DISABLED   SELECTOR   </span><br><span class="line">default-ipv4-ippool   11.0.0.0/16   true   Never      Never       false      all()</span><br><span class="line"># 导出配置</span><br><span class="line">calicoctl get ipPool -o yaml &gt; calico_ipip.yaml</span><br><span class="line"># 修改 ipip 选项</span><br><span class="line"># vim calico_ipip.yaml</span><br><span class="line">    cidr: 11.0.0.0/16</span><br><span class="line">    ipipMode: Always</span><br><span class="line">    natOutgoing: true</span><br><span class="line"># 应用配置</span><br><span class="line">x@x-vm:~$ calicoctl apply -f calico_ipip.yaml </span><br><span class="line">Successfully applied 1 &#x27;IPPool&#x27; resource(s)</span><br><span class="line"># 再次查看 ipPool 选项，看到 ipip 已经打开</span><br><span class="line">x@x-vm:~$ calicoctl get ipPool -o wide</span><br><span class="line">NAME                  CIDR          NAT    IPIPMODE   VXLANMODE   DISABLED   SELECTOR   </span><br><span class="line">default-ipv4-ippool   11.0.0.0/16   true   Always     Never       false      all()     </span><br></pre></td></tr></table></figure>
 <p>查看网卡详细信息，新增了 tunnel 0，占用了一个 pod 地址，类型为 ipip，remote 为 any，即可以向任意远端发送数据包。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ip -d addr</span><br><span class="line">...</span><br><span class="line">10: tunl0@NONE: &lt;NOARP,UP,LOWER_UP&gt; mtu 1440 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link/ipip 0.0.0.0 brd 0.0.0.0 promiscuity 0 </span><br><span class="line">    ipip any remote any local any ttl inherit nopmtudisc numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 </span><br><span class="line">    inet 11.0.82.5/32 brd 11.0.82.5 scope global tunl0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
 <h3 id="实操-1"><a href="#实操-1" class="headerlink" title="实操"></a>实操</h3><p>分别在两个node上各创建一个临时的 pod</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kubectl run -it --rm --restart=Never test1 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;x-vm&quot;&#125;&#125;&#125;&#x27; sh </span><br><span class="line">kubectl run -it --rm --restart=Never test2 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;worker&quot;&#125;&#125;&#125;&#x27; sh</span><br></pre></td></tr></table></figure>
-<p>查看 pod 信息，分布在不同的 node 上<br><img data-src="https://oss.xdai.vip/md-note/imgs/c8a0646038b34dc89030a7e107b17bd1.png" alt="706bfc0afa48e5d3a053084326dd28b7.png"><br>pod test1 去 ping test2，在物理网卡上抓包，指定 ip proto 4，可以看到封装的报文<br><img data-src="https://oss.xdai.vip/md-note/imgs/a3d1d03ef1af4d7e910ea9c1cd307b4d.png" alt="34f2405eb443b6ed28c855034802c719.png"><br>在 tunl0 上抓包，可以看到两个 pod 的原始数据包<br><img data-src="https://oss.xdai.vip/md-note/imgs/ff8b8fb1a8a94670bda0cb1c2a91930e.png" alt="093350cd412cb02140b7528b7ff30d93.png"><br>pod test1 上 traceroute test2，可以看到路径，第一跳到了当前 node ，第二跳到了远端 node 的 tunl0，最终到达 test2<br><img data-src="https://oss.xdai.vip/md-note/imgs/a611f3361b984476b7b928345da9feac.png" alt="60c7f601cf9f8eef1e183f2cf8ee24aa.png"></p>
+<p>查看 pod 信息，分布在不同的 node 上<br><img data-src="http://oss.xdai.vip/md-note/imgs/c8a0646038b34dc89030a7e107b17bd1.png" alt="706bfc0afa48e5d3a053084326dd28b7.png"><br>pod test1 去 ping test2，在物理网卡上抓包，指定 ip proto 4，可以看到封装的报文<br><img data-src="http://oss.xdai.vip/md-note/imgs/a3d1d03ef1af4d7e910ea9c1cd307b4d.png" alt="34f2405eb443b6ed28c855034802c719.png"><br>在 tunl0 上抓包，可以看到两个 pod 的原始数据包<br><img data-src="http://oss.xdai.vip/md-note/imgs/ff8b8fb1a8a94670bda0cb1c2a91930e.png" alt="093350cd412cb02140b7528b7ff30d93.png"><br>pod test1 上 traceroute test2，可以看到路径，第一跳到了当前 node ，第二跳到了远端 node 的 tunl0，最终到达 test2<br><img data-src="http://oss.xdai.vip/md-note/imgs/a611f3361b984476b7b928345da9feac.png" alt="60c7f601cf9f8eef1e183f2cf8ee24aa.png"></p>
 ]]></content>
       <categories>
         <category>网络技术</category>
@@ -1886,8 +1886,8 @@
 </ul>
 <span id="more"></span>
 
-<p>和 k8s 集成时，运行在 work node 上面，监听 k8s master 的状态，共用 k8s 的控制节点的 etcd 作为自己的数据库。<br><img data-src="https://oss.xdai.vip/md-note/imgs/cb1fdf9361814352acf0dde7b610d3b7.png" alt="205826f29a20b12c84a5940a76d121f0.png"></p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>节点分布<br><img data-src="https://oss.xdai.vip/md-note/imgs/c212e02daa004bea9274384d818f7a0c.png" alt="37ae6a952c139971c3cdbac8588173f6.png"></p>
+<p>和 k8s 集成时，运行在 work node 上面，监听 k8s master 的状态，共用 k8s 的控制节点的 etcd 作为自己的数据库。<br><img data-src="http://oss.xdai.vip/md-note/imgs/cb1fdf9361814352acf0dde7b610d3b7.png" alt="205826f29a20b12c84a5940a76d121f0.png"></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>节点分布<br><img data-src="http://oss.xdai.vip/md-note/imgs/c212e02daa004bea9274384d818f7a0c.png" alt="37ae6a952c139971c3cdbac8588173f6.png"></p>
 <ol>
 <li><p>master node</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 初始化 master 节点</span><br><span class="line">sudo kubeadm reset</span><br><span class="line">sudo kubeadm init --config kubadm.yaml </span><br><span class="line"># 下载 flannel 配置文件</span><br><span class="line">wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br><span class="line"># 修改配置文件，net-json 改为 k8s 安装的 podSubnet，type 默认为 vxlan </span><br><span class="line">  net-conf.json: |</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;Network&quot;: &quot;10.244.0.0/16&quot;,</span><br><span class="line">      &quot;Backend&quot;: &#123;</span><br><span class="line">        &quot;Type&quot;: &quot;vxlan&quot;,</span><br><span class="line">   &quot;Directrouting&quot;: false</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"># 部署</span><br><span class="line">kubectl apply -f kube-flannel.yml</span><br><span class="line"># 查看</span><br><span class="line">kubectl get pods --all-namespaces</span><br><span class="line">---</span><br><span class="line">NAMESPACE     NAME                           READY   STATUS              RESTARTS   AGE</span><br><span class="line">kube-system   coredns-66bff467f8-m7ghl       0/1     ContainerCreating   0          11m</span><br><span class="line">kube-system   coredns-66bff467f8-mgnj7       0/1     ContainerCreating   0          11m</span><br><span class="line">kube-system   etcd-x-vm                      1/1     Running             0          11m</span><br><span class="line">kube-system   kube-apiserver-x-vm            1/1     Running             1          11m</span><br><span class="line">kube-system   kube-controller-manager-x-vm   1/1     Running             0          11m</span><br><span class="line">kube-system   kube-flannel-ds-amd64-g7hl9    1/1     Running             0          35s</span><br><span class="line">kube-system   kube-proxy-5x7l5               1/1     Running             0          11m</span><br><span class="line">kube-system   kube-scheduler-x-vm            1/1     Running             0          11m</span><br><span class="line"># 多次查看，可以看到 coredns Pending -&gt; ContainerCreating -&gt; Running，因为 flannel 初始化初始化完成之后，k8s 认为当前节点可用，就创建了 coredns</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
@@ -1895,13 +1895,13 @@
 <p>安装 docker、kubeadm，关闭 swap，加入到集群中,hostname 不能重复</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在 master node 上初始化完成之后，会输出如下 token</span><br><span class="line">kubeadm join 192.168.121.137:6443 --token abcdef.0123456789abcdef \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:719b052641c7681b770f9609e82d6a8001ef9aa1125db6cea7b1a452d555c34a</span><br><span class="line"># 加入完成后，在 master node 上查看</span><br><span class="line">kubectl get nodes</span><br><span class="line">NAME     STATUS   ROLES    AGE   VERSION</span><br><span class="line">worker   Ready    &lt;none&gt;   52s   v1.18.4</span><br><span class="line">x-vm     Ready    master   23m   v1.18.4</span><br></pre></td></tr></table></figure>
 
-<p>在 worker node 上查看容器,确认 flannel、kube-proxy 已经运行<br><img data-src="https://oss.xdai.vip/md-note/imgs/9a28346a36c34ec48625faf2cb798116.png" alt="4378c8c0098fd036be47a1d0177623c3.png"></p>
+<p>在 worker node 上查看容器,确认 flannel、kube-proxy 已经运行<br><img data-src="http://oss.xdai.vip/md-note/imgs/9a28346a36c34ec48625faf2cb798116.png" alt="4378c8c0098fd036be47a1d0177623c3.png"></p>
 </li>
 <li><p>调整 coredns，使其分布到 worker node 上</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># -n 指定 namespace，先删除</span><br><span class="line">kubectl scale -n kube-system  deployment.v1.apps/coredns --replicas=0</span><br><span class="line"># 再将数量调整为 2，期望结果是两个 codedns 的 pod 分布到两个节点上</span><br><span class="line">kubectl scale -n kube-system  deployment.v1.apps/coredns --replicas=2</span><br></pre></td></tr></table></figure>
 
-<p>查看 pod 分布情况 <code>kubectl get pods --all-namespaces -o wide</code>,已经分布到两个节点上<br><img data-src="https://oss.xdai.vip/md-note/imgs/1894bebf5e304dcd8567521f76e427bf.png" alt="216db286ae71b105eb3bd7b2a136de02.png"></p>
-<p>查看 worker node 网卡信息，可以看到 doredns 容器对应的 veth 已经存在，而且也有了 cni 网卡<br><img data-src="https://oss.xdai.vip/md-note/imgs/41e04f84473b429c8681e52ef56aea40.png" alt="f027622b6f15a60cb387bb86f214d02e.png"></p>
+<p>查看 pod 分布情况 <code>kubectl get pods --all-namespaces -o wide</code>,已经分布到两个节点上<br><img data-src="http://oss.xdai.vip/md-note/imgs/1894bebf5e304dcd8567521f76e427bf.png" alt="216db286ae71b105eb3bd7b2a136de02.png"></p>
+<p>查看 worker node 网卡信息，可以看到 doredns 容器对应的 veth 已经存在，而且也有了 cni 网卡<br><img data-src="http://oss.xdai.vip/md-note/imgs/41e04f84473b429c8681e52ef56aea40.png" alt="f027622b6f15a60cb387bb86f214d02e.png"></p>
 </li>
 </ol>
 <h2 id="host-gw-实现"><a href="#host-gw-实现" class="headerlink" title="host-gw 实现"></a>host-gw 实现</h2><h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>在 kube-net 网络实现中：</p>
@@ -1910,24 +1910,24 @@
 <li>跨 node 通信是通过主机的默认路由，路由到物理网络中进行数据转发，此时需要在物理路由器上进行路由相关的配置</li>
 </ul>
 <p>部署 flannel 时，将配置文件中 <code>net-json</code> 字段的 <code>Type</code> 修改为 <code>host-gw</code> 。<br>Flannel host-gw 实现方案中，由于 linux 具有路由转发功能，所以可以将物理路由器相关的配置下沉到 work node (主机)上，由主机进行路由，类似于DVR，也避免了单点故障。<br>Flannel 连接 k8s 的数据库，每个 node 上的 flanned 进程知道所有 podSubnet 对应的 node，进而在主机的网络空间中配置 podSubnet 的路由指向对应的 node。<br>Flannel 环境中连接 pod 的 Linuxbridge 为 cni0（kube-net 是 cbr0），<strong>所有的 work node 必须在同一个二层网络中（添加路由时必须是二层可达才会生效）</strong></p>
-<h3 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h3><p>Flannel 安装完成后，查看路由信息：<br><img data-src="https://oss.xdai.vip/md-note/imgs/de11dfd3c1b547eab756b7674f6b7f3f.png" alt="查看路由信息.png"></p>
+<h3 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h3><p>Flannel 安装完成后，查看路由信息：<br><img data-src="http://oss.xdai.vip/md-note/imgs/de11dfd3c1b547eab756b7674f6b7f3f.png" alt="查看路由信息.png"></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在 master node 上创建一个临时的 pod，使用 nodeSelector 指定运行的 node</span><br><span class="line">kubectl run -it --rm --restart=Never test1 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;x-vm&quot;&#125;&#125;&#125;&#x27; sh</span><br><span class="line"># 新开一个窗口，在 work node 上创建一个临时的 pod</span><br><span class="line">kubectl run -it --rm --restart=Never test2 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;worker&quot;&#125;&#125;&#125;&#x27; sh</span><br></pre></td></tr></table></figure>
 
-<p>新开一个窗口，检查一个 pod 运行情况，可以看到分布在两个 node 上,IP 分别是 11.0.0.5 和 11.0.1.3<br><img data-src="https://oss.xdai.vip/md-note/imgs/48011100fe07463887b9271e161a70bd.png" alt="7de41a1c0421d0999013099aa1f28edd.png"><br>用 pod test1 去 ping test2，在 work node 上抓包<br><img data-src="https://oss.xdai.vip/md-note/imgs/65cb77b580e14a44bf68480fa25b0f83.png" alt="5ef90a49d64b4faa06f19d3273a2e4aa.png"><br>可以从物理网卡抓到两个 pod 之间的通信流量<br>在 pod test1 上 traceroute test2，可以看到路径经过了 work node 到达 test2<br><img data-src="https://oss.xdai.vip/md-note/imgs/8bb165ba7ae74e7fa9648e13c660b42d.png" alt="460c4781a35299373800e1bd52c187f0.png"></p>
+<p>新开一个窗口，检查一个 pod 运行情况，可以看到分布在两个 node 上,IP 分别是 11.0.0.5 和 11.0.1.3<br><img data-src="http://oss.xdai.vip/md-note/imgs/48011100fe07463887b9271e161a70bd.png" alt="7de41a1c0421d0999013099aa1f28edd.png"><br>用 pod test1 去 ping test2，在 work node 上抓包<br><img data-src="http://oss.xdai.vip/md-note/imgs/65cb77b580e14a44bf68480fa25b0f83.png" alt="5ef90a49d64b4faa06f19d3273a2e4aa.png"><br>可以从物理网卡抓到两个 pod 之间的通信流量<br>在 pod test1 上 traceroute test2，可以看到路径经过了 work node 到达 test2<br><img data-src="http://oss.xdai.vip/md-note/imgs/8bb165ba7ae74e7fa9648e13c660b42d.png" alt="460c4781a35299373800e1bd52c187f0.png"></p>
 <h2 id="VxLAN-实现"><a href="#VxLAN-实现" class="headerlink" title="VxLAN 实现"></a>VxLAN 实现</h2><h3 id="基本原理-1"><a href="#基本原理-1" class="headerlink" title="基本原理"></a>基本原理</h3><ul>
 <li>Ethernet Frame 封装到 UDP 中</li>
 <li>不考虑物理网络冲突问题</li>
 <li>封装需要额外的 50 字节（网卡默认 MTU 为 1450）</li>
 <li>允许 woker node 分布到三层网络中</li>
 </ul>
-<p>VxLAN 数据包封装：<br><img data-src="https://oss.xdai.vip/md-note/imgs/ce7d008af56c44b2862fa2705aeb0fa7.png" alt="24d7e3e98a34313a7f7b2a54047828aa.png"></p>
+<p>VxLAN 数据包封装：<br><img data-src="http://oss.xdai.vip/md-note/imgs/ce7d008af56c44b2862fa2705aeb0fa7.png" alt="24d7e3e98a34313a7f7b2a54047828aa.png"></p>
 <p>Flannel VxLAN 基于 Linux 原生的方式实现 VxLAN</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Linux 通过 VxLAN 字节口实现 VxLAN 的封装解封装</span><br><span class="line">ip link add vxlan0 type vxlan id 1 \</span><br><span class="line">remote 192.168.121.137 \</span><br><span class="line">local 192.168.121.138 \</span><br><span class="line">dstport 8472 \</span><br><span class="line">dev eth0</span><br><span class="line"># 通过监听端口来拦截数据进行封装解封装</span><br></pre></td></tr></table></figure>
 
 <h3 id="Flannel-的-VxLAN-实现"><a href="#Flannel-的-VxLAN-实现" class="headerlink" title="Flannel 的 VxLAN 实现"></a>Flannel 的 VxLAN 实现</h3><p>Flannel 会在 node 上额外创建 <code>flannel.&lt;vni&gt;</code> 设备，挂载的 ip 为当前 node podSubnet 的第 0 个地址作为 VTEP 地址。</p>
 <p>当有多个 node 时，如果按照 Linux 原生方式实现 VxLAN 时，每个 node 都要和其他 node 建立 VxLAN 隧道，也就是每个 node 上都要创建多个类型为 vxlan 的 netdev 设备，这样子接口的数量就是 n^2。</p>
 <p>为了避免这种情况，flannel 添加 flannel.vni 子接口的时候，并没有指定 remote ip，而是添加了对端 flannel.vni 的静态 arp 表项，并添加二层转规则（bridge fdb 查看），如果是发往对端的 flannel.vni 的 MAC 地址的话，从本端子接口发出，且指定了远端的 VTEP 地址。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/e80aa803a47f47278272b7f5daa254d3.png" alt="83b6071b31e417bfa2ed3d00c4fae740.png"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/e80aa803a47f47278272b7f5daa254d3.png" alt="83b6071b31e417bfa2ed3d00c4fae740.png"></p>
 <h4 id="Direct-routing-实现"><a href="#Direct-routing-实现" class="headerlink" title="Direct routing 实现"></a>Direct routing 实现</h4><p>传统的 VXLAN 使用隧道的通信方式会导致报文开销及流量增大，对于节点之间二层网络的通信，可以直接使用路由的方式而不用隧道，仅在跨三层通信时使用隧道封装，这样可以大大节省开销，二层通信性能也接近物理网络。</p>
 <p>仅使用 VXLAN，未启用 direct routing 时，路由表中同一二层网络的节点，路由表显示下一跳为 flannel.vni；启用 direct routing 后，路由表中下一跳变为物理网卡。</p>
 <p>启用方式，修改配置文件中 <code>Directrouting</code> 字段为 true</p>
@@ -1935,13 +1935,13 @@
 <li><p>清理 host-gw 环境，修改配置文件，重新部署 flannel</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 删除 flannel</span><br><span class="line">kubectl delete -f kube-flannel.yml</span><br><span class="line"># 删除 coredns</span><br><span class="line">kubectl scale -n kube-system  deployment.v1.apps/coredns --replicas=0</span><br><span class="line"># 修改 kube-flannel.yml 中 net-json type 为 vxlan</span><br><span class="line"># 重新部署</span><br><span class="line">kubectl apply -f kube-flannel.yml</span><br><span class="line"># 添加 coredns</span><br><span class="line">kubectl scale -n kube-system  deployment.v1.apps/coredns --replicas=2</span><br></pre></td></tr></table></figure></li>
 <li><p>查看网卡信息</p>
-<p>ip addr，可以看到 vni 接口<br><img data-src="https://oss.xdai.vip/md-note/imgs/8189732dfa6d406b802d5e7f0edb1b0d.png" alt="d90f30a8130cb9d4ac028ee94ea35d0d.png"><br>查看 arp 表<br><img data-src="https://oss.xdai.vip/md-note/imgs/8ad51f8196b449959361ac3028095525.png" alt="a6869b22d10a7855cafd6f35fd084946.png"><br>查看转发数据库，bridge fdb<br><img data-src="https://oss.xdai.vip/md-note/imgs/1b4f1e1199ce46cc968252a5a607befb.png" alt="849787945a8e0d6b0f3e35c36ff1121f.png"><br>在 work node 上查看接口，MAC 地址和 master node 上的转发表一致<br><img data-src="https://oss.xdai.vip/md-note/imgs/9a63b0df93454d8f857dd421baf25f09.png" alt="88fe04fcaf7986867947389112ac51f2.png"></p>
+<p>ip addr，可以看到 vni 接口<br><img data-src="http://oss.xdai.vip/md-note/imgs/8189732dfa6d406b802d5e7f0edb1b0d.png" alt="d90f30a8130cb9d4ac028ee94ea35d0d.png"><br>查看 arp 表<br><img data-src="http://oss.xdai.vip/md-note/imgs/8ad51f8196b449959361ac3028095525.png" alt="a6869b22d10a7855cafd6f35fd084946.png"><br>查看转发数据库，bridge fdb<br><img data-src="http://oss.xdai.vip/md-note/imgs/1b4f1e1199ce46cc968252a5a607befb.png" alt="849787945a8e0d6b0f3e35c36ff1121f.png"><br>在 work node 上查看接口，MAC 地址和 master node 上的转发表一致<br><img data-src="http://oss.xdai.vip/md-note/imgs/9a63b0df93454d8f857dd421baf25f09.png" alt="88fe04fcaf7986867947389112ac51f2.png"></p>
 </li>
 <li><p>创建 pod ，抓包验证</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在 master node 上创建一个临时的 pod，使用 nodeSelector 指定运行的 node</span><br><span class="line">kubectl run -it --rm --restart=Never test1 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;x-vm&quot;&#125;&#125;&#125;&#x27; sh</span><br><span class="line"># 新开一个窗口，在 work node 上创建一个临时的 pod</span><br><span class="line">kubectl run -it --rm --restart=Never test2 --image busybox --overrides=&#x27;&#123;&quot;apiVersion&quot;: &quot;v1&quot;,&quot;spec&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;kubernetes.io/hostname&quot;: &quot;worker&quot;&#125;&#125;&#125;&#x27; sh</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>查看 pods 分布情况：<br><img data-src="https://oss.xdai.vip/md-note/imgs/c090d6db08f5463daee24f827f9fbc41.png" alt="b4b779f57a9c73b69244c34a23134b32.png"></p>
-<p>用 test1 ping test2 ，在 worker 物理接口上抓包，可以看到封装数据包的内容<br><img data-src="https://oss.xdai.vip/md-note/imgs/d491e1966cd3432485407baf659b9920.png" alt="2ba4920d026f368064eefa2c74f118e8.png"></p>
+<p>查看 pods 分布情况：<br><img data-src="http://oss.xdai.vip/md-note/imgs/c090d6db08f5463daee24f827f9fbc41.png" alt="b4b779f57a9c73b69244c34a23134b32.png"></p>
+<p>用 test1 ping test2 ，在 worker 物理接口上抓包，可以看到封装数据包的内容<br><img data-src="http://oss.xdai.vip/md-note/imgs/d491e1966cd3432485407baf659b9920.png" alt="2ba4920d026f368064eefa2c74f118e8.png"></p>
 </li>
 </ol>
 <h2 id="UDP-实现"><a href="#UDP-实现" class="headerlink" title="UDP 实现"></a>UDP 实现</h2><p>非 VxLAN 的 UDP 数据封装，不推荐使用<br>数据经过用户态转发，性能低</p>
@@ -2249,13 +2249,13 @@
 
 <p><strong>高级用法</strong>：可以进行精确到位的操作，针对数据报文中的每个字段进行过滤控制，语法为 <code>proto[expr:size]</code> ，其中 <code>expr</code> 为偏移量，<code>size</code> 为要操作的字节数，默认为 1。</p>
 <p>例如：一个 IP 数据包头部长度为 20 字节，其中 12~15 这四个字节表示的是源地址，如果要过滤源地址为 192.168.1.1 的数据包（需要把 IP 地址转换为 16 进制），表达式可以写为：<code>ip[12:4] = 0xC0A80101</code>。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329896.png"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329896.png"></p>
 <h2 id="显示过滤器"><a href="#显示过滤器" class="headerlink" title="显示过滤器"></a>显示过滤器</h2><p>显示过滤器是在捕获数据之后再使用，语法与捕获过滤器不同。</p>
 <p>一般由三部分组成：字段名称、关系、值，例如 <code>ip.src == 192.168.1.1</code>，Wireshark 过滤器输入框具有联想功能，可以显示出协议的可选字段（如下图），方便进行过滤器的编写。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329898.png" alt="过滤器"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329898.png" alt="过滤器"></p>
 <p>一个过滤表达式编写完成且格式正确时，输入框会显示为绿色；反之，则为红色，需要表达式进行修改。</p>
 <p>Wireshark 还可以使用数据包中的指定字段来创建过滤表达式。首先在数据包列表处选中一个数据包，然后在数据包详细信息栏处查看这个数据包的详细内容，这里会以行的形式展示数据包的信息，当选中其中一行时（见下图），例如 IP 地址，那么在状态栏处就会显示出该数据包该行对应的过滤器表达式。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329900.png" alt="状态栏显示过滤器"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329900.png" alt="状态栏显示过滤器"></p>
 <p>还有更简单的办法，就是在选中的字段单击右键，在弹出菜单中选择“作为过滤器应用”，并根据二级菜单进行选择“选中”，就可以在输入栏中看到生成的表达式了。</p>
 <h2 id="远程捕获数据包"><a href="#远程捕获数据包" class="headerlink" title="远程捕获数据包"></a>远程捕获数据包</h2><p>在实际工作中，经常会碰到捕捉其他设备通信数据包的情况，例如在机房的服务器，可以登录但却不能直接触碰。多数情况下，会采用在远程设备上安装 Wireshark，再通过远程桌面的方式进行操作，这样不但会加大工作量，也产生了不必要的数据包。</p>
 <p>Wireshark 提供了远程捕获数据包的功能，可以很方便的监控远程服务器上的流量，只需要在服务器上安装 <code>rpcap</code> 即可，Windows 操作系统安装了 WinPcap 后，就自带了该工具。</p>
@@ -2264,17 +2264,17 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">rpcapd -h</span></span><br><span class="line"></span><br><span class="line">USAGE:</span><br><span class="line"> rpcapd [-b &lt;address&gt;] [-p &lt;port&gt;] [-6] [-l &lt;host_list&gt;] [-a &lt;host,port&gt;]</span><br><span class="line">        [-n] [-v] [-d] [-s &lt;file&gt;] [-f &lt;file&gt;]</span><br><span class="line">  -b &lt;address&gt;: the address to bind to (either numeric or literal).</span><br><span class="line">      Default: it binds to all local IPv4 addresses</span><br><span class="line">  -p &lt;port&gt;: the port to bind to. Default: it binds to port 2002</span><br><span class="line">  -4: use only IPv4 (default both IPv4 and IPv6 waiting sockets are used)</span><br><span class="line">  -l &lt;host_list&gt;: a file that keeps the list of the hosts which are allowed</span><br><span class="line">      to connect to this server (if more than one, list them one per line).</span><br><span class="line">      We suggest to use literal names (instead of numeric ones) in order to</span><br><span class="line">      avoid problems with different address families</span><br><span class="line">  -n: permit NULL authentication (usually used with &#x27;-l&#x27;)</span><br><span class="line">  -a &lt;host,port&gt;: run in active mode when connecting to &#x27;host&#x27; on port &#x27;port&#x27;</span><br><span class="line">      In case &#x27;port&#x27; is omitted, the default port (2003) is used</span><br><span class="line">  -v: run in active mode only (default: if &#x27;-a&#x27; is specified, it accepts</span><br><span class="line">      passive connections as well</span><br><span class="line">  -d: run in daemon mode (UNIX only) or as a service (Win32 only)</span><br><span class="line">      Warning (Win32): this switch is provided automatically when the service</span><br><span class="line">      is started from the control panel</span><br><span class="line">  -s &lt;file&gt;: save the current configuration to file</span><br><span class="line">  -f &lt;file&gt;: load the current configuration from file; all the switches</span><br><span class="line">      specified from the command line are ignored</span><br><span class="line">  -h: print this help screen</span><br></pre></td></tr></table></figure>
 
 <p>例如：在 远程服务器中运行了 <code>rpcapd -4 -n -p 8888</code>，那么可以在本地 Wireshark 中，添加远程抓包，如下图：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329901.png" alt="开启远程抓包"></p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329902.png" alt="wireshark 配置连接远程抓包"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329901.png" alt="开启远程抓包"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329902.png" alt="wireshark 配置连接远程抓包"></p>
 <p>之后，就可以在本地的 Wireshark 抓到远程服务器上的数据包了。</p>
 <h2 id="解密数据包"><a href="#解密数据包" class="headerlink" title="解密数据包"></a>解密数据包</h2><p>Chrome 浏览器添加运行参数 ：<code>--ssl-key-log-file=&quot;C:\Users\xdai\Desktop\sslkeylog.log&quot;</code>，可以将访问网站的 SSL Key 信息保存下来，或者为系统添加环境变量 <code>SSHKEYLOGFILE = &quot;/Path/to/log&quot;</code> 来保存 log 文件，对于 Windows 系统，环境变量重启系统会才会生效&#x2F;取消生效，Linux 系统使用 <code>export</code> 立即生效。</p>
 <p>然后打开 Wireshark 开启抓包，打开 Chrome 访问百度；抓取到数据包后，导入已经出现的 SSL Key 信息：“编辑”→“首选项”，然后在打开的“首选项”窗口中选中“Protocols”，找到 TLS 并导入文件。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329903.png" alt="ssl key 设置"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329903.png" alt="ssl key 设置"></p>
 <p>可以看到之前为加密的数据包，导入 Key 之后，以明文的方式显示出来了（例如，403 和 408）。</p>
 <p>解密前：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329904.png" alt="解密前报文"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329904.png" alt="解密前报文"></p>
 <p>解密后：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/202112132329905.png" alt="解密后报文"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/202112132329905.png" alt="解密后报文"></p>
 ]]></content>
       <categories>
         <category>网络技术</category>

@@ -33,26 +33,26 @@
 <meta property="og:site_name" content="xDai&#39;s Site">
 <meta property="og:description" content="架构概览 网络环境不宜说太多：四朵独立的云，中间通过防火墙隔离，需要搭建一套监控系统对全网的网络设备进行监控，通过 Zabbix Server + Proxy 分布式部署方式来实现。 版本选择截止目前，Zabbix 已经发布了 6.0 pre-release，稳定版也已经来到了 5.4。 在生产环境部署时，为稳定起见，建议使用 Long-term support (LTS) 版本。 本次部署选用的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/zabbix_deploy.svg">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211229090438953.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211228232224039.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211228232758646.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211229203922391.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211229002522793.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211229015713693.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211229112406476.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211229112709803.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211229113707531.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211230005830309.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211230010013164.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211230010402200.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20211230010908510.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/zabbix_deploy.svg">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211229090438953.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211228232224039.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211228232758646.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211229203922391.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211229002522793.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211229015713693.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211229112406476.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211229112709803.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211229113707531.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211230005830309.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211230010013164.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211230010402200.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20211230010908510.png">
 <meta property="article:published_time" content="2021-12-29T17:23:33.000Z">
-<meta property="article:modified_time" content="2022-06-02T09:53:04.379Z">
+<meta property="article:modified_time" content="2022-06-02T11:33:40.874Z">
 <meta property="article:author" content="某呆">
 <meta property="article:tag" content="zabbix">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://oss.xdai.vip/md-note/imgs/zabbix_deploy.svg">
+<meta name="twitter:image" content="http://oss.xdai.vip/md-note/imgs/zabbix_deploy.svg">
 
 
 <link rel="canonical" href="https://555.xdai.vip/posts/b9dcfcd4.html">
@@ -352,12 +352,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="架构概览"><a href="#架构概览" class="headerlink" title="架构概览"></a>架构概览</h2><p><img data-src="https://oss.xdai.vip/md-note/imgs/zabbix_deploy.svg" alt="zabbix_deploy"></p>
+        <h2 id="架构概览"><a href="#架构概览" class="headerlink" title="架构概览"></a>架构概览</h2><p><img data-src="http://oss.xdai.vip/md-note/imgs/zabbix_deploy.svg" alt="zabbix_deploy"></p>
 <p>网络环境不宜说太多：四朵独立的云，中间通过防火墙隔离，需要搭建一套监控系统对全网的网络设备进行监控，通过 Zabbix Server + Proxy 分布式部署方式来实现。</p>
 <h2 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h2><p>截止目前，Zabbix 已经发布了 6.0 pre-release，稳定版也已经来到了 5.4。</p>
 <p>在生产环境部署时，为稳定起见，建议使用 <strong>Long-term support</strong> (<strong>LTS</strong>) 版本。</p>
 <p>本次部署选用的是 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.zabbix.com/cn/rn/rn5.0.19">Zabbix 5.0 LTS</a> 版本。</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229090438953.png" alt="版本及软件依赖"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229090438953.png" alt="版本及软件依赖"></p>
 <span id="more"></span>
 
 <p>存储空间要求：</p>
@@ -416,7 +416,7 @@
   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-&#x27;EOF&#x27;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [&quot;https://docker.mirrors.ustc.edu.cn&quot;]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
 
 <p> 使用 <code>docker info</code> 命令查看国内镜像配置是否生效：</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211228232224039.png" alt="image-20211228232224039" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211228232224039.png" alt="image-20211228232224039" style="zoom:67%;" />
 
 <p>本文使用的 Docker 版本：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker --version</span><br><span class="line">Docker version 20.10.12, build e91ed57</span><br></pre></td></tr></table></figure>
@@ -427,7 +427,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker pull zabbix/zabbix-web-nginx-mysql:5.0-centos-latest</span><br><span class="line">docker pull zabbix/zabbix-server-mysql:5.0-centos-latest</span><br><span class="line">docker pull zabbix/zabbix-proxy-mysql:5.0-centos-latest</span><br><span class="line">docker pull zabbix/zabbix-snmptraps:5.0-centos-latest</span><br><span class="line">docker pull zabbix/zabbix-agent:5.0-centos-latest</span><br><span class="line">docker pull mysql:5.7</span><br></pre></td></tr></table></figure>
 
 <p>镜像拉取完成后，可以通过 <code>docker images</code> 查看镜像列表。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211228232758646.png" alt="image-20211228232758646" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211228232758646.png" alt="image-20211228232758646" style="zoom:67%;" />
 
 
 
@@ -436,7 +436,7 @@
 
 <p>启动完成后，通过 <code>docker ps</code> 查看所有容器已经正在运行，之后通过访问 <code>http://ip:8080</code> 即可访问！</p>
 <p>默认用户名&#x2F;密码是：<code>Admin/zabbix</code></p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229203922391.png" alt="image-20211229203922391"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229203922391.png" alt="image-20211229203922391"></p>
 <h2 id="生产环境部署"><a href="#生产环境部署" class="headerlink" title="生产环境部署"></a>生产环境部署</h2><h3 id="网络模式"><a href="#网络模式" class="headerlink" title="网络模式"></a>网络模式</h3><p>默认情况下，容器的网卡都是经过 NAT 的，为了保证相关服务可以正常被外部访问，容器都使用主机模式的网络（<code>--network=host</code>），即端口连接、端口监听都使用物理机的地址。</p>
 <h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>如果已经有现成的数据库，则不用使用本地数据库，直接配置指定远程数据库即可。</p>
 <p>Zabbix 支持 MySQL、PostgreSQL 等，使用不同后端数据库，需要选择对应的 Zabbix 容器镜像。</p>
@@ -444,7 +444,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run --name zbx5-mysql -td \</span><br><span class="line">    --network=host \</span><br><span class="line">    -e MYSQL_DATABASE=&quot;zabbix&quot; \</span><br><span class="line">    -e MYSQL_USER=&quot;zabbix&quot; \</span><br><span class="line">    -e MYSQL_PASSWORD=&quot;zabbix&quot; \</span><br><span class="line">    -e MYSQL_ROOT_PASSWORD=&quot;root&quot; \</span><br><span class="line">    --restart unless-stopped mysql:5.7 \</span><br><span class="line">    --character-set-server=utf8 --collation-server=utf8_bin \</span><br><span class="line">    --default-authentication-plugin=mysql_native_password</span><br></pre></td></tr></table></figure>
 
 <p>运行之后，一个本地数据库就搭建完成了，之后可以在 Linux 中使用 <code>docker exec -it zbx5-mysql mysql -proot</code> 来连接到本地数据库，其中 <code>MYSQL_DATABASE</code> 为新建的数据库，<code>MYSQL_ROOT_PASSWORD</code> 为数据库超级管理员 root 的密码<strong>（生产环境中请使用符合密码策略的强密码）</strong>。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229002522793.png" alt="image-20211229002522793" style="zoom: 67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229002522793.png" alt="image-20211229002522793" style="zoom: 67%;" />
 
 
 
@@ -477,7 +477,7 @@
 
 <p>运行完成之后，通过 <code>docker logs $&#123;docker_id&#125;</code> 可以看到运行日志，首先进行了数据库的初始化，之后写入配置文件，最后启动 Server 端。</p>
 <p>如果是已有数据库已有数据表，则不会再次进行初始化。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229015713693.png" alt="image-20211229015713693" style="zoom: 67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229015713693.png" alt="image-20211229015713693" style="zoom: 67%;" />
 
 <p>运行成功后，将原始容器的启动脚本拷贝出来进行修改。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">mkdir docker-build/zbx_server -p</span><br><span class="line">docker cp zbx5-server-mysql:/usr/bin/docker-entrypoint.sh ./docker-build/zbx_server</span><br><span class="line">cd docker-build/zbx_server</span><br></pre></td></tr></table></figure>
@@ -485,15 +485,15 @@
 <p>编辑原始启动文件：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">vim docker-entrypoint.sh</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">移动到 440 行左右，这里的配置就是调用函数更新配置，在这里添加需要的 `Include` 参数</span></span><br><span class="line">...</span><br><span class="line">    update_config_var $ZBX_CONFIG &quot;Include&quot; &quot;$&#123;ZBX_INCLUDE&#125;&quot;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229112406476.png" alt="image-20211229112406476"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229112406476.png" alt="image-20211229112406476"></p>
 <p>编辑 Dockerfile，制作新的镜像：</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat Dockerfile</span></span><br><span class="line"><span class="keyword">FROM</span> zabbix/zabbix-server-mysql:<span class="number">5.0</span>-centos-latest</span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> ./docker-entrypoint.sh /usr/bin/docker-entrypoint.sh</span></span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229112709803.png" alt="image-20211229112709803"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229112709803.png" alt="image-20211229112709803"></p>
 <p>重新打包镜像：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">使用当前目录的 Dockerfile 创建镜像，新镜像标签为 xdai/zabbix-server-mysql:v1</span></span><br><span class="line">docker build -t xdai/zabbix-server-mysql:v1 .</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20211229113707531.png" alt="image-20211229113707531"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20211229113707531.png" alt="image-20211229113707531"></p>
 <p>之后使用 <code>v1</code> 这个版本的镜像启动时，就可以支持 <code>Include</code> 参数了。</p>
 <h4 id="自定义-Zabbix-Proxy-镜像"><a href="#自定义-Zabbix-Proxy-镜像" class="headerlink" title="自定义 Zabbix Proxy 镜像"></a>自定义 Zabbix Proxy 镜像</h4><p>原理同上。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">启动 Proxy 容器，因为测试环境 Proxy 和 Server 在同一台机器上启动，端口无法重用，所以指定监听端口为 11111</span></span><br><span class="line">docker run --name zbx5-proxy-mysql -t \</span><br><span class="line">    -e DB_SERVER_HOST=&quot;127.0.0.1&quot; \</span><br><span class="line">    -e ZBX_LISTENPORT=11111 \</span><br><span class="line">    -e ZBX_HOSTNAME=&quot;zabbix-proxy-test1&quot; \</span><br><span class="line">    -e ZBX_SERVER_HOST=&quot;127.0.0.1&quot; \</span><br><span class="line">    -e MYSQL_USER=&quot;zabbix&quot; \</span><br><span class="line">    -e MYSQL_PASSWORD=&quot;zabbix&quot; \</span><br><span class="line">	-e MYSQL_ROOT_PASSWORD=&quot;root&quot; \</span><br><span class="line">    --network=host \</span><br><span class="line">    --restart unless-stopped \</span><br><span class="line">    -d zabbix/zabbix-proxy-mysql:5.0-centos-latest</span><br></pre></td></tr></table></figure>
@@ -583,21 +583,21 @@
 
 <p>Proxy 启动后，可以在前端 Web 上进行添加测试一下。</p>
 <p>被动模式，端口 11111。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211230005830309.png" alt="image-20211230005830309" style="zoom: 67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211230005830309.png" alt="image-20211230005830309" style="zoom: 67%;" />
 
 <p>添加成功后，上次在线时间（Last seen）会一直重置为 0，表示 Proxy 可被正常检测到。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211230010013164.png" alt="image-20211230010013164" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211230010013164.png" alt="image-20211230010013164" style="zoom:67%;" />
 
 
 
 <h4 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h4><p>Zabbix Server 端启动后，会默认监控本机的 10050 端口（zabbix_agent 端口）来对本机进行监控，如果没有运行 agent，系统会提示该主机离线。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211230010402200.png" alt="image-20211230010402200" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211230010402200.png" alt="image-20211230010402200" style="zoom:67%;" />
 
 <p>启动 Agent 容器，本机监控一般不需要额外的参数：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run --name zabbix-agent -d \</span><br><span class="line">    -e ZBX_HOSTNAME=&quot;local-agent&quot; \</span><br><span class="line">    -e ZBX_SERVER_HOST=&quot;127.0.0.1&quot;  \</span><br><span class="line">    --network=host \</span><br><span class="line">    -v /etc/localtime:/etc/localtime \</span><br><span class="line">    --restart unless-stopped \</span><br><span class="line">    zabbix/zabbix-agent:5.0-centos-latest</span><br></pre></td></tr></table></figure>
 
 <p>Agent 端启动后，Web 上可以看到本机状态恢复正常。</p>
-<img data-src="https://oss.xdai.vip/md-note/imgs/image-20211230010908510.png" alt="image-20211230010908510" style="zoom:67%;" />
+<img data-src="http://oss.xdai.vip/md-note/imgs/image-20211230010908510.png" alt="image-20211230010908510" style="zoom:67%;" />
 
 <h4 id="SNMPTraps"><a href="#SNMPTraps" class="headerlink" title="SNMPTraps"></a>SNMPTraps</h4><p>如果使用的 SNMPv3 版本，需要把每台网络设备的信息都录入进去，主要是 engine-id 不同；SNMPv2版本只需要写上只读只写的团体字即可。</p>
 <p>SNMPTrap 的配置文件如下，配置文件的编写参考 <a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.net-snmp.org/wiki/index.php/TUT:Configuring_snmptrapd_to_receive_SNMPv3_notifications">net-snmp</a>：</p>

@@ -33,14 +33,14 @@
 <meta property="og:site_name" content="xDai&#39;s Site">
 <meta property="og:description" content="NetBox 安装系统环境：Ubuntu20.04 LTS">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220209215651236.png">
-<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220209224251052.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20220209215651236.png">
+<meta property="og:image" content="http://oss.xdai.vip/md-note/imgs/image-20220209224251052.png">
 <meta property="article:published_time" content="2022-02-09T14:58:04.000Z">
-<meta property="article:modified_time" content="2022-06-02T09:53:04.379Z">
+<meta property="article:modified_time" content="2022-06-02T11:33:40.874Z">
 <meta property="article:author" content="某呆">
 <meta property="article:tag" content="netbox">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://oss.xdai.vip/md-note/imgs/image-20220209215651236.png">
+<meta name="twitter:image" content="http://oss.xdai.vip/md-note/imgs/image-20220209215651236.png">
 
 
 <link rel="canonical" href="https://555.xdai.vip/posts/6909405a.html">
@@ -475,7 +475,7 @@
 <p>然后使用浏览器访问这个服务器的 <code>8000</code> 端口测试一下！</p>
 <p>如果服务已经正常启动，但是无法访问的话，请自行检查系统的防火墙或者 iptables 设置，放行 8000 端口。</p>
 <p>可以正常登录~</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220209215651236.png" alt="image-20220209215651236"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20220209215651236.png" alt="image-20220209215651236"></p>
 <p>一般开发的时候使用这种方式来测试服务的运行情况，实际部署时，需要结合 WSGI 来运行服务，必要时还需要配置 nginx 来使用。</p>
 <p>先 crtl + C 停止服务，进行下一步操作。</p>
 <h4 id="使用-Gunicorn-运行-Django-服务"><a href="#使用-Gunicorn-运行-Django-服务" class="headerlink" title="使用 Gunicorn 运行 Django 服务"></a>使用 Gunicorn 运行 Django 服务</h4><p> NetBox 作为 HTTP 服务器后面的 WSGI 应用程序运行。 NetBox 默认使用的是 gunicorn，<strong>但是它不能处理静态文件，还要结合 nginx 才能正常使用</strong>，而 uwsgi 支持静态文件的映射。这里先使用官方提供的 gunicorn 来启动服务。</p>
@@ -509,7 +509,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart nginx</span><br></pre></td></tr></table></figure>
 
 <p>使用 80 端口来访问：</p>
-<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220209224251052.png" alt="image-20220209224251052"></p>
+<p><img data-src="http://oss.xdai.vip/md-note/imgs/image-20220209224251052.png" alt="image-20220209224251052"></p>
 <p>至此，NetBox 搭建完成！</p>
 <h3 id="使用-uwsgi-来启动-NetBox-服务"><a href="#使用-uwsgi-来启动-NetBox-服务" class="headerlink" title="使用 uwsgi 来启动 NetBox 服务"></a>使用 uwsgi 来启动 NetBox 服务</h3><p>NetBox 默认使用 gunicorn 作为 WSGI 来提供服务，<strong>但是它不能处理静态文件，还要结合 nginx 才能正常使用</strong>，而 uwsgi 支持静态文件的映射。这里给出使用方法。</p>
 <h4 id="安装-uwsgi"><a href="#安装-uwsgi" class="headerlink" title="安装 uwsgi"></a>安装 uwsgi</h4><p>进入到升级脚本创建的 Python 虚拟环境，之后命令行前面都会有个 <code>(venv)</code> 的提示符，表示当前在虚拟环境中：</p>
