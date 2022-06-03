@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 5.4.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fefefe">
+  <meta name="msvalidate.01" content="8DAA4873BEFC66EB6071E0A8562B64FF">
+  <meta name="baidu-site-verification" content="code-epf7zfvuoz">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/pace-js@1.2.4/themes/silver/pace-theme-minimal.css">
+  <script src="https://unpkg.com/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":260,"display":"post","padding":12,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#555","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Oxidized 是一个使用 Ruby 编写的开源网络设备配置备份工具，是 RANCID（思科的一个工具） 的替代品，轻量级且可扩展的 Oxidized 支持 130 多种操作系统。 体验一下它的功能以及各种实现，看如何能与现有的系统进行整合，或者用 python 造个简单的轮子。 结论：  整体使用感受：作为一个专门的配置备份软件，可以说把一个功能做到了比较高的水平！  亮点功能：可以支持监听设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络设备自动备份工具 Oxidized 使用体验">
+<meta property="og:url" content="https://555.xdai.vip/posts/4848784a.html">
+<meta property="og:site_name" content="xDai&#39;s Site">
+<meta property="og:description" content="Oxidized 是一个使用 Ruby 编写的开源网络设备配置备份工具，是 RANCID（思科的一个工具） 的替代品，轻量级且可扩展的 Oxidized 支持 130 多种操作系统。 体验一下它的功能以及各种实现，看如何能与现有的系统进行整合，或者用 python 造个简单的轮子。 结论：  整体使用感受：作为一个专门的配置备份软件，可以说把一个功能做到了比较高的水平！  亮点功能：可以支持监听设">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220427225051583.png">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220427225210786.png">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220427230254440.png">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220427230319838.png">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220427230359851.png">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220427230433163.png">
+<meta property="article:published_time" content="2022-04-27T15:47:55.000Z">
+<meta property="article:modified_time" content="2022-06-03T06:43:19.083Z">
+<meta property="article:author" content="某呆">
+<meta property="article:tag" content="oxidized">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss.xdai.vip/md-note/imgs/image-20220427225051583.png">
+
+
+<link rel="canonical" href="https://555.xdai.vip/posts/4848784a.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/4848784a.html","path":"posts/4848784a.html","title":"网络设备自动备份工具 Oxidized 使用体验"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>网络设备自动备份工具 Oxidized 使用体验 | xDai's Site</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9de2876f250b395fc8c1bffb43afd6b4"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="xDai's Site" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xDai's Site</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">^_^</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">22</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">33</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">安装过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%89%E5%8F%96%E9%95%9C%E5%83%8F"><span class="nav-number">1.1.</span> <span class="nav-text">拉取镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3"><span class="nav-number">1.2.</span> <span class="nav-text">配置文件相关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-number">1.3.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E8%BE%93%E5%87%BA"><span class="nav-number">1.4.</span> <span class="nav-text">程序输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.5.</span> <span class="nav-text">注意事项</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E7%95%8C%E9%9D%A2%E5%B1%95%E7%A4%BA"><span class="nav-number"></span> <span class="nav-text">前端界面展示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E9%A1%B5"><span class="nav-number">1.</span> <span class="nav-text">首页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">查看配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-git-%E6%96%B9%E5%BC%8F%E6%97%B6%EF%BC%8C%E6%9F%A5%E7%9C%8B%E7%89%88%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">基于 git 方式时，查看版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%89%88%E6%9C%AC%E5%B7%AE%E5%BC%82"><span class="nav-number">4.</span> <span class="nav-text">查看版本差异</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="某呆"
+      src="/images/avatar.ico">
+  <p class="site-author-name" itemprop="name">某呆</p>
+  <div class="site-description" itemprop="description">记录，分享</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xdai555" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xdai555" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vip@xdai.vip" title="E-Mail → mailto:vip@xdai.vip" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/q965844841qq?type=blog" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;q965844841qq?type&#x3D;blog" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-copyright fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://github.com/xdai555/nornir_docs_cn" title="https:&#x2F;&#x2F;github.com&#x2F;xdai555&#x2F;nornir_docs_cn" rel="noopener external nofollow noreferrer" target="_blank">Nornir 中文手册</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://textfsm.xdai.vip/" title="http:&#x2F;&#x2F;textfsm.xdai.vip&#x2F;" rel="noopener external nofollow noreferrer" target="_blank">TextFSM 在线解析</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://github.com/napalm-automation-community/napalm-h3c-cw7-ssh" title="https:&#x2F;&#x2F;github.com&#x2F;napalm-automation-community&#x2F;napalm-h3c-cw7-ssh" rel="noopener external nofollow noreferrer" target="_blank">napalm-h3c-cw7-ssh</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com/" title="https:&#x2F;&#x2F;kalacloud.com" rel="noopener external nofollow noreferrer" target="_blank">卡拉云低代码工具</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+        <!-- <h3 class="widget-title">Tag Cloud</h3>  #为标签云命名，建议不命名，直接删除此行 -->
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ipv6/" rel="tag">ipv6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jinja/" rel="tag">jinja</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netbox/" rel="tag">netbox</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netconf/" rel="tag">netconf</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netmiko/" rel="tag">netmiko</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nornir/" rel="tag">nornir</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openstack/" rel="tag">openstack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ospf/" rel="tag">ospf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oxidized/" rel="tag">oxidized</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/" rel="tag">pip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/" rel="tag">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/4848784a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.ico">
+      <meta itemprop="name" content="某呆">
+      <meta itemprop="description" content="记录，分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xDai's Site">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网络设备自动备份工具 Oxidized 使用体验
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-04-27 23:47:55" itemprop="dateCreated datePublished" datetime="2022-04-27T23:47:55+08:00">2022-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NetDevOps/" itemprop="url" rel="index"><span itemprop="name">NetDevOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/4848784a.html" class="post-meta-item leancloud_visitors" data-flag-title="网络设备自动备份工具 Oxidized 使用体验" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+
+
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/ytti/oxidized">Oxidized</a> 是一个使用 Ruby 编写的开源网络设备配置备份工具，是 RANCID（思科的一个工具） 的替代品，轻量级且可扩展的 Oxidized 支持 130 多种操作系统。</p>
+<p>体验一下它的功能以及各种实现，看如何能与现有的系统进行整合，或者用 python 造个简单的轮子。</p>
+<p>结论：</p>
+<ol>
+<li><p>整体使用感受：作为一个专门的配置备份软件，可以说把一个功能做到了比较高的水平！</p>
+</li>
+<li><p><strong>亮点功能</strong>：可以支持监听设备上报的 syslog 日志中的配置改动来触发配置文件备份，<strong>对我来说是一个全新的思路</strong>。</p>
+<p>目前支持 ios、junos、eos、nsos、aruba，后面有时间可以验证一次。</p>
+</li>
+</ol>
+<span id="more"></span>
+
+<h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull oxidized/oxidized</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置文件相关"><a href="#配置文件相关" class="headerlink" title="配置文件相关"></a>配置文件相关</h4><p>创建目录，用来存放配置文件、备份的配置、运行日志、主机清单文件等等</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /etc/oxidized</span><br></pre></td></tr></table></figure>
+
+<p>运行一次容器，让程序自动生成初始配置文件，<code>--rm</code> 参数为容器退出后自动删除该容器：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --<span class="built_in">rm</span> -v /etc/oxidized:/root/.config/oxidized -p 8888:8888/tcp -t oxidized/oxidized:latest oxidized</span><br></pre></td></tr></table></figure>
+
+<p>回显信息为：<code>edit ~/.config/oxidized/config</code>，说明已经生成了默认的配置文件。</p>
+<p>编辑配置文件，oxidized 的配置文件是 yaml 格式的，详细的配置项<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/ytti/oxidized/blob/master/docs/Configuration.md#advanced-configuration">Configuration</a>，提供了<strong>多种灵活的数据继承的方法</strong>，即可以为每台、每组、每种设备等等进行不同的配置。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">username:</span> <span class="string">oxidized</span>    <span class="comment"># 单台设备时以此为准</span></span><br><span class="line"><span class="attr">password:</span> <span class="string">S3cr3tx</span>     <span class="comment"># 单台设备时以此为准</span></span><br><span class="line"><span class="attr">model:</span> <span class="string">junos</span>          <span class="comment"># 单台设备时以此为准</span></span><br><span class="line"><span class="attr">interval:</span> <span class="number">3600</span>        <span class="comment"># 配置备份的间隔时间</span></span><br><span class="line"><span class="attr">log:</span> <span class="string">~/.config/oxidized/log</span>   <span class="comment"># 日志文件</span></span><br><span class="line"><span class="attr">debug:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">threads:</span> <span class="number">30</span>   <span class="comment"># 线程</span></span><br><span class="line"><span class="attr">timeout:</span> <span class="number">20</span>   <span class="comment"># 超时时间</span></span><br><span class="line"><span class="attr">retries:</span> <span class="number">3</span>    <span class="comment"># 失败重试次数</span></span><br><span class="line"><span class="attr">prompt:</span> <span class="type">!ruby/regexp</span> <span class="string">/^([\w.@-]+[#&gt;]\s?)$/</span>    <span class="comment"># 登录设备后的提示符判断</span></span><br><span class="line"><span class="attr">crash:</span></span><br><span class="line">  <span class="attr">directory:</span> <span class="string">~/.config/oxidized/crashes</span></span><br><span class="line">  <span class="attr">hostnames:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">rest:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span><span class="string">:8888</span>    <span class="comment"># 前端界面</span></span><br><span class="line"><span class="attr">pid:</span> <span class="string">~/.config/oxidized/oxidized.pid</span></span><br><span class="line"><span class="attr">input:</span>    <span class="comment"># 连接方式</span></span><br><span class="line">  <span class="attr">default:</span> <span class="string">ssh,</span> <span class="string">telnet</span></span><br><span class="line">  <span class="attr">debug:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">ssh:</span></span><br><span class="line">    <span class="attr">secure:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">output:</span></span><br><span class="line">  <span class="attr">default:</span> <span class="string">git</span>      <span class="comment"># 以git方式存储</span></span><br><span class="line">  <span class="attr">git:</span></span><br><span class="line">      <span class="attr">user:</span> <span class="string">Oxidized</span></span><br><span class="line">      <span class="attr">email:</span> <span class="string">oxidized@example.com</span></span><br><span class="line">      <span class="attr">repo:</span> <span class="string">&quot;~/.config/oxidized/oxidized.git&quot;</span></span><br><span class="line"><span class="attr">source:</span></span><br><span class="line">  <span class="attr">default:</span> <span class="string">csv</span></span><br><span class="line">  <span class="attr">csv:</span></span><br><span class="line">    <span class="attr">file:</span> <span class="string">~/.config/oxidized/router.db</span>  <span class="comment"># CSV 格式的主机数据库</span></span><br><span class="line">    <span class="attr">delimiter:</span> <span class="type">!ruby/regexp</span> <span class="string">/:/</span></span><br><span class="line">    <span class="attr">map:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="number">0</span>     <span class="comment"># CSV 里面的值映射关系</span></span><br><span class="line">      <span class="attr">ip:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">model:</span> <span class="number">2</span></span><br><span class="line">      <span class="attr">username:</span> <span class="number">3</span></span><br><span class="line">      <span class="attr">password:</span> <span class="number">4</span></span><br><span class="line">      <span class="attr">group:</span> <span class="number">5</span></span><br><span class="line">    <span class="attr">vars_map:</span></span><br><span class="line">      <span class="attr">enable:</span> <span class="number">6</span></span><br><span class="line"><span class="attr">groups:</span>             <span class="comment"># 为每个组进行单独的配置</span></span><br><span class="line">  <span class="attr">mikrotik:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">admin</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">blank</span></span><br><span class="line">  <span class="attr">ubiquiti:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">ubnt</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">ubnt</span></span><br><span class="line"><span class="attr">model_map:</span>            <span class="comment"># 为每种设备类型进行单独的配置</span></span><br><span class="line">  <span class="attr">cisco:</span> <span class="string">ios</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">admin</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">password</span></span><br><span class="line">  <span class="attr">juniper:</span> <span class="string">junos</span></span><br><span class="line">  <span class="attr">ironware:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">admin</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">password</span></span><br><span class="line">    <span class="attr">vars:</span></span><br><span class="line">      <span class="attr">enable:</span> <span class="string">enablepassword</span></span><br></pre></td></tr></table></figure>
+
+<p><code>router.db</code> 主机数据库，默认是 CSV 格式，也支持通过 SQL 、SQLite、HTTP 等方式来拉取，最终的数据结构根据不同的来源进行处理，然后<strong>重点是主机清单里面的数据，要通过  <code>map</code> 和 <code>var_map</code> 建立对应的映射关系</strong>，这里是配置文件可以灵活制定的关键。</p>
+<p>具体每种来源的配置方式：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/ytti/oxidized/blob/master/docs/Sources.md#source-sql">Sources</a>。</p>
+<p>以 CSV 格式为例，应当是以下格式，默认是以 <code>:</code> 为分隔符，最终结果是个列表，然后映射值时根据下标：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">r1:192.168.56.20:comware:netdevops:NetDevops@01:group1,enable_pass</span><br><span class="line">r2:192.168.56.21:comware:netdevops:NetDevops@01:group2,enable_pass</span><br><span class="line">r3:192.168.56.23:comware:netdevops:NetDevops@01:group1,enable_pass</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><p>运行容器，将本地数据卷映射到容器内的指定目录，容器内部默认监听 8888 端口：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -td \</span><br><span class="line">  --name oxidized_1 \</span><br><span class="line">  --restart=always \</span><br><span class="line">  -v /etc/oxidized:/root/.config/oxidized \</span><br><span class="line">  -p 8888:8888/tcp \</span><br><span class="line">  oxidized/oxidized:latest \</span><br><span class="line">  oxidized</span><br></pre></td></tr></table></figure>
+
+<h4 id="程序输出"><a href="#程序输出" class="headerlink" title="程序输出"></a>程序输出</h4><p>配置输出：</p>
+<ol>
+<li><p>以文件的方式存储</p>
+<p>需要手动创建父目录 <code>configs</code>，每个设备一个配置文件，只保留最新的配置，不会保存历史配置。</p>
+<p>默认为每个组建立一个文件夹。</p>
+<p>每次会在原文件的基础上更新文件，不会保存历史。</p>
+</li>
+<li><p>以 git 的方式存储，默认为每个组创建一个 git 仓库，可以通过 <code>single_repo: true</code> 来配置使用同一个仓库，此时每个组为一个文件夹。</p>
+<p>oxidized 默认创建的的是 bare repo，相当于一个私有的 git 仓库，里面没有 git 的工作目录，只有版本文件，每次备份配置后会进行一次提交；本地的私有仓库，可以通过克隆来查看具体的备份文件。</p>
+<p>例如，我这里有一个 default.git 的目录，是上面 router.db 里面几台主机的配置备份信息：</p>
+<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220427225051583.png" alt="image-20220427225051583"></p>
+<p>如果要查看具体的文件，可以克隆这个仓库：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> /etc/oxidized/default.git my_config</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220427225210786.png" alt="image-20220427225210786"></p>
+<p>如果要把文件提交到远程仓库，可以在配置文件中添加 hooks 来实现，例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">hooks:</span></span><br><span class="line">  <span class="attr">push_to_remote:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">githubrepo</span></span><br><span class="line">    <span class="attr">events:</span> [<span class="string">post_store</span>]  <span class="comment"># 发生改变时触发操作</span></span><br><span class="line">    <span class="attr">remote_repo:</span></span><br><span class="line">      <span class="attr">routers:</span> <span class="string">git@git.intranet:oxidized/routers.git</span></span><br><span class="line">      <span class="attr">switches:</span> <span class="string">git@git.intranet:oxidized/switches.git</span></span><br><span class="line">      <span class="attr">firewalls:</span> <span class="string">git@git.intranet:oxidized/firewalls.git</span></span><br><span class="line">    <span class="attr">publickey:</span> <span class="string">/root/.ssh/id_rsa.pub</span></span><br><span class="line">    <span class="attr">privatekey:</span> <span class="string">/root/.ssh/id_rsa</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的配置会在备份的配置发生改变时，把三个本地仓库分别推送到远程仓库，远端仓库使用密钥认证。</p>
+</li>
+</ol>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ol>
+<li>修改配置文件需要重启 docker 的时候，不会自动删除 pid 文件，会导致无法启动，需要手动删除解决。</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf /etc/oxidized/pid &amp;&amp; docker restart oxidized_1</span><br></pre></td></tr></table></figure>
+
+<h2 id="前端界面展示"><a href="#前端界面展示" class="headerlink" title="前端界面展示"></a>前端界面展示</h2><h3 id="首页"><a href="#首页" class="headerlink" title="首页"></a>首页</h3><p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220427230254440.png" alt="image-20220427230254440"></p>
+<h3 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h3><p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220427230319838.png" alt="image-20220427230319838"></p>
+<h3 id="基于-git-方式时，查看版本"><a href="#基于-git-方式时，查看版本" class="headerlink" title="基于 git 方式时，查看版本"></a>基于 git 方式时，查看版本</h3><p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220427230359851.png" alt="image-20220427230359851"></p>
+<h3 id="查看版本差异"><a href="#查看版本差异" class="headerlink" title="查看版本差异"></a>查看版本差异</h3><p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220427230433163.png" alt="image-20220427230433163"></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/posts/ad63b5a0.html" rel="bookmark">使用 netmiko 的 is_alive() 方法实现 ssh 保活机制</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/posts/6909405a.html" rel="bookmark">netbox 在 Ubuntu20 系统上的安装记录</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/oxidized/" rel="tag"><i class="fa fa-tag"></i> oxidized</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/ad63b5a0.html" rel="prev" title="使用 netmiko 的 is_alive() 方法实现 ssh 保活机制">
+                  <i class="fa fa-chevron-left"></i> 使用 netmiko 的 is_alive() 方法实现 ssh 保活机制
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="far fa-grin-wink"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">某呆</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">145k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:12</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.7/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"8MMinwRrMsuJe3aSCaWDvsK6-gzGzoHsz","app_key":"Bkx590nLq6gdEa1laXiWsWQC","server_url":"https://8mminwrr.lc-cn-n1-shared.com","security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>
