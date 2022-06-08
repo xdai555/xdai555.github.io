@@ -26,27 +26,31 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"555.xdai.vip","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":12,"offset":12,"width":260},"copycode":{"enable":true,"style":null},"bookmark":{"enable":true,"color":"#555","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="迭代思维与 MVP 产品规划方法 MVP： minimum viable product 最小可用产品 OOPD：Online&amp;Offline Product Development，线上线下相结合的产品开发方法  内裤原则：MVP包含了产品的轮廓，核心的功能，让业务可以运转 优先线下：能够走线下的，优先走线下流程，让核心的功能先跑起来，快速做用户验证和方案验证 MVP的核心：忽略掉一切的">
+    <meta name="description" content="下载 adb 工具，对应平台如下： 123https:&#x2F;&#x2F;dl.google.com&#x2F;android&#x2F;repository&#x2F;platform-tools-latest-windows.ziphttps:&#x2F;&#x2F;dl.google.com&#x2F;android&#x2F;repository&#x2F;platform-tools-latest-windows.ziphttps:&#x2F;&#x2F;dl.google.com&#x2F;android&#x2F;r">
 <meta property="og:type" content="article">
-<meta property="og:title" content="产品迭代">
-<meta property="og:url" content="https://555.xdai.vip/posts/8ad6508.html">
+<meta property="og:title" content="adb连接安卓手机远程调试">
+<meta property="og:url" content="https://555.xdai.vip/posts/1b7d9e70.html">
 <meta property="og:site_name" content="xDai&#39;s Site">
-<meta property="og:description" content="迭代思维与 MVP 产品规划方法 MVP： minimum viable product 最小可用产品 OOPD：Online&amp;Offline Product Development，线上线下相结合的产品开发方法  内裤原则：MVP包含了产品的轮廓，核心的功能，让业务可以运转 优先线下：能够走线下的，优先走线下流程，让核心的功能先跑起来，快速做用户验证和方案验证 MVP的核心：忽略掉一切的">
+<meta property="og:description" content="下载 adb 工具，对应平台如下： 123https:&#x2F;&#x2F;dl.google.com&#x2F;android&#x2F;repository&#x2F;platform-tools-latest-windows.ziphttps:&#x2F;&#x2F;dl.google.com&#x2F;android&#x2F;repository&#x2F;platform-tools-latest-windows.ziphttps:&#x2F;&#x2F;dl.google.com&#x2F;android&#x2F;r">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-07-29T12:23:27.000Z">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/image-20220608142617160.png">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/adb_devices-202206081432956.png">
+<meta property="og:image" content="https://oss.xdai.vip/md-note/imgs/202206081459553.png">
+<meta property="article:published_time" content="2022-06-08T07:03:15.000Z">
 <meta property="article:modified_time" content="2022-06-08T07:12:30.359Z">
 <meta property="article:author" content="某呆">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss.xdai.vip/md-note/imgs/image-20220608142617160.png">
 
 
-<link rel="canonical" href="https://555.xdai.vip/posts/8ad6508.html">
+<link rel="canonical" href="https://555.xdai.vip/posts/1b7d9e70.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/8ad6508.html","path":"posts/8ad6508.html","title":"产品迭代"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://555.xdai.vip/posts/1b7d9e70.html","path":"posts/1b7d9e70.html","title":"adb连接安卓手机远程调试"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>产品迭代 | xDai's Site</title>
+<title>adb连接安卓手机远程调试 | xDai's Site</title>
   
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -260,7 +264,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/8ad6508.html">
+    <link itemprop="mainEntityOfPage" href="https://555.xdai.vip/posts/1b7d9e70.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.ico">
@@ -273,12 +277,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="产品迭代 | xDai's Site">
+      <meta itemprop="name" content="adb连接安卓手机远程调试 | xDai's Site">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          产品迭代
+          adb连接安卓手机远程调试
         </h1>
 
         <div class="post-meta-container">
@@ -289,7 +293,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-07-29 20:23:27" itemprop="dateCreated datePublished" datetime="2020-07-29T20:23:27+08:00">2020-07-29</time>
+      <time title="创建时间：2022-06-08 15:03:15" itemprop="dateCreated datePublished" datetime="2022-06-08T15:03:15+08:00">2022-06-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -297,12 +301,12 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">未分类</span></a>
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
         </span>
     </span>
 
   
-    <span id="/posts/8ad6508.html" class="post-meta-item leancloud_visitors" data-flag-title="产品迭代" title="阅读次数">
+    <span id="/posts/1b7d9e70.html" class="post-meta-item leancloud_visitors" data-flag-title="adb连接安卓手机远程调试" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -314,14 +318,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>766</span>
+      <span>1.7k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -332,48 +336,32 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>迭代思维与 MVP 产品规划方法</p>
-<p>MVP： minimum viable product 最小可用产品</p>
-<p>OOPD：Online&amp;Offline Product Development，线上线下相结合的产品开发方法</p>
-<ul>
-<li>内裤原则：MVP包含了产品的轮廓，核心的功能，让业务可以运转</li>
-<li>优先线下：能够走线下的，优先走线下流程，让核心的功能先跑起来，快速做用户验证和方案验证</li>
-<li>MVP的核心：忽略掉一切的细枝末节，做合适的假设和简化，使用最短的时间开发出来</li>
-</ul>
-<p>迭代思维是最强大的产品思维逻辑，互联网上唯快不破的秘诀。</p>
-<p>在资源受限的情况下（如人力、时间、资金、技术储备），忽略掉一切细枝末节，做合适的假设和简化，使用最短的时间开发出来简单的功能，之后再进行快速迭代，验证用户的需求。</p>
+        <p>下载 adb 工具，对应平台如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://dl.google.com/android/repository/platform-tools-latest-windows.zip</span><br><span class="line">https://dl.google.com/android/repository/platform-tools-latest-windows.zip</span><br><span class="line">https://dl.google.com/android/repository/platform-tools-latest-linux.zip</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
 
-<p>如何找出产品的 MVP 功能范围？</p>
-<ul>
-<li>产品的核心目标？核心用户？核心场景？</li>
-<li>都需要在产品里面完成或者呈现？</li>
-<li>最小 MVP 产品要做哪些事情？能达到哪些业务目标？</li>
-<li>做哪些简化和假设，能够在最短的时间交付产品，也业务流程跑起来？</li>
-</ul>
-<p>数据库设计的十个原则</p>
-<p>一般性原则：3 个基础原则，3 个完备性原则；一般情况下都需要遵守</p>
-<p>4  个扩展性原则（影响系统的性能和容量）</p>
-<p>3 个基础原则：</p>
-<ul>
-<li>结构清晰：表名、字段命名没有歧义，能一眼看懂</li>
-<li>唯一职责：一表一用，领域定义清晰，不存储无关信息，相关数据在一张表中</li>
-<li>主键原则：设计不带物理意义的主键；有唯一约束，确保幂等</li>
-</ul>
-<p>3 个完备性原则：</p>
-<ul>
-<li>完整性：保证数据的准确性和完整性，重要的内容都有记录</li>
-<li>可追溯：可追溯创建时间，修改时间，可以逻辑删除</li>
-<li>一致性原则：数据之间保持一致，尽可能避免同样的数据存储在不同表中</li>
-</ul>
-<p>4 个扩展性原则：</p>
-<ul>
-<li>长短分离：可以扩展，长文本独立存储；有合适的容量设计</li>
-<li>冷热分离：当前数据与历史数据分离</li>
-<li>索引完备：有合适索引方便查询</li>
-<li>不使用关联查询：不使用一切的 SQL Join 操作，不做 2 个表或者更多表的关联查询</li>
-</ul>
+<p>解压工具，在文件夹内运行终端，<code>adb version</code> 查看是否可以运行（不用必要添加环境变量）</p>
+<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220608142617160.png" alt="adb version"></p>
+<p>在手机上打开 <code>开发者选项</code>，开启 <code>USB 调试</code> 功能，电脑连接手机。</p>
+<p>按照手机提示，先选择驱动安装，在电脑上按照手机随机附带的 <code>CD-ROM</code> 安装驱动程序，我这款机器提供了 <code>adb</code> 的使用方法，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">一、Ubuntu环境</span><br><span class="line">1.  建立或修改文件 ~/.android/adb_usb.ini，在文件开头或末尾添加一行，内容是0x2a45。</span><br><span class="line"></span><br><span class="line">2.  建立或修改文件 /etc/udev/rules.d/51-android.rules</span><br><span class="line">2.1 修改文件权限：</span><br><span class="line">    sudo chmod a+rx /etc/udev/rules.d/51-android.rules</span><br><span class="line"></span><br><span class="line">2.2 在文件中添加一行内容：</span><br><span class="line">    SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;2a45&quot;, MODE=&quot;0666&quot;, GROUP=&quot;plugdev&quot;</span><br><span class="line"></span><br><span class="line">4.  确保你在用户组&quot;plugdev&quot;</span><br><span class="line">    sudo adduser plugdev</span><br><span class="line"></span><br><span class="line">5.  按下面流程重启udev服务或直接重启PC</span><br><span class="line">    sudo service udev restart</span><br><span class="line"></span><br><span class="line">6.  检查ADB设备是否存在</span><br><span class="line">    adb kill-server</span><br><span class="line">    adb devices</span><br><span class="line"></span><br><span class="line">二、Windows XP中文环境</span><br><span class="line">1.  建立或修改C:\Documents and Settings\&lt;你的用户名&gt;\.android\adb_usb.ini文件，在该文件中添加一行文本，内容是0x2a45。</span><br><span class="line"></span><br><span class="line">2.  检查ADB设备是否找到（命令行程序中）</span><br><span class="line">    adb kill-server</span><br><span class="line">    adb devices</span><br><span class="line">　　</span><br><span class="line">三、Windows 7中文环境</span><br><span class="line">1.  建立或修改C:\用户\&lt;你的用户名&gt;\.android\adb_usb.ini文件，在该文件中添加一行文本，内容是0x2a45。</span><br><span class="line"></span><br><span class="line">2.  检查ADB设备是否找到（命令行程序中）</span><br><span class="line">    adb kill-server</span><br><span class="line">    adb devices</span><br><span class="line"></span><br><span class="line">参考文档： http://developer.android.com/tools/device.html</span><br></pre></td></tr></table></figure>
+
+
+
+<p>按照要求配置 windows 环境后，使用 <code>adb devices</code> 查看是否连接成功设备。</p>
+<p><img data-src="https://oss.xdai.vip/md-note/imgs/adb_devices-202206081432956.png" alt="image-20220608143206915"></p>
+<p>第一次使用该命令会提示状态为 <code>unauthorized</code>，需要在手机上点击信任设备，然后再次查看，就是正常的 <code>device</code> 状态。</p>
+<p>之后通过 adb 相关命令，挂载 <code>/system</code> 分区，之后进行修改文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 进入手机终端</span><br><span class="line">adb shell</span><br><span class="line"># 获取 root 权限，需要在手机上授权</span><br><span class="line">su</span><br><span class="line"># 挂载系统分区</span><br><span class="line">mount -o rw,remount /system</span><br><span class="line"># 添加永久的无线调试权限</span><br><span class="line">echo &quot;service.adb.tcp.port=5555&quot; &gt;&gt; /system/build.prop</span><br><span class="line"># 重启设备使配置生效</span><br><span class="line">adb reboot</span><br></pre></td></tr></table></figure>
+
+<p>重启之后，就可以通过 IP 来远程 adb</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb connect 192.168.124.108:5555</span><br><span class="line">adb devices</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://oss.xdai.vip/md-note/imgs/202206081459553.png" alt="image-20220608145905457"></p>
+<p>几个命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 从设备提取文件</span><br><span class="line">adb pull system/build.prop  ./</span><br><span class="line"># 向设备推送文件</span><br><span class="line">adb push ./build.prop system</span><br><span class="line"># 退到windows上重启设备</span><br><span class="line">adb reboot</span><br><span class="line"></span><br><span class="line"># 修改权限，注意和源文件要一样的权限；如果是第三方软件，还要注意修改文件所有权</span><br><span class="line">chmod 644 /system/build.prop</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -389,14 +377,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/61f26ef2.html" rel="prev" title="解决 Django 导出 csv 乱码问题">
-                  <i class="fa fa-chevron-left"></i> 解决 Django 导出 csv 乱码问题
+                <a href="/posts/5566e398.html" rel="prev" title="【转载】运维如何在工作中寻找亮点">
+                  <i class="fa fa-chevron-left"></i> 【转载】运维如何在工作中寻找亮点
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/acfac2f9.html" rel="next" title="paramiko 使用证书免密连接 H3C 设备">
-                  paramiko 使用证书免密连接 H3C 设备 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

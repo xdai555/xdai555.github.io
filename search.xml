@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>adb连接安卓手机远程调试</title>
+    <url>/posts/1b7d9e70.html</url>
+    <content><![CDATA[<p>下载 adb 工具，对应平台如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://dl.google.com/android/repository/platform-tools-latest-windows.zip</span><br><span class="line">https://dl.google.com/android/repository/platform-tools-latest-windows.zip</span><br><span class="line">https://dl.google.com/android/repository/platform-tools-latest-linux.zip</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<p>解压工具，在文件夹内运行终端，<code>adb version</code> 查看是否可以运行（不用必要添加环境变量）</p>
+<p><img data-src="https://oss.xdai.vip/md-note/imgs/image-20220608142617160.png" alt="adb version"></p>
+<p>在手机上打开 <code>开发者选项</code>，开启 <code>USB 调试</code> 功能，电脑连接手机。</p>
+<p>按照手机提示，先选择驱动安装，在电脑上按照手机随机附带的 <code>CD-ROM</code> 安装驱动程序，我这款机器提供了 <code>adb</code> 的使用方法，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">一、Ubuntu环境</span><br><span class="line">1.  建立或修改文件 ~/.android/adb_usb.ini，在文件开头或末尾添加一行，内容是0x2a45。</span><br><span class="line"></span><br><span class="line">2.  建立或修改文件 /etc/udev/rules.d/51-android.rules</span><br><span class="line">2.1 修改文件权限：</span><br><span class="line">    sudo chmod a+rx /etc/udev/rules.d/51-android.rules</span><br><span class="line"></span><br><span class="line">2.2 在文件中添加一行内容：</span><br><span class="line">    SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;2a45&quot;, MODE=&quot;0666&quot;, GROUP=&quot;plugdev&quot;</span><br><span class="line"></span><br><span class="line">4.  确保你在用户组&quot;plugdev&quot;</span><br><span class="line">    sudo adduser plugdev</span><br><span class="line"></span><br><span class="line">5.  按下面流程重启udev服务或直接重启PC</span><br><span class="line">    sudo service udev restart</span><br><span class="line"></span><br><span class="line">6.  检查ADB设备是否存在</span><br><span class="line">    adb kill-server</span><br><span class="line">    adb devices</span><br><span class="line"></span><br><span class="line">二、Windows XP中文环境</span><br><span class="line">1.  建立或修改C:\Documents and Settings\&lt;你的用户名&gt;\.android\adb_usb.ini文件，在该文件中添加一行文本，内容是0x2a45。</span><br><span class="line"></span><br><span class="line">2.  检查ADB设备是否找到（命令行程序中）</span><br><span class="line">    adb kill-server</span><br><span class="line">    adb devices</span><br><span class="line">　　</span><br><span class="line">三、Windows 7中文环境</span><br><span class="line">1.  建立或修改C:\用户\&lt;你的用户名&gt;\.android\adb_usb.ini文件，在该文件中添加一行文本，内容是0x2a45。</span><br><span class="line"></span><br><span class="line">2.  检查ADB设备是否找到（命令行程序中）</span><br><span class="line">    adb kill-server</span><br><span class="line">    adb devices</span><br><span class="line"></span><br><span class="line">参考文档： http://developer.android.com/tools/device.html</span><br></pre></td></tr></table></figure>
+
+
+
+<p>按照要求配置 windows 环境后，使用 <code>adb devices</code> 查看是否连接成功设备。</p>
+<p><img data-src="https://oss.xdai.vip/md-note/imgs/adb_devices-202206081432956.png" alt="image-20220608143206915"></p>
+<p>第一次使用该命令会提示状态为 <code>unauthorized</code>，需要在手机上点击信任设备，然后再次查看，就是正常的 <code>device</code> 状态。</p>
+<p>之后通过 adb 相关命令，挂载 <code>/system</code> 分区，之后进行修改文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 进入手机终端</span><br><span class="line">adb shell</span><br><span class="line"># 获取 root 权限，需要在手机上授权</span><br><span class="line">su</span><br><span class="line"># 挂载系统分区</span><br><span class="line">mount -o rw,remount /system</span><br><span class="line"># 添加永久的无线调试权限</span><br><span class="line">echo &quot;service.adb.tcp.port=5555&quot; &gt;&gt; /system/build.prop</span><br><span class="line"># 重启设备使配置生效</span><br><span class="line">adb reboot</span><br></pre></td></tr></table></figure>
+
+<p>重启之后，就可以通过 IP 来远程 adb</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">adb connect 192.168.124.108:5555</span><br><span class="line">adb devices</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://oss.xdai.vip/md-note/imgs/202206081459553.png" alt="image-20220608145905457"></p>
+<p>几个命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 从设备提取文件</span><br><span class="line">adb pull system/build.prop  ./</span><br><span class="line"># 向设备推送文件</span><br><span class="line">adb push ./build.prop system</span><br><span class="line"># 退到windows上重启设备</span><br><span class="line">adb reboot</span><br><span class="line"></span><br><span class="line"># 修改权限，注意和源文件要一样的权限；如果是第三方软件，还要注意修改文件所有权</span><br><span class="line">chmod 644 /system/build.prop</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>【转载】运维如何在工作中寻找亮点</title>
     <url>/posts/5566e398.html</url>
     <content><![CDATA[<blockquote>
